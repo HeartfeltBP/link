@@ -57,7 +57,7 @@
 		<HeaderAction icon={UserAvatarFilledAlt}>
 			<HeaderPanelDivider>Account Actions</HeaderPanelDivider>
 			{#if $user}
-				<HeaderPanelLink on:click={() => logOut(auth)}>Log Out</HeaderPanelLink>
+				<HeaderPanelLink on:click={() => logOut()}>Log Out</HeaderPanelLink>
 			{:else}
 				<HeaderPanelLink href="/account/auth">Log In</HeaderPanelLink>
 			{/if}

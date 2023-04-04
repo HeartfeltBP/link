@@ -55,6 +55,7 @@ export const createAuthEmailPass = async (
 				Weight: 'bungo'
 			})
 		})
+
 		.catch((e) => {
 			const errorCode = e.errorCode
 			const errorMessage = e.errorMessage
@@ -65,17 +66,26 @@ export const createAuthEmailPass = async (
 	return 0
 }
 
-export const createUser = async() => {
+export const createUser = async () => {
 
 }
 
-// export const signInPost(curAuth: Auth) {
-// 	if(hasCurrentUser()) {
-// 		const csrfToken = 
-// 		if(!csrfToken) return
+export const syncUser = async () =>
+{
+	const userAuth: Auth = getAuth(app)
+	if(!userAuth.currentUser) {
+		return
+	}
+	
+	const token = await userAuth.currentUser.getIdToken()
 
-// 	}
-// }
+	const response = await fetch('/auth/session', {
+		method: 'POST',
+		body: token
+	})
+
+	return await response.text()
+}
 
 export const checkEmailPass = async (
 	email: string,
@@ -88,14 +98,11 @@ export const checkEmailPass = async (
 			// signed in
 			const user = userCredential.user
 
-			console.log(user.uid)
-
-			const uidVal = user.uid
+			console.log()
 
 			if (user.uid != undefined) {
-				const retVal = await setDoc(doc(firestore, `users/${user.uid}/`), { uidVal })
-				console.log(retVal)
-				getAuth(app).onAuthStateChanged(() => goto('/'))
+				console.info('🪪')
+				getAuth(app).onAuthStateChanged(() => goto('/')) // create hook to clear cookies and stuff
 				return getAuth(app)
 			}
 		})

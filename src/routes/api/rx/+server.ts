@@ -20,8 +20,9 @@ type HfWindow = {
 	collectionCount: number
 }
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, cookies }) => {
 	let response: Response
+	
 	const contentType = request.headers.get('Content-Type')
 	if (request.body != null && contentType) {
 		if (contentType.startsWith(MSGPACK_TYPE)) {
@@ -66,7 +67,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			}
 			
 			if(metricType == 'PPG0' || metricType == 'PPG1') {
-				const fidInQuestion = await uploadFrame(getAuth(app).currentUser?.uid, frame, frameHeader)
+				const fidInQuestion = await uploadFrame(frame, frameHeader)
 				return new Response(`${fidInQuestion}`, { status: 200 })
 				
 			}
