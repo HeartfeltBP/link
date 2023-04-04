@@ -1,6 +1,8 @@
 import type { RequestHandler } from '@sveltejs/kit'
 import { decodeAsync } from '@msgpack/msgpack'
 import * as fs from 'fs'
+import type { Frame, FrameHeader } from '$lib/utilities/types'
+import { frameHandler, frameObj, uploadFrame } from '$lib/utilities/repository'
 
 // https://www.ibm.com/docs/en/odm/8.8.0?topic=api-rest-response-codes-error-messages
 
@@ -34,6 +36,15 @@ export const POST: RequestHandler = async ({ request }) => {
 			let samplingRate = dataArr[1]
 			let metricType = dataArr[2]
 			let collectionCount = dataArr[3]
+
+			if(metricType = 'PPG0') {
+				dataArr.splice(0, 3).forEach(element => frameHandler.ir.push(Number(element)))
+			}
+			else if (metricType = 'PPG1') {
+				dataArr.splice(0, 3).forEach(element => frameHandler.red.push(Number(element)))
+			}
+
+			
 
 			fs.openSync(
 				'./WINDOWS/' + 'N' + String(collectionCount) + 'DATA' + String(metricType) + '.txt',

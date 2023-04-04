@@ -7,7 +7,7 @@
 	import { Line } from 'svelte-chartjs'
 	import { formatData } from '$lib/utilities/data.js'
 	import type { Sample } from '$lib/utilities/types.js'
-	import { FIRESTORE_TARGET } from '$lib/utilities/constants'
+	import { FIRESTORE_TARGET } from '$lib/utilities/constants.js'
 	import {
 		Chart as ChartJS,
 		Title,

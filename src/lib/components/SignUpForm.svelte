@@ -33,7 +33,6 @@
 		height: string
 	}
 
-	// add this to auth handler
 	function confirmPass(pass: string, passConfirm: string) {
 		return pass === passConfirm ? true : false
 	}
@@ -49,7 +48,7 @@
 		/>
 		<h1>Sign Up</h1>
 		<br />
-		<Form on:submit={() => createAuthEmailPass(email, pass, pass_confirm)} method="POST" action="/success">
+		<Form on:submit={() => createAuthEmailPass(email, pass, pass_confirm)}>
 			<Row>
 				<Column>
 					<TextInput

@@ -1,20 +1,27 @@
 import { app, auth, firestore } from './firebase'
 import { doc, setDoc } from 'firebase/firestore'
 import {
-	getAuth,
 	createUserWithEmailAndPassword,
 	type Auth,
-	signInWithEmailAndPassword
+	signInWithEmailAndPassword,
+	type User
 } from 'firebase/auth'
 
 import { userStore } from 'sveltefire'
 
-export const hasCurrentUser = (auth: Auth = getAuth(app)): boolean => {
-	const user = auth.currentUser
+export const hasCurrentUser = (): boolean => {
+	const user: User | null = auth.currentUser
 	return user ? true : false
 }
 
-export const logOut = (auth: Auth = getAuth(app)) => {
+export const getUid = (): string | null => {
+	if(hasCurrentUser()) {
+		return auth.currentUser?.uid || null
+	}
+	return null
+}
+
+export const logOut = () => {
 	auth.signOut().then(() => {
 		// successful signout!
 		console.log('logged out... womp womp')
@@ -26,7 +33,6 @@ export const createAuthEmailPass = async (
 	email: string,
 	pass: string,
 	pass_confirm?: string,
-	auth: Auth = getAuth(app)
 ) => {
 	if (pass_confirm !== undefined) {
 		if (pass !== pass_confirm) {
@@ -56,7 +62,14 @@ export const createAuthEmailPass = async (
 	return 0
 }
 
-export const checkEmailPass = async (email: string, pass: string, auth: Auth = getAuth(app)): Promise<Auth | null> => {
+export const createUser = async() => {
+
+}
+
+export const checkEmailPass = async (
+	email: string,
+	pass: string,
+): Promise<Auth | null> => {
 	console.log(email, pass)
 
 	signInWithEmailAndPassword(auth, email, pass)
@@ -65,7 +78,7 @@ export const checkEmailPass = async (email: string, pass: string, auth: Auth = g
 			const user = userCredential.user
 
 			console.log(user.uid)
-			if(user.uid != undefined) {
+			if (user.uid != undefined) {
 				auth.updateCurrentUser(user)
 				userStore(auth)
 				return auth
@@ -75,6 +88,7 @@ export const checkEmailPass = async (email: string, pass: string, auth: Auth = g
 			const errorCode = e.errorCode
 			const errorMessage = e.errorMessage
 			console.log(errorCode, e)
-			return -1
+			return null
 		})
+	return null
 }

@@ -30,6 +30,7 @@
 	import Api from 'carbon-icons-svelte/lib/Api.svelte'
 	import IbmCloudPakWatsonAiops from 'carbon-icons-svelte/lib/IbmCloudPakWatsonAiops.svelte'
 	import { LogoGithub, UserAvatarFilledAlt } from 'carbon-icons-svelte'
+	
 	import 'carbon-components-svelte/css/g100.css'
 	import { auth } from '$lib/utilities/firebase.js'
 	import { logOut } from '$lib/utilities/auth.js'
@@ -50,7 +51,9 @@
 	</svelte:fragment>
 	<HeaderUtilities>
 		<HeaderActionLink icon={LogoGithub} href="https://github.com/HeartfeltBP" />
+		{#if $user}
 		<HeaderActionLink icon={Settings} href="/settings" />
+		{/if}
 		<HeaderAction icon={UserAvatarFilledAlt}>
 			<HeaderPanelDivider>Account Actions</HeaderPanelDivider>
 			{#if $user}

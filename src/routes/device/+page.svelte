@@ -3,7 +3,7 @@
 	import 'carbon-components-svelte/css/g100.css'
 
 	import { userStore } from 'sveltefire'
-	import { auth } from '../../lib/utilities/firebase.js'
+	import { auth } from '$lib/utilities/firebase.js'
 
 	const user = userStore(auth)
 	if(!user) {

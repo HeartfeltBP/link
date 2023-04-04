@@ -7,7 +7,7 @@
 	import { Line } from 'svelte-chartjs'
 	import { formatData } from '$lib/utilities/data.js'
 	import type { Frame } from '$lib/utilities/types.js'
-	import { FIRESTORE_TARGET } from '$lib/utilities/constants'
+	import { DATA_DB_TEST } from '$lib/utilities/constants'
 	import {
 		Chart as ChartJS,
 		Title,
@@ -22,7 +22,7 @@
 	ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
 
 	const user = userStore(auth)
-	const posts = collectionStore<Frame>(firestore, `${FIRESTORE_TARGET}/${$user?.uid}/frames`)
+	const posts = collectionStore<Frame>(firestore, `${DATA_DB_TEST}/${$user?.uid}/frames`)
 </script>
 
 {#if $posts}

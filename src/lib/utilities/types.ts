@@ -5,25 +5,39 @@ export interface User {
 	Weight: string
 }
 
-export interface Sample {
-	fid: string // frame id
-	sid: string // sample id
-	status: string // new, valid, invalid, predicted
-	ppg_scaled: number[]
-	vpg_scaled: number[]
-	apg_scaled: number[]
-	abp_scaled: number[]
-	ppg_raw: number[]
-	ppg: number[]
-	abp: number[] // rescaled bp prediction
-	hr: number
-	snr: number
-	beat_sim: number
+// 256 samples
+export interface Window {
+	fid: string 			// frame id
+	sid?: string 			// sample id
+	status: string 			// new, valid, invalid, predicted
+	ppg_scaled?: number[] 	// 
+	vpg_scaled?: number[]
+	apg_scaled?: number[]
+	abp_scaled?: number[] 	// output of model
+	ppg_raw?: number[] 		// combined red and ir
+	ppg?: number[] 			// ppg after bandpass
+	abp?: number[] 			// rescaled bp prediction (actual wave)
+	f0?: number 				// fundamental frequency of short window (not representative of hr)
+	snr?: number
+	beat_sim?: number
 }
 
+// 4100 samples
 export interface Frame {
-	fid: string
-	status: string
-	target: string
-	frame: number[]
+	fid?: string
+	status: string 			// new, valid, invalid, predicted
+	target: string 			// collection to write to downstream (testing mode bpm-data-test)
+	ir_frame?: number[] 		// raw data
+	red_frame?: number[] 	// raw data
+	ir_frame_processed?: number[]
+	red_frame_processed?: number[]
+	pulse_rate?: number 
+	spo2?: number 
+	r?: number // absorb
+}
+
+export interface FrameHeader {
+	sr: number
+	ir_amplitude?: number
+	red_amplitude?: number
 }
