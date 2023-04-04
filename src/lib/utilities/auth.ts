@@ -1,28 +1,31 @@
-import { app, auth, firestore } from './firebase'
-import { doc, setDoc } from 'firebase/firestore'
+import { app, firestore } from './firebase'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 import {
 	createUserWithEmailAndPassword,
 	type Auth,
 	signInWithEmailAndPassword,
-	type User
+	type User,
+	getAuth
 } from 'firebase/auth'
 
 import { userStore } from 'sveltefire'
+import { goto } from '$app/navigation'
 
 export const hasCurrentUser = (): boolean => {
-	const user: User | null = auth.currentUser
+	console.log(getAuth(app))
+	const user: User | null = getAuth(app).currentUser
 	return user ? true : false
 }
 
 export const getUid = (): string | null => {
 	if(hasCurrentUser()) {
-		return auth.currentUser?.uid || null
+		return getAuth(app).currentUser?.uid || null
 	}
 	return null
 }
 
 export const logOut = () => {
-	auth.signOut().then(() => {
+	getAuth(app).signOut().then(() => {
 		// successful signout!
 		console.log('logged out... womp womp')
 		return false
@@ -41,7 +44,7 @@ export const createAuthEmailPass = async (
 		}
 	}
 
-	createUserWithEmailAndPassword(auth, email, pass)
+	createUserWithEmailAndPassword(getAuth(app), email, pass)
 		.then(async (userCredential) => {
 			// signed in
 			const user = userCredential.user
@@ -66,22 +69,34 @@ export const createUser = async() => {
 
 }
 
+// export const signInPost(curAuth: Auth) {
+// 	if(hasCurrentUser()) {
+// 		const csrfToken = 
+// 		if(!csrfToken) return
+
+// 	}
+// }
+
 export const checkEmailPass = async (
 	email: string,
 	pass: string,
 ): Promise<Auth | null> => {
 	console.log(email, pass)
 
-	signInWithEmailAndPassword(auth, email, pass)
-		.then((userCredential) => {
+	signInWithEmailAndPassword(getAuth(app), email, pass)
+		.then ( async (userCredential) => {
 			// signed in
 			const user = userCredential.user
 
 			console.log(user.uid)
+
+			const uidVal = user.uid
+
 			if (user.uid != undefined) {
-				auth.updateCurrentUser(user)
-				userStore(auth)
-				return auth
+				const retVal = await setDoc(doc(firestore, `users/${user.uid}/`), { uidVal })
+				console.log(retVal)
+				getAuth(app).onAuthStateChanged(() => goto('/'))
+				return getAuth(app)
 			}
 		})
 		.catch((e) => {

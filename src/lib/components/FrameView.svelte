@@ -25,13 +25,13 @@
 	const posts = collectionStore<Frame>(firestore, `${DATA_DB_TEST}/${$user?.uid}/frames`)
 </script>
 
-{#if $posts}
+<!-- {#if $posts}
 	<Grid>
 		{#each $posts as p}
 			<Row>
 				<Column>
 					<Line
-						data={formatData('frame', p.frame)}
+						data={formatData('frame', p.ir_frame)}
 						width={800}
 						height={400}
 						options={{ responsive: true }}
@@ -40,4 +40,4 @@
 			</Row>
 		{/each}
 	</Grid>
-{/if}
+{/if} -->
