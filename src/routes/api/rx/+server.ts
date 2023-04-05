@@ -2,10 +2,11 @@ import type { RequestHandler } from '@sveltejs/kit'
 import { decodeAsync } from '@msgpack/msgpack'
 import * as fs from 'fs'
 import type { Frame, FrameHeader } from '$lib/utilities/types'
-import { uploadFrame } from '$lib/utilities/repository'
+import { uploadFrame } from '$lib/utilities/server/repository.server'
 import { DATA_DB_TEST } from '$lib/utilities/constants'
 import { app } from '$lib/utilities/firebase'
 import { getAuth } from 'firebase/auth'
+import { uploadFrameHttp } from '$lib/utilities/server/repository.server'
 // https://www.ibm.com/docs/en/odm/8.8.0?topic=api-rest-response-codes-error-messages
 
 const MSGPACK_TYPE = 'application/x-msgpack'
@@ -22,16 +23,24 @@ type HfWindow = {
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	let response: Response
-	
+	console.log(cookies.getAll())
+	let uid: string = cookies.get('UID (hackers ignore)') || ''
 	const contentType = request.headers.get('Content-Type')
+
+	let idToken: string = cookies.get('idToken') || ''
+	if(idToken != '') 
+	{
+		console.log(idToken + "ID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		if(uid == '') {
+			new Response('Could not retrieve uid from token', { status: 400 })
+		}
+
+	} else {
+		return new Response('Cannot get authentication token', { status: 400 })
+	}
+
 	if (request.body != null && contentType) {
-		if (contentType.startsWith(MSGPACK_TYPE)) {
-			const data = await decodeAsync(request.body)
-			console.log('NOT IMPLEMENTED')
-		} else if (contentType.startsWith(JSON_TYPE)) {
-			const data = await request.json()
-			console.log('NOT IMPLEMENTED')
-		} else if (contentType.startsWith(CSV_TYPE) || contentType.startsWith(PLAIN_TYPE)) {
+		if (contentType.startsWith(CSV_TYPE) || contentType.startsWith(PLAIN_TYPE)) {
 			const data = await request.text()
 
 			let dataArr = data.split(',')
@@ -43,6 +52,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 			let collectionCount = dataArr[3]
 			let transmissionCount = dataArr[4]
 			let postId = dataArr[5] // the fid from previous transmission if it exists
+			// let token = dataArr[6]
 
 			const frameHeader: FrameHeader = {
 				sr: Number(samplingRate)
@@ -67,9 +77,10 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 			}
 			
 			if(metricType == 'PPG0' || metricType == 'PPG1') {
-				const fidInQuestion = await uploadFrame(frame, frameHeader)
-				return new Response(`${fidInQuestion}`, { status: 200 })
-				
+				if(uid && uid != null && typeof(uid) != 'undefined') {
+					const fidInQuestion = await uploadFrameHttp(uid, idToken, frame, frameHeader)
+					return new Response(`${fidInQuestion}`, { status: 200 })
+				}
 			}
 
 			fs.openSync(

@@ -59,7 +59,7 @@
 			{#if $user}
 				<HeaderPanelLink on:click={() => logOut()}>Log Out</HeaderPanelLink>
 			{:else}
-				<HeaderPanelLink href="/account/auth">Log In</HeaderPanelLink>
+				<HeaderPanelLink href="/account/signin">Log In</HeaderPanelLink>
 			{/if}
 		</HeaderAction>
 	</HeaderUtilities>

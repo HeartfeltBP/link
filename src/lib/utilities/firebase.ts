@@ -27,4 +27,4 @@ export const functions: Functions = getFunctions(app)
 
 export const firestore: Firestore = getFirestore(app)
 export const auth: Auth = getAuth(app)
-setPersistence(auth, browserSessionPersistence)
+// setPersistence(auth, browserSessionPersistence)

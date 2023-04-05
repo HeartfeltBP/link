@@ -48,7 +48,7 @@
 						/>
 						<br />
 						<Button icon={Login} type="submit" name="submit">Sign In</Button>
-						<Button kind="ghost" href="/account">Create Account</Button>
+						<Button kind="ghost" href="/account/signup">Create Account</Button>
 					</FluidForm>
 				</div>
 			</Column>

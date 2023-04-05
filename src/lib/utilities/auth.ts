@@ -102,7 +102,8 @@ export const checkEmailPass = async (
 
 			if (user.uid != undefined) {
 				console.info('🪪')
-				getAuth(app).onAuthStateChanged(() => goto('/')) // create hook to clear cookies and stuff
+				getAuth(app).onAuthStateChanged(() => goto('/account/signin')) // create hook to clear cookies and stuff
+				
 				return getAuth(app)
 			}
 		})
