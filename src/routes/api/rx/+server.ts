@@ -2,11 +2,12 @@ import type { RequestHandler } from '@sveltejs/kit'
 import { decodeAsync } from '@msgpack/msgpack'
 import * as fs from 'fs'
 import type { Frame, FrameHeader } from '$lib/utilities/types'
-import { uploadFrame } from '$lib/utilities/server/repository.server'
+import { uploadFrameHttp } from '$lib/utilities/server/repository.server'
+import { getUid } from '$lib/utilities/server/auth.server'
 import { DATA_DB_TEST } from '$lib/utilities/constants'
 import { app } from '$lib/utilities/firebase'
 import { getAuth } from 'firebase/auth'
-import { uploadFrameHttp } from '$lib/utilities/server/repository.server'
+
 // https://www.ibm.com/docs/en/odm/8.8.0?topic=api-rest-response-codes-error-messages
 
 const MSGPACK_TYPE = 'application/x-msgpack'
@@ -21,23 +22,10 @@ type HfWindow = {
 	collectionCount: number
 }
 
-export const POST: RequestHandler = async ({ request, cookies }) => {
+export const POST: RequestHandler = async ({ request }) => {
 	let response: Response
-	console.log(cookies.getAll())
-	let uid: string = cookies.get('UID (hackers ignore)') || ''
+	
 	const contentType = request.headers.get('Content-Type')
-
-	let idToken: string = cookies.get('idToken') || ''
-	if(idToken != '') 
-	{
-		console.log(idToken + "ID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-		if(uid == '') {
-			new Response('Could not retrieve uid from token', { status: 400 })
-		}
-
-	} else {
-		return new Response('Cannot get authentication token', { status: 400 })
-	}
 
 	if (request.body != null && contentType) {
 		if (contentType.startsWith(CSV_TYPE) || contentType.startsWith(PLAIN_TYPE)) {
@@ -52,7 +40,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 			let collectionCount = dataArr[3]
 			let transmissionCount = dataArr[4]
 			let postId = dataArr[5] // the fid from previous transmission if it exists
-			// let token = dataArr[6]
+			let idToken = dataArr[6] // token
 
 			const frameHeader: FrameHeader = {
 				sr: Number(samplingRate)
@@ -75,7 +63,17 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 			else if (metricType = 'PPG1') {
 				dataArr.splice(0, 3).forEach(element => frame.red_frame?.push(Number(element)))
 			}
+
+			if(!idToken || idToken != '') return new Response('Cannot get authentication token', {status: 401}) 
 			
+			const uid = getUid(idToken)
+
+			if(uid == '') {
+				new Response('Could not retrieve uid from token', { status: 400 })
+			}
+
+			console.log(idToken, uid, "<><><><><ID::ID::ID::ID><><><><>")
+
 			if(metricType == 'PPG0' || metricType == 'PPG1') {
 				if(uid && uid != null && typeof(uid) != 'undefined') {
 					const fidInQuestion = await uploadFrameHttp(uid, idToken, frame, frameHeader)
@@ -98,7 +96,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		}
 	} else {
 		// errors
-		console.log('something went wrong API/SERVER')
+		console.log('content type invalid or something else went wrong...')
 	}
 
 	return new Response('balls', { status: 400 })

@@ -17,6 +17,7 @@ const serviceAccount = accountJsonObj
 const serviceAccountObj: ServiceAccount = { 
 	privateKey: accountJsonObj.private_key, 
 	projectId: accountJsonObj.project_id,
+	clientEmail: accountJsonObj.client_email
 }
 
 export const app_admin = initializeApp({credential: cert(serviceAccountObj)})
