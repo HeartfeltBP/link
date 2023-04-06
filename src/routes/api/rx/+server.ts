@@ -2,7 +2,7 @@ import type { RequestHandler } from '@sveltejs/kit'
 import { decodeAsync } from '@msgpack/msgpack'
 import * as fs from 'fs'
 import type { Frame, FrameHeader } from '$lib/utilities/types'
-import { uploadFrameHttp } from '$lib/utilities/server/repository.server'
+import { uploadFrame } from '$lib/utilities/server/repository.server'
 import { getUid } from '$lib/utilities/server/auth.server'
 import { DATA_DB_TEST } from '$lib/utilities/constants'
 import { app } from '$lib/utilities/firebase'
@@ -32,7 +32,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			const data = await request.text()
 
 			let dataArr = data.split(',')
-			console.log(dataArr[0], dataArr[1], dataArr[2], dataArr[3], dataArr.length)
+			console.log(dataArr[0], dataArr[1], dataArr[2], dataArr[3], dataArr[4], dataArr[5], dataArr[6], dataArr.length)
 
 			let numSamples = dataArr[0]
 			let samplingRate = dataArr[1]
@@ -40,8 +40,12 @@ export const POST: RequestHandler = async ({ request }) => {
 			let collectionCount = dataArr[3]
 			let transmissionCount = dataArr[4]
 			let postId = dataArr[5] // the fid from previous transmission if it exists
-			let idToken = dataArr[6] // token
-
+			let tokenAuth = dataArr[6] // token
+			
+			const tokenTemp = tokenAuth.split(' ')
+			tokenTemp[1] = tokenTemp[1].replace(/[\r\n]+/gm, '')
+			const idToken = tokenTemp[1]
+			console.log(tokenTemp, idToken)
 			const frameHeader: FrameHeader = {
 				sr: Number(samplingRate)
 			}
@@ -52,9 +56,9 @@ export const POST: RequestHandler = async ({ request }) => {
 			}
 
 			if(postId) {
-				if(postId !== 'INIT') {
-					frame.fid = postId;
-				}
+				frame.fid = postId
+			} else {
+				console.error('Cannot get postId')
 			}
 
 			if(metricType = 'PPG0') {
@@ -64,21 +68,16 @@ export const POST: RequestHandler = async ({ request }) => {
 				dataArr.splice(0, 3).forEach(element => frame.red_frame?.push(Number(element)))
 			}
 
-			if(!idToken || idToken != '') return new Response('Cannot get authentication token', {status: 401}) 
+			if(!idToken || idToken == '') return new Response('Cannot get authentication token', {status: 401}) 
 			
-			const uid = getUid(idToken)
 
-			if(uid == '') {
-				new Response('Could not retrieve uid from token', { status: 400 })
-			}
-
-			console.log(idToken, uid, "<><><><><ID::ID::ID::ID><><><><>")
+			console.log('<><><><><ID::ID:' + `${getUid(idToken)}` + ':ID::ID><><><><>')
 
 			if(metricType == 'PPG0' || metricType == 'PPG1') {
-				if(uid && uid != null && typeof(uid) != 'undefined') {
-					const fidInQuestion = await uploadFrameHttp(uid, idToken, frame, frameHeader)
-					return new Response(`${fidInQuestion}`, { status: 200 })
-				}
+				
+				const fidInQuestion = await uploadFrame(idToken, frame, frameHeader)
+				return new Response(`${fidInQuestion}`, { status: 200 })
+		
 			}
 
 			fs.openSync(

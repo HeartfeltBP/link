@@ -1,11 +1,10 @@
-import type { PageLoad } from './types'
+import type { PageLoad } from './$types'
 import { app } from '$lib/utilities/firebase'
 import { getAuth } from 'firebase/auth'
 import { redirect } from '@sveltejs/kit'
 
-// TODO: identity page should just be proxy for bpm handshake
-// could check or send other things serverside related to signin,
-// if BPM not found, have seperate path to  
+// TODO: identity page should be seperate setup from login to sync device
+// work in to onboarding
 
 // export const load = ( async () => {
 //     const userAuth = getAuth(app)

@@ -12,7 +12,6 @@
     <Row>
         <Column>
             <Home />
-
         </Column>
     </Row>
 </Grid>

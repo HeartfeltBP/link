@@ -1,4 +1,3 @@
-import type { PageLoad } from './types'
 import { app } from '$lib/utilities/firebase'
 import { getAuth } from 'firebase/auth'
 import type { RequestHandler } from '@sveltejs/kit'

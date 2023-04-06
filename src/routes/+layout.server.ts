@@ -1,6 +1,6 @@
 import { auth } from '$lib/utilities/server/auth.server'
 import { redirect } from '@sveltejs/kit'
-import type { LayoutServerLoad } from './$types'
+import type { LayoutServerLoad, LayoutServerLoadEvent } from './$types'
 
 export const load = ( async ({ cookies }: LayoutServerLoadEvent) => {
 	try {
@@ -13,6 +13,6 @@ export const load = ( async ({ cookies }: LayoutServerLoadEvent) => {
 	} catch {
 		// The token is set but invalid or expired
 		cookies.set('token', '', { maxAge: -1 })
-		throw redirect(307, '/')
+		// throw redirect(307, '/')
 	}
 }) satisfies LayoutServerLoad

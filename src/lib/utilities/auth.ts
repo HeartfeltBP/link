@@ -30,7 +30,9 @@ export const hasCurrentUser = (): boolean => {
 export const logOut = () => {
 	getAuth(app).signOut().then(() => {
 		// successful signout!
+		document.cookie = ""
 		console.log('logged out... womp womp')
+		console.log(document.cookie)
 		return false
 	})
 }
@@ -43,6 +45,7 @@ export const createAuthEmailPass = async (
 	if (pass_confirm !== undefined) {
 		if (pass !== pass_confirm) {
 			console.error('PASSWORDS DO NOT MATCH!')
+			localStorage.setItem('BpmIdentityStatus', 'INVALID')
 			return -1
 		}
 	}
@@ -117,8 +120,6 @@ export const checkEmailPass = async (
 			// signed in
 			const curUser = userCredential.user
 
-			console.log()
-
 			if (curUser.uid != undefined) {
 				console.info('🪪')
 
@@ -133,6 +134,7 @@ export const checkEmailPass = async (
 					})
 
 					uStore.set(curUser)
+
 					if(!isTokenSet && token) {
 						document.location.reload()
 					}
