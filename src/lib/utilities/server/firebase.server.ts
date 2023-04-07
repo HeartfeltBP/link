@@ -2,16 +2,7 @@ import { initializeApp, cert, type AppOptions, type Credential, type ServiceAcco
 import { initializeFirestore, getFirestore, Firestore } from 'firebase-admin/firestore'
 import { getFunctions } from 'firebase-admin/functions'
 import { getAuth } from 'firebase-admin/auth'
-import {
-	PUBLIC_apiKey,
-	PUBLIC_authDomain,
-	PUBLIC_projectId,
-	PUBLIC_storageBucket,
-	PUBLIC_messagingSenderId,
-	PUBLIC_appId
-} from '$env/static/public'
-
-import accountJsonObj from './heartfelt-0-firebase-adminsdk-unf3t-f96f6a2e58.json'
+import accountJsonObj from './heartfelt-0-firebase-adminsdk-unf3t-99dcc010a9.json'
 
 const serviceAccount = accountJsonObj
 const serviceAccountObj: ServiceAccount = { 
