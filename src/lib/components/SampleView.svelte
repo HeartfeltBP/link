@@ -6,7 +6,7 @@
 	import { Grid, Row, Column } from 'carbon-components-svelte'
 	import { Line } from 'svelte-chartjs'
 	import { formatData } from '$lib/utilities/data.js'
-	// import type { Sample } from '$lib/utilities/types.js'
+	import type { hfWindow } from '$lib/utilities/types.js'
 	import { DATA_DB_TEST } from '$lib/utilities/constants.js'
 	import {
 		Chart as ChartJS,
@@ -22,10 +22,10 @@
 	ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
 
 	const user = userStore(auth)
-	// const posts = collectionStore<Sample>(firestore, `${DATA_DB_TEST}/${$user?.uid}/samples`)
+	const posts = collectionStore<hfWindow>(firestore, `${DATA_DB_TEST}${$user?.uid}/windows`)
 </script>
 
-<!-- {#if $posts}
+{#if $posts}
 	<Grid>
 		{#each $posts as p}
 			<Row>
@@ -48,4 +48,4 @@
 			</Row>
 		{/each}
 	</Grid>
-{/if} -->
+{/if}

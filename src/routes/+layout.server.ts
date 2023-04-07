@@ -1,5 +1,5 @@
 import { auth } from '$lib/utilities/server/auth.server'
-import { redirect } from '@sveltejs/kit'
+// import { redirect } from '@sveltejs/kit'
 import type { LayoutServerLoad, LayoutServerLoadEvent } from './$types'
 
 export const load = ( async ({ cookies }: LayoutServerLoadEvent) => {
