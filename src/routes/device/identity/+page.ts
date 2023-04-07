@@ -1,16 +1,17 @@
 export const ssr = false
 
-import { app, auth } from '$lib/utilities/firebase'
+import { auth } from '$lib/utilities/firebase'
 import type { PageLoad, PageLoadEvent } from './$types'
 
 
 export const load = ( async ({ parent }: PageLoadEvent) => {
-	const { uid, token } = await parent()
+	const { token } = await parent()
 	
 	console.log('<<><><><><><><><><><><><><><><><><><><><><><><>>')
 	const idToken = token
 
 	const idStatus = localStorage.getItem('BpmIdentityStatus')
+	
 	if(idStatus === 'OK') {
 		return
 	}

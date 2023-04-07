@@ -2,7 +2,7 @@ import { app } from '$lib/utilities/firebase'
 import { getAuth } from 'firebase/auth'
 import type { RequestHandler } from '@sveltejs/kit'
 
-export const GET = ( async ({ request, cookies }) => {
+export const POST = ( async ({ request, cookies }) => {
     const userToken = cookies.get('idToken')
 
     if(typeof(userToken) == 'undefined') {

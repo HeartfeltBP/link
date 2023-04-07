@@ -7,7 +7,7 @@
 	import { userStore } from 'sveltefire'
 
 	import 'carbon-components-svelte/css/g100.css'
-	import SignInForm from '$lib/components/SignInForm.svelte'
+	import LogInForm from '$lib/components/LogInForm.svelte'
 
 	const user = userStore(auth)
 </script>
@@ -15,6 +15,6 @@
 {#if $user}
 	<!-- account form -->
 {:else}
-	<SignInForm />
+	<LogInForm />
 	<SignUpForm />
 {/if}

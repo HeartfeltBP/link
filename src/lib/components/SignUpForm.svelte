@@ -14,7 +14,10 @@
 		MultiSelect,
 		NumberInput,
 		ContentSwitcher,
-		Switch
+		Switch,
+
+		Dropdown
+
 	} from 'carbon-components-svelte'
 	import { CodeSigningService, DocumentPdf } from 'carbon-icons-svelte'
 	import 'carbon-components-svelte/css/g100.css'
@@ -22,16 +25,10 @@
 	import { createAuthEmailPass, hasCurrentUser } from '../utilities/auth'
 	import logoImage from '$lib/assets/HeartfeltLogo.png'
 
-	let email: string, pass: string, pass_confirm: string
+	import type { HfUser } from '$lib/utilities/types'
 
-	// todo rewrite to use these
-	type HfUser = {
-		email: string
-		pass: string
-		DOB: string
-		weight: string
-		height: string
-	}
+	let email: string, pass: string, pass_confirm: string
+	let height: string, weight: string, race: string, birthdate: string
 
 	function confirmPass(pass: string, passConfirm: string) {
 		return pass === passConfirm ? true : false
@@ -86,20 +83,20 @@
 								</Column>
 								<Column>
 									<br /> <br />
-									<ContentSwitcher size="sm" selectedIndex={0}>
-										<Switch text="m" />
-										<Switch text="ft" />
-									</ContentSwitcher>
+									<Dropdown selectedId={'0'} items={[
+										{ id: '0', text: 'm (meters)'},
+										{ id: '1', text: 'ft (feet)'}
+									]} />
 								</Column>
 								<Column>
 									<NumberInput name="weight" label="Weight" placeholder="e.g. 100" required />
 								</Column>
 								<Column>
 									<br /> <br />
-									<ContentSwitcher size="sm" selectedIndex={0}>
-										<Switch text="kg" />
-										<Switch text="lb" />
-									</ContentSwitcher>
+									<Dropdown selectedId={'0'} items={[
+										{ id: '0', text: 'kg (kilograms)'},
+										{ id: '1', text: 'lb (pounds)'}
+									]} />
 								</Column>
 							</Row>
 						</Column>

@@ -128,7 +128,7 @@ export const checkEmailPass = async (
 					const isTokenSet: boolean = cookie.parse(document.cookie)['token'] !== undefined
 					const token: string = await curUser.getIdToken()
 
-					document.cookie = cookie.serialize('token', token ?? '', {
+					document.cookie = cookie.serialize('idToken', token ?? '', {
 						path: '/',
 						maxAge: token ? undefined : 0
 					})
@@ -156,4 +156,12 @@ export const checkEmailPass = async (
 			return null
 		})
 	return null
+}
+
+export const setIdStatus = (status: string) => {
+	const idStatus = localStorage.getItem('BpmIdentityStatus')
+	if(idStatus) {
+		return 1
+	}
+	return 0
 }

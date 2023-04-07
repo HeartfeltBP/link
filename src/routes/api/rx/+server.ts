@@ -34,25 +34,28 @@ export const POST: RequestHandler = async ({ request }) => {
 			let dataArr = data.split(',')
 			console.log(dataArr[0], dataArr[1], dataArr[2], dataArr[3], dataArr[4], dataArr[5], dataArr[6], dataArr.length)
 
-			let numSamples = dataArr[0]
-			let samplingRate = dataArr[1]
-			let metricType = dataArr[2]
-			let collectionCount = dataArr[3]
-			let transmissionCount = dataArr[4]
-			let postId = dataArr[5] // the fid from previous transmission if it exists
-			let tokenAuth = dataArr[6] // token
+			const numSamples = dataArr[0]
+			const samplingRate = dataArr[1]
+			const metricType = dataArr[2]
+			const collectionCount = dataArr[3]
+			const transmissionCount = dataArr[4]
+			const postId = dataArr[5] // the fid from previous transmission if it exists
+			const tokenAuth = dataArr[6] // token
+
+			// const sampleData = dataArr.slice(6, -1) use this instead of of the foreach?
 			
 			const tokenTemp = tokenAuth.split(' ')
 			tokenTemp[1] = tokenTemp[1].replace(/[\r\n]+/gm, '')
 			const idToken = tokenTemp[1]
 			console.log(tokenTemp, idToken)
+
 			const frameHeader: FrameHeader = {
 				sr: Number(samplingRate)
 			}
 
 			const frame: Frame = {
 				status: 'new',
-				target: DATA_DB_TEST,
+				target: DATA_DB_TEST
 			}
 
 			if(postId) {
@@ -61,10 +64,10 @@ export const POST: RequestHandler = async ({ request }) => {
 				console.error('Cannot get postId')
 			}
 
-			if(metricType = 'PPG0') {
+			if(metricType == 'PPG0') {
 				dataArr.splice(0, 3).forEach(element => frame.ir_frame?.push(Number(element)))
 			}
-			else if (metricType = 'PPG1') {
+			else if (metricType == 'PPG1') {
 				dataArr.splice(0, 3).forEach(element => frame.red_frame?.push(Number(element)))
 			}
 

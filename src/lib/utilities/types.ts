@@ -1,8 +1,9 @@
-export interface User {
+export type HfUser = {
+	email: string
+	pass: string
 	DOB: string
-	Height: string
-	Name: string
-	Weight: string
+	weight: string
+	height: string
 }
 
 // 256 samples
