@@ -31,7 +31,7 @@
 			<Row>
 				<Column>
 					<Line
-						data={formatData('ppg_raw', p.ppg_raw)}
+						data={formatData('ppg', p.ppg)}
 						width={500}
 						height={200}
 						options={{ responsive: true }}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import 'carbon-components-svelte/css/g100.css'
-	import SampleView from '$lib/components/SampleView.svelte'
+	import WindowView from '$lib/components/WindowView.svelte'
 	import FrameView from '$lib/components/FrameView.svelte'
 	import SignInForm from '$lib/components/LogInForm.svelte'
 	import { auth } from '$lib/utilities/firebase.js'
@@ -27,6 +27,6 @@
 	{#if selectedIndex == 0}
 		<FrameView />
 	{:else if selectedIndex == 1}
-		<SampleView />
+		<WindowView />
 	{/if}
 {/if}

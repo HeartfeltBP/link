@@ -1,11 +1,11 @@
-export function formatData(label: string, abp: number[]) {
+export function formatData(label: string, sig: number[]) {
 	const data = {
-		labels: Array.from(Array(abp.length).keys()),
+		labels: Array.from(Array(sig.length).keys()),
 		type: 'line',
 		datasets: [
 			{
 				label: label,
-				data: abp,
+				data: sig,
 				fill: true,
 				lineTension: 0.3,
 				backgroundColor: 'rgba(255, 0, 0, 1)',
