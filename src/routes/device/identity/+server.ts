@@ -9,7 +9,9 @@ export const GET = ( async ({request, cookies}) => {
 	const testResponse = await fetch('http://192.168.12.26:80/', {
 		method: 'GET'
 	})
-})
+
+    return testResponse
+}) satisfies RequestHandler
 
 export const POST = ( async ({ request, cookies }) => {
 	
@@ -43,7 +45,7 @@ export const POST = ( async ({ request, cookies }) => {
 			localStorage.setItem('BpmIdentityStatus', 'OK')
             console.log(auth.currentUser?.uid)
 		    console.log(postResponse)	
-            return new Response(idToken, {status: 400})
+            return new Response(idToken, {status: 200})
 		}
         return new Response(idToken, {status: 400})
 	}
