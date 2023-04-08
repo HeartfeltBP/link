@@ -17,12 +17,7 @@ export const POST = ( async ({ request, cookies }) => {
 	
 	console.log('<<><><><><><><><><><><><><><><><><><><><><><><>>')
 	const idToken = cookies.get('token')
-
-	const idStatus = localStorage.getItem('BpmIdentityStatus')
-	if(idStatus === 'OK') {
-		return new Response('ID Status OK, aborting', { status: 302 })
-	}
-
+	
     if(!idToken || typeof(idToken) == 'undefined') {
         return new Response('Token not available', { status: 401 })
     }
@@ -42,7 +37,6 @@ export const POST = ( async ({ request, cookies }) => {
 			}
 		})
 		if(postResponse.status == 200) {
-			localStorage.setItem('BpmIdentityStatus', 'OK')
             console.log(auth.currentUser?.uid)
 		    console.log(postResponse)	
             return new Response(idToken, {status: 200})

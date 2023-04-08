@@ -23,7 +23,6 @@ type HfWindow = {
 }
 
 export const POST: RequestHandler = async ({ request }) => {
-	let response: Response
 	
 	const contentType = request.headers.get('Content-Type')
 
@@ -48,6 +47,8 @@ export const POST: RequestHandler = async ({ request }) => {
 			tokenTemp[1] = tokenTemp[1].replace(/[\r\n]+/gm, '')
 			const idToken = tokenTemp[1]
 			console.log(tokenTemp, idToken)
+			if(!idToken || idToken == '') return new Response('Cannot get authentication token', {status: 401}) 
+			console.log('<><><><><ID::ID:' + `${getUid(idToken)}` + ':ID::ID><><><><>')
 
 			const frameHeader: FrameHeader = {
 				sr: Number(samplingRate)
@@ -64,23 +65,29 @@ export const POST: RequestHandler = async ({ request }) => {
 				console.error('Cannot get postId')
 			}
 
+			let tempArr: number[] = []
 			if(metricType == 'PPG0') {
-				dataArr.splice(0, 3).forEach(element => frame.ir_frame?.push(Number(element)))
+				console.info('Processing IR Frame')
+				dataArr.splice(7).forEach(element => tempArr.push(Number(element)))
+				frame.ir_frame = tempArr
 			}
 			else if (metricType == 'PPG1') {
-				dataArr.splice(0, 3).forEach(element => frame.red_frame?.push(Number(element)))
+				console.info('Processing Red Frame')
+				dataArr.splice(7).forEach(element => tempArr.push(Number(element)))
+				frame.red_frame = tempArr
+			} else {
+				return new Response('INIT', { status: 200 })
 			}
 
-			if(!idToken || idToken == '') return new Response('Cannot get authentication token', {status: 401}) 
-			
+			console.log(tempArr)
+			const fidInQuestion: string | null = await uploadFrame(idToken, frame, frameHeader)
 
-			console.log('<><><><><ID::ID:' + `${getUid(idToken)}` + ':ID::ID><><><><>')
-
-			if(metricType == 'PPG0' || metricType == 'PPG1') {
-				
-				const fidInQuestion = await uploadFrame(idToken, frame, frameHeader)
-				return new Response(`${fidInQuestion}`, { status: 200 })
-		
+			// currently only support PPG, ECG can still be sent, however it will be rejected
+			if(fidInQuestion) {
+				return new Response(`${fidInQuestion}`, { status: 201 })
+			}
+			else {
+				return new Response('INIT', { status: 200 })
 			}
 
 			fs.openSync(

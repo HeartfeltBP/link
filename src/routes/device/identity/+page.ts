@@ -1,11 +1,11 @@
 export const ssr = false
 
 import { goto } from '$app/navigation'
-import { auth } from '$lib/utilities/firebase'
+import { uStore } from '$lib/utilities/auth'
 import type { PageLoad, PageLoadEvent } from './$types'
 
 export const load = ( async ({ parent }: PageLoadEvent) => {
-    if(!auth.currentUser) {
+    if(!uStore) {
         goto('/')
     }
 	return

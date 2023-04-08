@@ -7,7 +7,7 @@
 
 	const user = userStore(auth)
 	if(!user) {
-		goto('account/auth')
+		goto('device/identity')
 	}
 </script>
 

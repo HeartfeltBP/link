@@ -6,36 +6,39 @@ import { DOC_ENDPOINT, GOOGLE_API, DATA_DB_TEST } from '$lib/utilities/constants
 import { firestore_admin } from './firebase.server'
 import { getUid } from './auth.server'
    
-export const uploadFrame = async (token: string, frame: Frame, frameHeader?: FrameHeader): Promise<string> => {
+export const uploadFrame = async (token: string, frame: Frame, frameHeader?: FrameHeader): Promise<string | null> => {
 	const uid = await getUid(token)
 
     if(!uid || typeof(uid) == 'undefined' || uid == null) {
         console.error('User not logged in. UID not available...')
-        return 'FAIL'
+        return null
     }
     
     const framePath = `${DATA_DB_TEST}${uid}/frames/`
     const headerPath = `${DATA_DB_TEST}${uid}/headers/`
     
-    if(frame.fid && frame.fid == 'INIT') {
+    if(frame.fid && frame.fid === 'INIT') {
+        frame.fid = undefined
         console.log(framePath, headerPath, frame.fid)
 		const frameRef: DocumentReference = await firestore_admin.collection(framePath).add(frame)
 		console.log(framePath, headerPath, frameRef.id);
-        await firestore_admin.doc(framePath + `${frame.fid}`).set(frame)
 
         if(typeof(frameHeader) != 'undefined') {
             // await firestore_admin.doc(headerPath + `${frame.fid}`).set(frameHeader)
 			 await firestore_admin.doc(headerPath + `${frameRef.id}`).set(frameHeader)
         }
-        return frameRef.id.toString()
-    } else if(frame.fid && frame.fid != 'INIT'){
-        await firestore_admin.doc(framePath + `${frame.fid}`).set(frame)
+        return frameRef.id
+    } else if(frame.fid && frame.fid != 'INIT' && frame.fid.length > 4){
+        if(!firestore_admin.collection(framePath).doc(frame.fid).get().then(query => query.exists)) {
+            return null
+        }
 
+        await firestore_admin.doc(framePath + `${frame.fid}`).update({...frame})
         if(typeof(frameHeader) != 'undefined' && typeof(frame.fid) != 'undefined') {
-            await firestore_admin.doc(headerPath + `${frame.fid}`).set(frameHeader)
+            await firestore_admin.doc(headerPath + `${frame.fid}`).update({...frameHeader})
         }
     }
-	return 'INIT'
+	return null
 }
 
 // export const uploadFrameHttp = async (uid: string, token: string, frame: Frame, frameHeader?: FrameHeader) =>
