@@ -14,13 +14,11 @@ export interface hfWindow {
 	ppg_scaled: number[] 	// 
 	vpg_scaled: number[]
 	apg_scaled: number[]
-	abp_scaled: number[] 	// output of model
-	ppg_raw: number[] 		// combined red and ir
-	ppg: number[] 			// ppg after bandpass
-	abp: number[] 			// rescaled bp prediction (actual wave)
+	ppg: number[] 			// 256 samples of ppg data from combined_frame_for_processing
+	abp: number[] 			// bp prediction (raw model output)
 	f0: number 				// fundamental frequency of short window (not representative of hr)
-	snr: number
-	beat_sim: number
+	snr: number             // estimated signal to noise ratio
+	beat_sim: number        // correlation between beats in window
 }
 
 // 4100 samples
@@ -30,12 +28,15 @@ export interface Frame {
 	target: string 			// collection to write to downstream (testing mode bpm-data-test)
 	ir_frame?: number[] 	// raw data
 	red_frame?: number[] 	// raw data
+	ir_frame_for_processing?: number[]  // for spo2 calc
+	red_frame_for_processing?: number[] // for spo2 calc
 	ir_frame_for_presentation?: number[]
 	red_frame_for_presentation?: number[]
+	combined_frame_for_processing?: number[] // broken into windows for bp prediction
 	combined_frame_for_presentation?: number[]
-	pulse_rate?: number
+	pulse_rate?: number  // from red_frame_for_processing
 	spo2?: number
-	r?: number // absorb
+	r?: number // absorbance
 }
 
 export interface FrameHeader {
