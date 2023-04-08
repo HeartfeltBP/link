@@ -73,25 +73,9 @@ export const createAuthEmailPass = async (
 }
 
 export const createUser = async () => {
-
+// wrap create with email with this to also send things to db
 }
 
-// export const syncUser = async () =>
-// {
-// 	const userAuth: Auth = getAuth(app)
-// 	if(!userAuth.currentUser) {
-// 		return
-// 	}
-	
-// 	const token = await userAuth.currentUser.getIdToken()
-
-// 	const response = await fetch('/account/session', {
-// 		method: 'POST',
-// 		body: token
-// 	})
-
-// 	return await response.text()
-// }
 
 export const checkEmailPass = async (
 	email: string,
@@ -125,10 +109,12 @@ export const checkEmailPass = async (
 
 				auth.onAuthStateChanged(() => goto('/account/signin')) // create hook to clear cookies and stuff
 				auth.onIdTokenChanged( async () => {
+
 					const isTokenSet: boolean = cookie.parse(document.cookie)['token'] !== undefined
 					const token: string = await curUser.getIdToken()
 
-					document.cookie = cookie.serialize('idToken', token ?? '', {
+					// do with localstorage or session storage instead?
+					document.cookie = cookie.serialize('token', token ?? '', {
 						path: '/',
 						maxAge: token ? undefined : 0
 					})
@@ -158,10 +144,21 @@ export const checkEmailPass = async (
 	return null
 }
 
+export const getSetNewIdToken = async (): Promise<string | null> => {
+	const token = await auth.currentUser?.getIdToken() ?? null
+	document.cookie = cookie.serialize('token', token ?? '', {
+		path: '/',
+		maxAge: token ? undefined : 0
+	})
+	return token
+}
+
 export const setIdStatus = (status: string) => {
+	const idStatus = localStorage.setItem('BpmIdentityStatus', status)
+	return typeof(idStatus) != 'undefined'
+}
+
+export const getIdStatus = (status: string) => {
 	const idStatus = localStorage.getItem('BpmIdentityStatus')
-	if(idStatus) {
-		return 1
-	}
-	return 0
+	return typeof(idStatus) != 'undefined'
 }

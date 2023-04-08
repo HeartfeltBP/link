@@ -1,5 +1,6 @@
 import { auth_admin } from './firebase.server'
-import { getAuth, type DecodedIdToken } from 'firebase-admin/auth'
+import { getAuth } from 'firebase-admin/auth'
+import type { DecodedIdToken } from 'firebase-admin/auth'
 
 export const auth = auth_admin
 
