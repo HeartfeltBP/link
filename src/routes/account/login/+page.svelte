@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { auth } from '$lib/utilities/firebase'
 	import { userStore } from 'sveltefire'
-
 	import 'carbon-components-svelte/css/g100.css'
-	import SignInForm from '$lib/components/SignInForm.svelte'
+	import LogInForm from '$lib/components/LogInForm.svelte'
 
 	const user = userStore(auth)
 </script>
 
 {#if !$user}
-	<SignInForm />
+	<LogInForm />
 {:else}
-    <p>Security features...</p>
+	<p>Security features...</p>
+	<p>{$user.uid}</p>
 {/if}

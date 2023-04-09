@@ -2,11 +2,10 @@
 	import 'carbon-components-svelte/css/g100.css'
 	import SampleView from '$lib/components/SampleView.svelte'
 	import FrameView from '$lib/components/FrameView.svelte'
-	import SignInForm from '$lib/components/SignInForm.svelte'
 	import { auth } from '$lib/utilities/firebase.js'
 	import { userStore } from 'sveltefire'
 
-	import { ContentSwitcher, Switch, Button } from 'carbon-components-svelte'
+	import { ContentSwitcher, Switch } from 'carbon-components-svelte'
 
 	const user = userStore(auth)
 

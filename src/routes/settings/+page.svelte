@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Home from '$lib/components/Home.svelte'
 	import 'carbon-components-svelte/css/g100.css'
 
 	import { userStore } from 'sveltefire'

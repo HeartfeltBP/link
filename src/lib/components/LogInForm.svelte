@@ -4,12 +4,11 @@
 		TextInput,
 		Content,
 		Button,
-		FluidForm,
+		Form,
 		ImageLoader,
 		Column,
 		Grid,
-		Row,
-		Breakpoint
+		Row
 	} from 'carbon-components-svelte'
 
 	import { Login } from 'carbon-icons-svelte'
@@ -17,8 +16,7 @@
 	import logoImage from '$lib/assets/HeartfeltLogo.png'
 	import { checkEmailPass } from '$lib/utilities/auth'
 
-
-	let email: string, pass: string 
+	let email: string, pass: string
 </script>
 
 <Content>
@@ -26,20 +24,23 @@
 		<Row>
 			<Column>
 				<div style="width:100%">
-					<h1 style="margin-bottom:1em">Sign In</h1>
-					<FluidForm on:submit={()=>checkEmailPass(email, pass)}>
+					<h1 style="margin-bottom:1em">Log In</h1>
+					<Form on:submit={() => checkEmailPass(email, pass)}>
 						<div style="width: 8em; margin-bottom: 2em">
-							<ImageLoader fadeIn={true} src={ logoImage } />
+							<ImageLoader fadeIn={true} src={logoImage} />
 						</div>
 						<TextInput
 							required
 							type="input"
+							size="xl"
 							bind:value={email}
 							labelText="E-mail"
 							placeholder="Enter e-mail"
 						/>
+						<br />
 						<PasswordInput
 							required
+							size="xl"
 							type="password"
 							invalidText="Please enter password"
 							bind:value={pass}
@@ -47,9 +48,9 @@
 							placeholder="Enter password"
 						/>
 						<br />
-						<Button icon={Login} type="submit" name="submit">Sign In</Button>
-						<Button kind="ghost" href="/account">Create Account</Button>
-					</FluidForm>
+						<Button icon={Login} type="submit" name="submit">Log In</Button>
+						<Button kind="ghost" href="/account/signup">Create Account</Button>
+					</Form>
 				</div>
 			</Column>
 		</Row>

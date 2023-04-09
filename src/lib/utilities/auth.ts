@@ -1,5 +1,4 @@
-import { app, firestore } from './firebase'
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { app, auth } from './firebase'
 import {
 	createUserWithEmailAndPassword,
 	type Auth,
@@ -8,56 +7,60 @@ import {
 	getAuth
 } from 'firebase/auth'
 
-import { userStore } from 'sveltefire'
 import { goto } from '$app/navigation'
+import { writable } from 'svelte/store'
+import { browser } from '$app/environment'
+import cookie from 'cookie'
+
+export const uStore = writable<User | null>(null)
 
 export const hasCurrentUser = (): boolean => {
-	console.log(getAuth(app))
-	const user: User | null = getAuth(app).currentUser
-	return user ? true : false
+	return uStore ? true : false
 }
 
-export const getUid = (): string | null => {
-	if(hasCurrentUser()) {
-		return getAuth(app).currentUser?.uid || null
-	}
-	return null
-}
+// export const getUid = (): string | null => {
+// 	if(hasCurrentUser()) {
+// 		return getAuth(app).currentUser?.uid || null
+// 	}
+// 	return null
+// }
 
 export const logOut = () => {
-	getAuth(app).signOut().then(() => {
-		// successful signout!
-		console.log('logged out... womp womp')
-		return false
-	})
+	getAuth(app)
+		.signOut()
+		.then(() => {
+			// successful signout!
+			document.cookie = ''
+			console.log('logged out... womp womp')
+			console.log(document.cookie)
+			return false
+		})
 }
 
-export const createAuthEmailPass = async (
-	email: string,
-	pass: string,
-	pass_confirm?: string,
-) => {
+export const createAuthEmailPass = async (email: string, pass: string, pass_confirm?: string) => {
 	if (pass_confirm !== undefined) {
 		if (pass !== pass_confirm) {
 			console.error('PASSWORDS DO NOT MATCH!')
+			localStorage.setItem('BpmIdentityStatus', 'INVALID')
 			return -1
 		}
 	}
 
 	createUserWithEmailAndPassword(getAuth(app), email, pass)
-		.then(async (userCredential) => {
+		.then(async () => {
 			// signed in
-			const user = userCredential.user
-			await setDoc(doc(firestore, 'users', user.uid), {
-				DOB: 'bungo',
-				Height: 'bungo',
-				Name: 'bungo',
-				Weight: 'bungo'
-			})
+			// const user = userCredential.user
+			// await setDoc(doc(firestore, 'users', user.uid), {
+			// 	DOB: 'bungo',
+			// 	Height: 'bungo',
+			// 	Name: 'bungo',
+			// 	Weight: 'bungo'
+			// })
 		})
+
 		.catch((e) => {
 			const errorCode = e.errorCode
-			const errorMessage = e.errorMessage
+			// const errorMessage = e.errorMessage
 			console.log(errorCode, e)
 			return -1
 		})
@@ -65,45 +68,87 @@ export const createAuthEmailPass = async (
 	return 0
 }
 
-export const createUser = async() => {
-
+export const createUser = async () => {
+	// wrap create with email with this to also send things to db
 }
 
-// export const signInPost(curAuth: Auth) {
-// 	if(hasCurrentUser()) {
-// 		const csrfToken = 
-// 		if(!csrfToken) return
+export const checkEmailPass = async (email: string, pass: string): Promise<Auth | null> => {
+	if (!browser) {
+		console.log('no browser available')
+		return null
+	}
 
-// 	}
-// }
+	if (email.length <= 3) {
+		console.info('enter a proper email please')
+		return null
+	}
 
-export const checkEmailPass = async (
-	email: string,
-	pass: string,
-): Promise<Auth | null> => {
-	console.log(email, pass)
+	if (pass.length <= 4) {
+		console.info('unexpectedly bad password')
+		return null
+	}
 
-	signInWithEmailAndPassword(getAuth(app), email, pass)
-		.then ( async (userCredential) => {
+	console.info('signing in', email, '...')
+
+	signInWithEmailAndPassword(auth, email, pass)
+		.then(async (userCredential) => {
 			// signed in
-			const user = userCredential.user
+			const curUser = userCredential.user
 
-			console.log(user.uid)
+			if (curUser.uid != undefined) {
+				console.info('🪪')
 
-			const uidVal = user.uid
+				auth.onAuthStateChanged(() => goto('/account/signin')) // create hook to clear cookies and stuff
+				auth.onIdTokenChanged(async () => {
+					const isTokenSet: boolean = cookie.parse(document.cookie)['token'] !== undefined
+					const token: string = await curUser.getIdToken()
 
-			if (user.uid != undefined) {
-				const retVal = await setDoc(doc(firestore, `users/${user.uid}/`), { uidVal })
-				console.log(retVal)
-				getAuth(app).onAuthStateChanged(() => goto('/'))
+					// do with localstorage or session storage instead?
+					document.cookie = cookie.serialize('token', token ?? '', {
+						path: '/',
+						maxAge: token ? undefined : 0
+					})
+
+					uStore.set(curUser)
+
+					if (!isTokenSet && token) {
+						document.location.reload()
+					}
+				})
+
+				// setInterval(async () => {
+				// 	if(auth.currentUser) {
+				// 		await auth.currentUser.getIdToken(true)
+				// 	}
+				// }, (10 * 60 * 1000))
+
 				return getAuth(app)
 			}
 		})
 		.catch((e) => {
 			const errorCode = e.errorCode
-			const errorMessage = e.errorMessage
+			// const errorMessage = e.errorMessage
 			console.log(errorCode, e)
 			return null
 		})
 	return null
+}
+
+export const getSetNewIdToken = async (): Promise<string | null> => {
+	const token = (await auth.currentUser?.getIdToken()) ?? null
+	document.cookie = cookie.serialize('token', token ?? '', {
+		path: '/',
+		maxAge: token ? undefined : 0
+	})
+	return token
+}
+
+export const setIdStatus = (status: string) => {
+	const idStatus = localStorage.setItem('BpmIdentityStatus', status)
+	return typeof idStatus != 'undefined'
+}
+
+export const getIdStatus = (status: string) => {
+	const idStatus = localStorage.getItem('BpmIdentityStatus')
+	return typeof idStatus != 'undefined'
 }

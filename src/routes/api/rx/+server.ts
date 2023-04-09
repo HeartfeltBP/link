@@ -1,47 +1,61 @@
+/*eslint prefer-const: 0*/
 import type { RequestHandler } from '@sveltejs/kit'
-import { decodeAsync } from '@msgpack/msgpack'
 import * as fs from 'fs'
 import type { Frame, FrameHeader } from '$lib/utilities/types'
-import { uploadFrame } from '$lib/utilities/repository'
+import { uploadFrame } from '$lib/utilities/server/repository.server'
+import { getUid } from '$lib/utilities/server/auth.server'
 import { DATA_DB_TEST } from '$lib/utilities/constants'
-import { app } from '$lib/utilities/firebase'
-import { getAuth } from 'firebase/auth'
+
 // https://www.ibm.com/docs/en/odm/8.8.0?topic=api-rest-response-codes-error-messages
 
-const MSGPACK_TYPE = 'application/x-msgpack'
-const JSON_TYPE = 'application/json'
+// const MSGPACK_TYPE = 'application/x-msgpack'
+// const JSON_TYPE = 'application/json'
 const CSV_TYPE = 'text/csv'
 const PLAIN_TYPE = 'text/plain'
 
-type HfWindow = {
-	numSamples: number
-	samplingRate: number
-	metricType: string
-	collectionCount: number
-}
+// type HfWindow = {
+// 	numSamples: number
+// 	samplingRate: number
+// 	metricType: string
+// 	collectionCount: number
+// }
 
 export const POST: RequestHandler = async ({ request }) => {
-	let response: Response
 	const contentType = request.headers.get('Content-Type')
+
 	if (request.body != null && contentType) {
-		if (contentType.startsWith(MSGPACK_TYPE)) {
-			const data = await decodeAsync(request.body)
-			console.log('NOT IMPLEMENTED')
-		} else if (contentType.startsWith(JSON_TYPE)) {
-			const data = await request.json()
-			console.log('NOT IMPLEMENTED')
-		} else if (contentType.startsWith(CSV_TYPE) || contentType.startsWith(PLAIN_TYPE)) {
+		if (contentType.startsWith(CSV_TYPE) || contentType.startsWith(PLAIN_TYPE)) {
 			const data = await request.text()
 
-			let dataArr = data.split(',')
-			console.log(dataArr[0], dataArr[1], dataArr[2], dataArr[3], dataArr.length)
+			const dataArr = data.split(',')
+			console.log(
+				dataArr[0],
+				dataArr[1],
+				dataArr[2],
+				dataArr[3],
+				dataArr[4],
+				dataArr[5],
+				dataArr[6],
+				dataArr.length
+			)
 
-			let numSamples = dataArr[0]
-			let samplingRate = dataArr[1]
-			let metricType = dataArr[2]
-			let collectionCount = dataArr[3]
-			let transmissionCount = dataArr[4]
-			let postId = dataArr[5] // the fid from previous transmission if it exists
+			// const numSamples = dataArr[0]
+			const samplingRate = dataArr[1]
+			const metricType = dataArr[2]
+			const collectionCount = dataArr[3]
+			// const transmissionCount = dataArr[4]
+			const postId = dataArr[5] // the fid from previous transmission if it exists
+			const tokenAuth = dataArr[6] // token
+
+			// const sampleData = dataArr.slice(6, -1) use this instead of of the foreach?
+
+			const tokenTemp = tokenAuth.split(' ')
+			tokenTemp[1] = tokenTemp[1].replace(/[\r\n]+/gm, '')
+			const idToken = tokenTemp[1]
+			console.log(tokenTemp, idToken)
+			if (!idToken || idToken == '')
+				return new Response('Cannot get authentication token', { status: 401 })
+			console.log('<><><><><ID::ID:' + `${getUid(idToken)}` + ':ID::ID><><><><>')
 
 			const frameHeader: FrameHeader = {
 				sr: Number(samplingRate)
@@ -49,26 +63,36 @@ export const POST: RequestHandler = async ({ request }) => {
 
 			const frame: Frame = {
 				status: 'new',
-				target: DATA_DB_TEST,
+				target: DATA_DB_TEST
 			}
 
-			if(postId) {
-				if(postId !== 'INIT') {
-					frame.fid = postId;
-				}
+			if (postId) {
+				frame.fid = postId
+			} else {
+				console.error('Cannot get postId')
 			}
 
-			if(metricType = 'PPG0') {
-				dataArr.splice(0, 3).forEach(element => frame.ir_frame?.push(Number(element)))
+			let tempArr: number[] = []
+			if (metricType == 'PPG0') {
+				console.info('Processing IR Frame')
+				dataArr.splice(7).forEach((element) => tempArr.push(Number(element)))
+				frame.ir_frame = tempArr
+			} else if (metricType == 'PPG1') {
+				console.info('Processing Red Frame')
+				dataArr.splice(7).forEach((element) => tempArr.push(Number(element)))
+				frame.red_frame = tempArr
+			} else {
+				return new Response('INIT', { status: 200 })
 			}
-			else if (metricType = 'PPG1') {
-				dataArr.splice(0, 3).forEach(element => frame.red_frame?.push(Number(element)))
-			}
-			
-			if(metricType == 'PPG0' || metricType == 'PPG1') {
-				const fidInQuestion = await uploadFrame(getAuth(app).currentUser?.uid, frame, frameHeader)
-				return new Response(`${fidInQuestion}`, { status: 200 })
-				
+
+			console.log(tempArr)
+			const fidInQuestion: string | null = await uploadFrame(idToken, frame, frameHeader)
+
+			// currently only support PPG, ECG can still be sent, however it will be rejected
+			if (fidInQuestion) {
+				return new Response(`${fidInQuestion}`, { status: 201 })
+			} else {
+				return new Response('INIT', { status: 200 })
 			}
 
 			fs.openSync(
@@ -86,7 +110,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		}
 	} else {
 		// errors
-		console.log('something went wrong API/SERVER')
+		console.log('content type invalid or something else went wrong...')
 	}
 
 	return new Response('balls', { status: 400 })
