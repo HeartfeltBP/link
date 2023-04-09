@@ -6,7 +6,7 @@
 	import { auth } from '$lib/utilities/firebase.js'
 
 	const user = userStore(auth)
-	if(!user) {
+	if (!user) {
 		goto('device/identity')
 	}
 </script>

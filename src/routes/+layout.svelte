@@ -1,25 +1,15 @@
 <script lang="ts">
 	import {
 		Content,
-		Grid,
-		Row,
-		Column,
-		HeaderNavMenu,
-		HeaderNavItem,
 		HeaderUtilities,
-		HeaderNav,
 		SideNav,
 		SideNavItems,
-		SideNavMenu,
 		SideNavLink,
 		SkipToContent,
 		HeaderAction,
 		Header,
-		SideNavMenuItem,
 		HeaderPanelLink,
 		HeaderPanelDivider,
-		Tag,
-		HeaderGlobalAction,
 		HeaderActionLink
 	} from 'carbon-components-svelte'
 
@@ -28,9 +18,8 @@
 	import WatsonHealthHoleFilling from 'carbon-icons-svelte/lib/WatsonHealthHoleFilling.svelte'
 	import Settings from 'carbon-icons-svelte/lib/Settings.svelte'
 	import Api from 'carbon-icons-svelte/lib/Api.svelte'
-	import IbmCloudPakWatsonAiops from 'carbon-icons-svelte/lib/IbmCloudPakWatsonAiops.svelte'
 	import { LogoGithub, UserAvatarFilledAlt } from 'carbon-icons-svelte'
-	
+
 	import 'carbon-components-svelte/css/g100.css'
 	import { auth } from '$lib/utilities/firebase.js'
 	import { logOut } from '$lib/utilities/auth.js'
@@ -38,6 +27,9 @@
 
 	let isSideNavOpen = false
 	const user = userStore(auth)
+	// if (typeof window != 'undefined') {
+	// 	const perf = getPerformance(app)
+	// }
 </script>
 
 <svelte:head>
@@ -52,14 +44,14 @@
 	<HeaderUtilities>
 		<HeaderActionLink icon={LogoGithub} href="https://github.com/HeartfeltBP" />
 		{#if $user}
-		<HeaderActionLink icon={Settings} href="/settings" />
+			<HeaderActionLink icon={Settings} href="/settings" />
 		{/if}
 		<HeaderAction icon={UserAvatarFilledAlt}>
 			<HeaderPanelDivider>Account Actions</HeaderPanelDivider>
 			{#if $user}
 				<HeaderPanelLink on:click={() => logOut()}>Log Out</HeaderPanelLink>
 			{:else}
-				<HeaderPanelLink href="/account/signin">Log In</HeaderPanelLink>
+				<HeaderPanelLink href="/account/login">Log In</HeaderPanelLink>
 			{/if}
 		</HeaderAction>
 	</HeaderUtilities>
@@ -69,16 +61,14 @@
 	<SideNavItems>
 		<SideNavLink icon={Home} href="/" text="Home" />
 		{#if $user}
-		<SideNavLink icon={ChartComboStacked} href="/stats" text="Stats" />
-		<SideNavLink icon={WatsonHealthHoleFilling} href="/device" text="Device" />
-		<SideNavLink icon={Settings} href="/settings" text="Settings" />
+			<SideNavLink icon={ChartComboStacked} href="/stats" text="Stats" />
+			<SideNavLink icon={WatsonHealthHoleFilling} href="/device" text="Device" />
+			<SideNavLink icon={Settings} href="/settings" text="Settings" />
 		{/if}
 		<SideNavLink icon={Api} href="/api" text="Api" />
 	</SideNavItems>
 </SideNav>
 
 <Content>
-	<slot>
-
-	</slot>
+	<slot />
 </Content>

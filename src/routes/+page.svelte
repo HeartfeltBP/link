@@ -9,10 +9,9 @@
 <!-- if logged in redirect to home page -->
 
 <Grid>
-    <Row>
-        <Column>
-            <Home />
-        </Column>
-    </Row>
+	<Row>
+		<Column>
+			<Home />
+		</Column>
+	</Row>
 </Grid>
-

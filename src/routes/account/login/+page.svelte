@@ -1,9 +1,6 @@
 <script lang="ts">
-	import { getAuth } from 'firebase/auth'
-	import { app, auth } from '$lib/utilities/firebase'
+	import { auth } from '$lib/utilities/firebase'
 	import { userStore } from 'sveltefire'
-	import { page } from '$app/stores'
-
 	import 'carbon-components-svelte/css/g100.css'
 	import LogInForm from '$lib/components/LogInForm.svelte'
 
@@ -13,6 +10,6 @@
 {#if !$user}
 	<LogInForm />
 {:else}
-    <p>Security features...</p>
-	<p> { $user.uid }</p>
+	<p>Security features...</p>
+	<p>{$user.uid}</p>
 {/if}

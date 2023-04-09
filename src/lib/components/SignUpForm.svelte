@@ -13,36 +13,26 @@
 		Checkbox,
 		MultiSelect,
 		NumberInput,
-		ContentSwitcher,
-		Switch,
-
-		Dropdown
-
+		Dropdown,
+		ImageLoader
 	} from 'carbon-components-svelte'
 	import { CodeSigningService, DocumentPdf } from 'carbon-icons-svelte'
 	import 'carbon-components-svelte/css/g100.css'
 
-	import { createAuthEmailPass, hasCurrentUser } from '../utilities/auth'
+	import { createAuthEmailPass } from '../utilities/auth'
 	import logoImage from '$lib/assets/HeartfeltLogo.png'
 
-	import type { HfUser } from '$lib/utilities/types'
+	// import type { HfUser } from '$lib/utilities/types'
 
 	let email: string, pass: string, pass_confirm: string
-	let height: string, weight: string, race: string, birthdate: string
-
-	function confirmPass(pass: string, passConfirm: string) {
-		return pass === passConfirm ? true : false
-	}
+	// let height: string, weight: string, race: string, birthdate: string
 </script>
 
 <Content>
 	<Grid>
-		<img
-			height="120em"
-			style=" margin: auto; margin-bottom: 2em"
-			alt="logo;"
-			src={logoImage}
-		/>
+		<div style="width: 8em; margin-bottom: 2em">
+			<ImageLoader fadeIn={true} src={logoImage} />
+		</div>
 		<h1>Sign Up</h1>
 		<br />
 		<Form on:submit={() => createAuthEmailPass(email, pass, pass_confirm)}>
@@ -83,20 +73,26 @@
 								</Column>
 								<Column>
 									<br /> <br />
-									<Dropdown selectedId={'0'} items={[
-										{ id: '0', text: 'm (meters)'},
-										{ id: '1', text: 'ft (feet)'}
-									]} />
+									<Dropdown
+										selectedId={'0'}
+										items={[
+											{ id: '0', text: 'm (meters)' },
+											{ id: '1', text: 'ft (feet)' }
+										]}
+									/>
 								</Column>
 								<Column>
 									<NumberInput name="weight" label="Weight" placeholder="e.g. 100" required />
 								</Column>
 								<Column>
 									<br /> <br />
-									<Dropdown selectedId={'0'} items={[
-										{ id: '0', text: 'kg (kilograms)'},
-										{ id: '1', text: 'lb (pounds)'}
-									]} />
+									<Dropdown
+										selectedId={'0'}
+										items={[
+											{ id: '0', text: 'kg (kilograms)' },
+											{ id: '1', text: 'lb (pounds)' }
+										]}
+									/>
 								</Column>
 							</Row>
 						</Column>

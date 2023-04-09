@@ -6,7 +6,7 @@
 // export const onToken = (error: any, data: any) => {
 // 	if(typeof(data != 'undefined')) {
 // 		console.log(data)
-// 	} 
+// 	}
 // }
 
 // export const onServicesAndCharDiscovered = (

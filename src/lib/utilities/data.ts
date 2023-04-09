@@ -25,6 +25,7 @@ export function formatData(label: string, abp: number[]) {
 	return data
 }
 
+// TODO:
 export const txHandler = async (tx: string) => {
-	
+	return tx
 }

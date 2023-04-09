@@ -1,4 +1,4 @@
-import { app, firestore, auth } from './firebase'
+import { app, auth } from './firebase'
 import {
 	createUserWithEmailAndPassword,
 	type Auth,
@@ -15,9 +15,7 @@ import cookie from 'cookie'
 export const uStore = writable<User | null>(null)
 
 export const hasCurrentUser = (): boolean => {
-	console.log(getAuth(app))
-	const user: User | null = getAuth(app).currentUser
-	return user ? true : false
+	return uStore ? true : false
 }
 
 // export const getUid = (): string | null => {
@@ -28,20 +26,18 @@ export const hasCurrentUser = (): boolean => {
 // }
 
 export const logOut = () => {
-	getAuth(app).signOut().then(() => {
-		// successful signout!
-		document.cookie = ""
-		console.log('logged out... womp womp')
-		console.log(document.cookie)
-		return false
-	})
+	getAuth(app)
+		.signOut()
+		.then(() => {
+			// successful signout!
+			document.cookie = ''
+			console.log('logged out... womp womp')
+			console.log(document.cookie)
+			return false
+		})
 }
 
-export const createAuthEmailPass = async (
-	email: string,
-	pass: string,
-	pass_confirm?: string,
-) => {
+export const createAuthEmailPass = async (email: string, pass: string, pass_confirm?: string) => {
 	if (pass_confirm !== undefined) {
 		if (pass !== pass_confirm) {
 			console.error('PASSWORDS DO NOT MATCH!')
@@ -51,9 +47,9 @@ export const createAuthEmailPass = async (
 	}
 
 	createUserWithEmailAndPassword(getAuth(app), email, pass)
-		.then(async (userCredential) => {
+		.then(async () => {
 			// signed in
-			const user = userCredential.user
+			// const user = userCredential.user
 			// await setDoc(doc(firestore, 'users', user.uid), {
 			// 	DOB: 'bungo',
 			// 	Height: 'bungo',
@@ -64,7 +60,7 @@ export const createAuthEmailPass = async (
 
 		.catch((e) => {
 			const errorCode = e.errorCode
-			const errorMessage = e.errorMessage
+			// const errorMessage = e.errorMessage
 			console.log(errorCode, e)
 			return -1
 		})
@@ -73,26 +69,21 @@ export const createAuthEmailPass = async (
 }
 
 export const createUser = async () => {
-// wrap create with email with this to also send things to db
+	// wrap create with email with this to also send things to db
 }
 
-
-export const checkEmailPass = async (
-	email: string,
-	pass: string,
-): Promise<Auth | null> => {
-
-	if(!browser) {
+export const checkEmailPass = async (email: string, pass: string): Promise<Auth | null> => {
+	if (!browser) {
 		console.log('no browser available')
 		return null
 	}
 
-	if(email.length <= 3) {
+	if (email.length <= 3) {
 		console.info('enter a proper email please')
 		return null
 	}
 
-	if(pass.length <= 4) {
+	if (pass.length <= 4) {
 		console.info('unexpectedly bad password')
 		return null
 	}
@@ -100,7 +91,7 @@ export const checkEmailPass = async (
 	console.info('signing in', email, '...')
 
 	signInWithEmailAndPassword(auth, email, pass)
-		.then ( async (userCredential) => {
+		.then(async (userCredential) => {
 			// signed in
 			const curUser = userCredential.user
 
@@ -108,8 +99,7 @@ export const checkEmailPass = async (
 				console.info('🪪')
 
 				auth.onAuthStateChanged(() => goto('/account/signin')) // create hook to clear cookies and stuff
-				auth.onIdTokenChanged( async () => {
-
+				auth.onIdTokenChanged(async () => {
 					const isTokenSet: boolean = cookie.parse(document.cookie)['token'] !== undefined
 					const token: string = await curUser.getIdToken()
 
@@ -121,7 +111,7 @@ export const checkEmailPass = async (
 
 					uStore.set(curUser)
 
-					if(!isTokenSet && token) {
+					if (!isTokenSet && token) {
 						document.location.reload()
 					}
 				})
@@ -131,13 +121,13 @@ export const checkEmailPass = async (
 				// 		await auth.currentUser.getIdToken(true)
 				// 	}
 				// }, (10 * 60 * 1000))
-				
+
 				return getAuth(app)
 			}
 		})
 		.catch((e) => {
 			const errorCode = e.errorCode
-			const errorMessage = e.errorMessage
+			// const errorMessage = e.errorMessage
 			console.log(errorCode, e)
 			return null
 		})
@@ -145,7 +135,7 @@ export const checkEmailPass = async (
 }
 
 export const getSetNewIdToken = async (): Promise<string | null> => {
-	const token = await auth.currentUser?.getIdToken() ?? null
+	const token = (await auth.currentUser?.getIdToken()) ?? null
 	document.cookie = cookie.serialize('token', token ?? '', {
 		path: '/',
 		maxAge: token ? undefined : 0
@@ -155,10 +145,10 @@ export const getSetNewIdToken = async (): Promise<string | null> => {
 
 export const setIdStatus = (status: string) => {
 	const idStatus = localStorage.setItem('BpmIdentityStatus', status)
-	return typeof(idStatus) != 'undefined'
+	return typeof idStatus != 'undefined'
 }
 
 export const getIdStatus = (status: string) => {
 	const idStatus = localStorage.getItem('BpmIdentityStatus')
-	return typeof(idStatus) != 'undefined'
+	return typeof idStatus != 'undefined'
 }

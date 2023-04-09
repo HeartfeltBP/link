@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { Content, Column, Row } from 'carbon-components-svelte'
-
 	import SignUpForm from '$lib/components/SignUpForm.svelte'
 
 	import { auth } from '$lib/utilities/firebase'
