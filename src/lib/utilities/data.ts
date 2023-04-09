@@ -1,11 +1,12 @@
-export function formatData(label: string, abp: number[]) {
+export function formatData(label: string, sig: number[]) {
+	let x = sig.map(element => element - Math.min(... sig))
 	const data = {
-		labels: Array.from(Array(abp.length).keys()),
+		labels: Array.from(Array(sig.length).keys()),
 		type: 'line',
 		datasets: [
 			{
 				label: label,
-				data: abp,
+				data: x,
 				fill: true,
 				lineTension: 0.3,
 				backgroundColor: 'rgba(255, 0, 0, 1)',
@@ -20,12 +21,12 @@ export function formatData(label: string, abp: number[]) {
 				pointRadius: 1,
 				pointHitRadius: 10
 			}
-		]
+		],
 	}
 	return data
 }
 
 // TODO:
 export const txHandler = async (tx: string) => {
-	return tx
+	
 }

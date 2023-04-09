@@ -1,6 +1,6 @@
 <script lang="ts">
 	import 'carbon-components-svelte/css/g100.css'
-	import SampleView from '$lib/components/SampleView.svelte'
+	import SampleView from '$lib/components/WindowView.svelte'
 	import FrameView from '$lib/components/FrameView.svelte'
 	import { auth } from '$lib/utilities/firebase.js'
 	import { userStore } from 'sveltefire'

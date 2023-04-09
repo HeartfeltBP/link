@@ -34,7 +34,10 @@
 						data={formatData('frame', p.combined_frame_for_presentation ?? [])}
 						width={800}
 						height={400}
-						options={{ responsive: true }}
+						options={{
+							responsive: true,
+							// scales: {y: {min: 82000, max: 86000}}
+						}}
 					/>
 				</Column>
 			</Row>
