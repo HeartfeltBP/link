@@ -13,11 +13,10 @@
 	const storageOfLocal = readable(Object.keys(localStorage))
 	const cookies = readable(document.cookie)
 
-
 	export const bpmPair = async () => {
 		const idToken: string = cookie.parse(document.cookie)['token']
 		// const idToken: string | null = localStorage.getItem('token')
-		console.log(".oOoOoOoOooOoOo({<0>})OoOoOoOoOoOooOo.")
+		console.log('.oOoOoOoOooOoOo({<0>})OoOoOoOoOoOooOo.')
 		console.log(idToken)
 
 		if (!idToken || typeof idToken == 'undefined') {
@@ -35,7 +34,7 @@
 			const postResponse = await fetch('http://192.168.12.26:80/', {
 				method: 'POST',
 				headers: {
-					Authorization: idToken
+					Authorization: idToken,
 				}
 			})
 			if (postResponse.status == 200) {
@@ -46,7 +45,6 @@
 			return new Response(idToken, { status: 400 })
 		}
 	}
-
 </script>
 
 {#if !$user}
@@ -57,10 +55,11 @@
 	<br />
 	<p>Hello: {$user.uid}</p>
 	<br />
-	<Button on:click={() => fetch('/device/identity', { method: 'POST' })}>Send Pairing Signal</Button>
+	<Button on:click={() => fetch('/device/identity', { method: 'POST' })}>Send Pairing Signal</Button
+	>
 	<Button on:click={() => fetch('/device/identity', { method: 'GET' })}>Send Get Test</Button>
 	<Button on:click={() => getSetNewIdToken()}>Refresh Id Token</Button>
-	<br/>
+	<br />
 	<h4>LOCAL</h4>
 	<Button on:click={() => bpmPair()}>Send Pairing Signal</Button>
 	<Button on:click={() => bpmPair()}>Send Get Test</Button>
