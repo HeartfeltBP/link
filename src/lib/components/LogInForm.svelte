@@ -7,20 +7,35 @@
 		Form,
 		ImageLoader,
 		Grid,
-		Row
+		Row,
+		InlineNotification
 	} from 'carbon-components-svelte'
 
 	import { Login } from 'carbon-icons-svelte'
 	import 'carbon-components-svelte/css/g100.css'
 	import logoImage from '$lib/assets/HeartfeltLogo.png'
 	import { checkEmailPass } from '$lib/utilities/auth'
+	import { writable } from 'svelte/store'
+	import { error } from '@sveltejs/kit'
 
 	let email: string, pass: string
+	let errors: any[] = []
+	let errorStore = writable(errors)
+
+	window.onerror = (error) => {
+		$errorStore.push(error)
+	}
 </script>
 
 <Content>
 	<Grid>
 		<Row>
+			{#each $errorStore as item}
+			<InlineNotification
+				title="An error has occured"
+				subtitle={item.toString()}
+			/>
+			{/each}
 			<div style="width:100%">
 				<h1 style="margin-bottom:1em">Log In</h1>
 				<Form on:submit={() => checkEmailPass(email, pass)}>

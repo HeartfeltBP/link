@@ -5,7 +5,7 @@
 
 	import 'carbon-components-svelte/css/g100.css'
 	import { Button } from 'carbon-components-svelte'
-	import { readable } from 'svelte/store'
+	import { readable, writable } from 'svelte/store'
 	import { getSetNewIdToken } from '$lib/utilities/auth'
 	import { bleInit } from '$lib/utilities/ble'
 
@@ -13,7 +13,13 @@
 	const storageOfSession = readable(Object.keys(sessionStorage))
 	const storageOfLocal = readable(Object.keys(localStorage))
 	const cookies = readable(document.cookie)
-    
+
+    let value = writable()
+
+    export const bleClick = async (): Promise<void> => {
+        const val = await bleInit()
+        value.set(val)
+    }    
 </script>
 
 {#if !$user}
@@ -26,7 +32,8 @@
 	<br />
 	<br />
 	<h4>BLE</h4>
-	<Button on:click={() => bleInit()}>Connect BLE</Button>
+	<Button on:click={() => bleClick()}>Connect BLE</Button>
+    <p>{$value}</p>
 	<br />
 	<br />
 	<br />

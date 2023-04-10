@@ -12,9 +12,9 @@ export const bleInit = async () => {
     const available = await navigator.bluetooth.getAvailability()
     console.log(navigator)
     if(available) {
-        const devices = await navigator.bluetooth
+        const devices = navigator.bluetooth
         console.log(devices)
-        return devices
+        return JSON.stringify(devices)
     }
 }
 
