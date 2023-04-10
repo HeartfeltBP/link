@@ -140,6 +140,7 @@ export const getSetNewIdToken = async (): Promise<string | null> => {
 		path: '/',
 		maxAge: token ? undefined : 0
 	})
+	localStorage.setItem('token', token ?? '')
 	return token
 }
 

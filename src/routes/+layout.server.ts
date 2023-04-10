@@ -5,6 +5,7 @@ import type { LayoutServerLoad, LayoutServerLoadEvent } from './$types'
 export const load = (async ({ cookies }: LayoutServerLoadEvent) => {
 	try {
 		const token = cookies.get('token')
+		// const token = localStorage.getItem('token')
 		const user = token ? await auth_admin.verifyIdToken(token) : null
 		return {
 			uid: user?.uid,
@@ -13,6 +14,7 @@ export const load = (async ({ cookies }: LayoutServerLoadEvent) => {
 	} catch {
 		// The token is set but invalid or expired
 		cookies.set('token', '', { maxAge: -1 })
+		// localStorage.setItem('token', '')
 		// throw redirect(307, '/')
 	}
 }) satisfies LayoutServerLoad

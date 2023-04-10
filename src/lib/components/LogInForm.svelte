@@ -22,7 +22,6 @@
 <Content>
 	<Grid>
 		<Row>
-			<Column>
 				<div style="width:100%">
 					<h1 style="margin-bottom:1em">Log In</h1>
 					<Form on:submit={() => checkEmailPass(email, pass)}>
@@ -52,7 +51,6 @@
 						<Button kind="ghost" href="/account/signup">Create Account</Button>
 					</Form>
 				</div>
-			</Column>
 		</Row>
 	</Grid>
 </Content>
