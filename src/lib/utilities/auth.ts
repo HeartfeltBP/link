@@ -98,12 +98,12 @@ export const checkEmailPass = async (email: string, pass: string): Promise<Auth 
 			if (curUser.uid != undefined) {
 				console.info('🪪')
 
-				auth.onAuthStateChanged(() => goto('/account/signin')) // create hook to clear cookies and stuff
+				auth.onAuthStateChanged(() => goto('/')) // create hook to clear cookies and stuff
 				auth.onIdTokenChanged(async () => {
 					const isTokenSet: boolean = cookie.parse(document.cookie)['token'] !== undefined
 					const token: string = await curUser.getIdToken()
 
-					// do with localstorage or session storage instead?
+					// do with localstorage or session storage instead - does sveltekit support sending localStorage w request???
 					document.cookie = cookie.serialize('token', token ?? '', {
 						path: '/',
 						maxAge: token ? undefined : 0

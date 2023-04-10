@@ -19,19 +19,32 @@
 		console.log('.oOoOoOoOooOoOo({<0>})OoOoOoOoOoOooOo.')
 		console.log(idToken)
 
-		if (!idToken || typeof idToken == 'undefined') {
-			return new Response('Token not available', { status: 401 })
+		try {
+			if (!idToken || typeof idToken == 'undefined') {
+				return new Response('Token not available', { status: 401 })
+			}
+		} catch(e) {
+			console.error('Token not available')
+			console.error(e)
+			return
 		}
 
 		console.info('Bpm test GET sending...')
-		const testResponse = await fetch('http://192.168.12.26:80/', {
-			method: 'GET'
-		})
+		let testResponse: Response, postResponse: Response
+
+		try {
+			testResponse = await fetch('http://192.168.12.26:80/', {
+				method: 'GET'
+			})
+		} catch(e) {
+			console.error(e)
+			return
+		}
 
 		console.info('Bpm says: ', testResponse.status, testResponse.statusText)
 
 		if (testResponse.status == 200) {
-			const postResponse = await fetch('http://192.168.12.26:80/', {
+			postResponse = await fetch('http://192.168.12.26:80/', {
 				method: 'POST',
 				headers: {
 					Authorization: idToken,
