@@ -7,7 +7,6 @@
 	import { Button } from 'carbon-components-svelte'
 	import { readable } from 'svelte/store'
 	import { getSetNewIdToken } from '$lib/utilities/auth'
-    import noble from '@abandonware/noble'
 	import { bleInit } from '$lib/utilities/ble'
 
 	const user = userStore(auth)

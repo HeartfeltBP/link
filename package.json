@@ -43,6 +43,7 @@
 		"@abandonware/noble": "^1.9.2-20",
 		"@msgpack/msgpack": "^2.8.0",
 		"@types/noble": "^0.0.41",
+		"@types/web-bluetooth": "^0.0.16",
 		"chart.js": "^4.2.1",
 		"dotenv": "^16.0.3",
 		"firebase": "^9.19.1",
@@ -51,6 +52,7 @@
 		"svelte-chartjs": "^3.1.2",
 		"sveltefire": "^0.2.3",
 		"usb": "^2.9.0",
+		"web-bluetooth": "^0.1.2",
 		"ws": "^8.13.0"
 	}
 }
