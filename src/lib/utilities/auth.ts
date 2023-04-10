@@ -140,6 +140,7 @@ export const getSetNewIdToken = async (): Promise<string | null> => {
 		path: '/',
 		maxAge: token ? undefined : 0
 	})
+	localStorage.setItem('token', token ?? '')
 	return token
 }
 
@@ -148,7 +149,7 @@ export const setIdStatus = (status: string) => {
 	return typeof idStatus != 'undefined'
 }
 
-export const getIdStatus = (status: string) => {
+export const getIdStatus = () => {
 	const idStatus = localStorage.getItem('BpmIdentityStatus')
 	return typeof idStatus != 'undefined'
 }
