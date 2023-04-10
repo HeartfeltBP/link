@@ -3,7 +3,7 @@
 	import { auth, firestore } from '$lib/utilities/firebase.js'
 	import { userStore, collectionStore } from 'sveltefire'
 
-	import { Grid, Row, Column } from 'carbon-components-svelte'
+	import { Grid, Row, Column, Button } from 'carbon-components-svelte'
 	import { Line } from 'svelte-chartjs'
 	import { formatData } from '$lib/utilities/data.js'
 	import type { Frame } from '$lib/utilities/types.js'
@@ -25,13 +25,14 @@
 	const posts = collectionStore<Frame>(firestore, `${DATA_DB_TEST}${$user?.uid}/frames`)
 </script>
 
+<Button on:click={() => location.reload()}>Refresh</Button>
 {#if $posts}
 	<Grid>
 		{#each $posts as p}
 			<Row>
 				<Column>
 					<Line
-						data={formatData('frame', p.combined_frame_for_presentation ?? [])}
+						data={formatData(true, 'red_frame', p.red_frame ?? [], 'ir_frame', p.ir_frame ?? [])}
 						width={800}
 						height={400}
 						options={{

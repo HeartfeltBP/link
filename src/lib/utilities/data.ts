@@ -1,27 +1,81 @@
-export function formatData(label: string, sig: number[]) {
-	let x = sig.map(element => element - Math.min(... sig))
+export type HfDataset = {
+	label: string,
+	data: number[],
+	fill: boolean,
+	lineTension: number,
+	backgroundColor: string,
+	borderColor: string,
+	borderCapStyle: CanvasLineCap,
+	borderDash: number[],
+	borderDashOffset: number,
+	borderJoinStyle: CanvasLineJoin,
+	pointHoverBackgroundColor: string,
+	pointHoverBorderColor: string,
+	pointHoverBorderWidth: number,
+	pointRadius: number,
+	pointHitRadius: number
+	
+}
+
+export function formatData(scale: boolean, label: string, sig: number[], label2?: string, sig2?: number[]) {
+	let x : number[]
+	if (scale == true) {
+		x = sig.map(element => element - Math.min(... sig))
+	}
+	else {
+		x = sig
+	}
+	let dataset0: HfDataset = {
+		label: label,
+		data: x,
+		fill: true,
+		lineTension: 0.3,
+		backgroundColor: '#7e2835',
+		borderColor: '#7e2835',
+		borderCapStyle: 'butt' as CanvasLineCap,
+		borderDash: [],
+		borderDashOffset: 0.0,
+		borderJoinStyle: 'miter' as CanvasLineJoin,
+		pointHoverBackgroundColor: 'rgb(0, 0, 0)',
+		pointHoverBorderColor: 'rgba(220, 220, 220,1)',
+		pointHoverBorderWidth: 2,
+		pointRadius: 1,
+		pointHitRadius: 10
+	}
+	let datasets = [dataset0]
+
+	if (typeof sig2 != 'undefined' && typeof label2 != 'undefined') {
+		let xx : number[]
+		if (scale == true) {
+			xx = sig.map(element => element - Math.min(... sig2))
+		}
+		else {
+			xx = sig2
+		}
+		let dataset1: HfDataset = {
+			label: label2,
+			data: xx,
+			fill: true,
+			lineTension: 0.3,
+			backgroundColor: '#115363',
+			borderColor: '#115363',
+			borderCapStyle: 'butt' as CanvasLineCap,
+			borderDash: [],
+			borderDashOffset: 0.0,
+			borderJoinStyle: 'miter' as CanvasLineJoin,
+			pointHoverBackgroundColor: 'rgb(0, 0, 0)',
+			pointHoverBorderColor: 'rgba(220, 220, 220,1)',
+			pointHoverBorderWidth: 2,
+			pointRadius: 1,
+			pointHitRadius: 10
+		}
+		datasets = [dataset0, dataset1]
+	}
+
 	const data = {
 		labels: Array.from(Array(sig.length).keys()),
 		type: 'line',
-		datasets: [
-			{
-				label: label,
-				data: x,
-				fill: true,
-				lineTension: 0.3,
-				backgroundColor: 'rgba(255, 0, 0, 1)',
-				borderColor: 'rgba(255, 0, 0, 1)',
-				borderCapStyle: 'butt' as CanvasLineCap,
-				borderDash: [],
-				borderDashOffset: 0.0,
-				borderJoinStyle: 'miter' as CanvasLineJoin,
-				pointHoverBackgroundColor: 'rgb(0, 0, 0)',
-				pointHoverBorderColor: 'rgba(220, 220, 220,1)',
-				pointHoverBorderWidth: 2,
-				pointRadius: 1,
-				pointHitRadius: 10
-			}
-		],
+		datasets: datasets,
 	}
 	return data
 }

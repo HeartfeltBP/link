@@ -31,7 +31,7 @@
 			<Row>
 				<Column>
 					<Line
-						data={formatData('ppg', p.ppg)}
+						data={formatData(true, 'ppg', p.ppg)}
 						width={500}
 						height={200}
 						options={{ responsive: true }}
@@ -39,7 +39,7 @@
 				</Column>
 				<Column>
 					<Line
-						data={formatData('abp', p.abp)}
+						data={formatData(false, 'abp', p.abp)}
 						width={500}
 						height={200}
 						options={{ responsive: true }}
