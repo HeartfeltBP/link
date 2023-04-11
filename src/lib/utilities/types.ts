@@ -7,7 +7,7 @@ export type HfUser = {
 }
 
 // 256 samples
-export interface hfWindow {
+export interface HfWindow {
 	fid: string 			// frame id
 	wid: string 			// sample id
 	status: string 			// new, valid, invalid, predicted
@@ -24,7 +24,7 @@ export interface hfWindow {
 }
 
 // 4100 samples
-export interface Frame {
+export interface HfFrame {
 	fid?: string
 	status: string 			// new, valid, invalid, predicted
 	target: string 			// collection to write to downstream (testing mode bpm-data-test)
@@ -32,14 +32,13 @@ export interface Frame {
 	red_frame?: number[] 	// raw data
 	ir_frame_for_presentation?: number[]
 	red_frame_for_presentation?: number[]
-	combined_frame_for_processing?: number[] // broken into windows for bp prediction
-	combined_frame_for_presentation?: number[]
+	frame_for_prediction?: number[] // broken into windows for bp prediction
 	pulse_rate?: number  // from red_frame_for_processing
 	spo2?: number
 	r?: number // absorbance
 }
 
-export interface FrameHeader {
+export interface HfFrameHeader {
 	sr: number
 	ir_amplitude?: number
 	red_amplitude?: number

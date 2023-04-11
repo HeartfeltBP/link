@@ -1,10 +1,10 @@
 /*eslint prefer-const: 0*/
 import type { RequestHandler } from '@sveltejs/kit'
 import * as fs from 'fs'
-import type { Frame, FrameHeader } from '$lib/utilities/types'
+import type { HfFrame, HfFrameHeader } from '$lib/utilities/types'
 import { uploadFrame } from '$lib/utilities/server/repository.server'
 import { getUid } from '$lib/utilities/server/auth.server'
-import { DATA_DB_TEST } from '$lib/utilities/constants'
+import { DATA_DB } from '$lib/utilities/constants'
 
 // https://www.ibm.com/docs/en/odm/8.8.0?topic=api-rest-response-codes-error-messages
 
@@ -57,13 +57,13 @@ export const POST: RequestHandler = async ({ request }) => {
 				return new Response('Cannot get authentication token', { status: 401 })
 			console.log('<><><><><ID::ID:' + `${getUid(idToken)}` + ':ID::ID><><><><>')
 
-			const frameHeader: FrameHeader = {
+			const frameHeader: HfFrameHeader = {
 				sr: Number(samplingRate)
 			}
 
-			const frame: Frame = {
+			const frame: HfFrame = {
 				status: 'new',
-				target: DATA_DB_TEST
+				target: DATA_DB
 			}
 
 			if (postId) {

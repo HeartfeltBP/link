@@ -6,8 +6,8 @@
 	import { Grid, Row, Column } from 'carbon-components-svelte'
 	import { Line } from 'svelte-chartjs'
 	import { formatData } from '$lib/utilities/data.js'
-	import type { hfWindow } from '$lib/utilities/types.js'
-	import { DATA_DB_TEST } from '$lib/utilities/constants.js'
+	import type { HfWindow } from '$lib/utilities/types.js'
+	import { DATA_DB } from '$lib/utilities/constants.js'
 	import {
 		Chart as ChartJS,
 		Title,
@@ -22,7 +22,7 @@
 	ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
 
 	const user = userStore(auth)
-	const posts = collectionStore<hfWindow>(firestore, `${DATA_DB_TEST}${$user?.uid}/windows`)
+	const posts = collectionStore<HfWindow>(firestore, `${DATA_DB}${$user?.uid}/windows`)
 </script>
 
 {#if $posts}
@@ -32,17 +32,17 @@
 				<Column>
 					<Line
 						data={formatData(true, 'ppg', p.ppg)}
-						width={500}
-						height={200}
-						options={{ responsive: true }}
+						width={600}
+						height={300}
+						options={{ responsive: false }}
 					/>
 				</Column>
 				<Column>
 					<Line
 						data={formatData(false, 'abp', p.abp)}
-						width={500}
-						height={200}
-						options={{ responsive: true }}
+						width={600}
+						height={300}
+						options={{ responsive: false }}
 					/>
 				</Column>
 			</Row>

@@ -17,10 +17,15 @@ export type HfDataset = {
 	
 }
 
+const calculateAverage = (array: number[]): number => {
+    const sum = array.reduce((a: number, b: number): number => a + b);
+    return sum / array.length;
+};
+
 export function formatData(scale: boolean, label: string, sig: number[], label2?: string, sig2?: number[]) {
 	let x : number[]
 	if (scale == true) {
-		x = sig.map(element => element - Math.min(... sig))
+		x = sig.map(element => element - calculateAverage(sig))
 	}
 	else {
 		x = sig
@@ -47,7 +52,7 @@ export function formatData(scale: boolean, label: string, sig: number[], label2?
 	if (typeof sig2 != 'undefined' && typeof label2 != 'undefined') {
 		let xx : number[]
 		if (scale == true) {
-			xx = sig.map(element => element - Math.min(... sig2))
+			xx = sig.map(element => element - calculateAverage(sig2))
 		}
 		else {
 			xx = sig2
