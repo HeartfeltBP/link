@@ -7,7 +7,8 @@
 	import { Button } from 'carbon-components-svelte'
 	import { readable, writable } from 'svelte/store'
 	import { getSetNewIdToken } from '$lib/utilities/auth'
-	import { bleInit } from '$lib/utilities/ble'
+	import { CHAR_UUID, SERVICE_UUID, bleInit } from '$lib/utilities/ble'
+	import type { Service } from 'noble'
 
 	const user = userStore(auth)
 	const storageOfSession = readable(Object.keys(sessionStorage))
@@ -19,7 +20,11 @@
     export const bleClick = async (): Promise<void> => {
         const val = await bleInit()
         value.set(val)
-    }    
+    }
+
+
+
+
 </script>
 
 {#if !$user}
@@ -32,7 +37,7 @@
 	<br />
 	<br />
 	<h4>BLE</h4>
-	<Button on:click={() => bleClick()}>Connect BLE</Button>
+	<Button on:click={() => bleClick()}>Get BLE Info</Button>
     <p>{$value}</p>
 	<br />
 	<br />
