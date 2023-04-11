@@ -31,17 +31,17 @@
 			<Row>
 				<Column>
 					<Line
-						data={formatData(true, 'ppg', p.ppg)}
-						width={600}
-						height={300}
+						data={formatData(true, `ppg_${p.wid}`, p.ppg)}
+						width={400}
+						height={200}
 						options={{ responsive: false }}
 					/>
 				</Column>
 				<Column>
 					<Line
-						data={formatData(false, 'abp', p.abp)}
-						width={600}
-						height={300}
+						data={formatData(false, `abp_${p.wid}`, p.abp)}
+						width={400}
+						height={200}
 						options={{ responsive: false }}
 					/>
 				</Column>

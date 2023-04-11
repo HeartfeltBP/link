@@ -23,16 +23,9 @@ const calculateAverage = (array: number[]): number => {
 };
 
 export function formatData(scale: boolean, label: string, sig: number[], label2?: string, sig2?: number[]) {
-	let x : number[]
-	if (scale == true) {
-		x = sig.map(element => element - calculateAverage(sig))
-	}
-	else {
-		x = sig
-	}
 	let dataset0: HfDataset = {
 		label: label,
-		data: x,
+		data: sig,
 		fill: true,
 		lineTension: 0.3,
 		backgroundColor: '#7e2835',
@@ -50,16 +43,9 @@ export function formatData(scale: boolean, label: string, sig: number[], label2?
 	let datasets = [dataset0]
 
 	if (typeof sig2 != 'undefined' && typeof label2 != 'undefined') {
-		let xx : number[]
-		if (scale == true) {
-			xx = sig.map(element => element - calculateAverage(sig2))
-		}
-		else {
-			xx = sig2
-		}
 		let dataset1: HfDataset = {
 			label: label2,
-			data: xx,
+			data: sig2,
 			fill: true,
 			lineTension: 0.3,
 			backgroundColor: '#115363',

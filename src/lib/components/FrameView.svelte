@@ -31,23 +31,21 @@
 	<Grid>
 		{#each $posts as p}
 			<Row>
-				<Column padding>SpO2 = {p.spo2}%</Column>
+				<Column>SpO2 = {p.spo2}%</Column>
 			</Row>
 			<Row>
-				<Column padding>R = {Math.round((p.r ?? 0) * 10000) / 10000}</Column>
+				<Column>R = {Math.round((p.r ?? 0) * 10000) / 10000}</Column>
 			</Row>
 			<Row>
-				<Column padding>Pulse Rate = {p.pulse_rate} bpm</Column>
+				<Column>Pulse Rate = {p.pulse_rate} bpm</Column>
 			</Row>
 			<Row>
 				<Column>
 					<Line
-						data={formatData(false, 'red_frame', p.red_frame_for_presentation ?? [], 'ir_frame', p.ir_frame_for_presentation ?? [])}
+						data={formatData(false, `red_${p.fid}`, p.red_frame_for_presentation ?? [], `ir_${p.fid}`, p.ir_frame_for_presentation ?? [])}
 						width={1600}
 						height={400}
-						options={{
-							responsive: false,
-						}}
+						options={{ responsive: false }}
 					/>
 				</Column>
 			</Row>
