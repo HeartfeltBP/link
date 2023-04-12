@@ -5,32 +5,19 @@
 
 	import 'carbon-components-svelte/css/g100.css'
 	import { Button } from 'carbon-components-svelte'
-	import { readable } from 'svelte/store'
+	import { readable, writable, type Writable } from 'svelte/store'
 	import { getSetNewIdToken } from '$lib/utilities/auth'
+	import { test } from 'vitest'
 
 	const user = userStore(auth)
 	const storageOfSession = readable(Object.keys(sessionStorage))
 	const storageOfLocal = readable(Object.keys(localStorage))
 	const cookies = readable(document.cookie)
 
-	export const bpmPair = async () => {
-		const idToken: string = cookie.parse(document.cookie)['token']
-		// const idToken: string | null = localStorage.getItem('token')
-		console.log('.oOoOoOoOooOoOo({<0>})OoOoOoOoOoOooOo.')
-		console.log(idToken)
+	// let statusWritable = writable<number>(69)
 
-		try {
-			if (!idToken || typeof idToken == 'undefined') {
-				return new Response('Token not available', { status: 401 })
-			}
-		} catch(e) {
-			console.error('Token not available')
-			console.error(e)
-			return
-		}
-
-		console.info('Bpm test GET sending...')
-		let testResponse: Response, postResponse: Response
+	export const getTest = async () => {
+		let testResponse: Response
 
 		try {
 			testResponse = await fetch('http://192.168.12.26:80/', {
@@ -41,46 +28,75 @@
 			return
 		}
 
+		return testResponse.status
+	}
+
+	export const bpmPair = async (statusWritable: Writable<number>) => {
+		const idToken: string = cookie.parse(document.cookie)['token']
+		console.log('.oOoOoOoOooOoOo({<0>})OoOoOoOoOoOooOo.')
+		console.log(idToken)
+
+
+		if (!idToken || typeof idToken == 'undefined') {
+			console.error('Token not available')
+			return
+		}
+	
+
+		console.info('Bpm test GET sending...')
+		let testResponse: Response, postResponse: Response
+
+		try {
+			testResponse = await fetch('http://192.168.12.26:80/', {
+				method: 'GET'
+			})
+			// statusWritable.set(testResponse.status)
+		} catch(e) {
+			console.error(e)
+			return
+		}
+
 		console.info('Bpm says: ', testResponse.status, testResponse.statusText)
 
 		if (testResponse.status == 200) {
-			postResponse = await fetch('http://192.168.12.26:80/', {
-				method: 'POST',
-				headers: {
-					Authorization: idToken,
+			try {
+				postResponse = await fetch('http://192.168.12.26:80/', {
+					method: 'POST',
+					headers: {
+						Authorization: idToken,
+					}
+				})
+				if (postResponse.status == 200) {
+					console.log(auth.currentUser?.uid)
+					console.log(postResponse)
 				}
-			})
-			if (postResponse.status == 200) {
-				console.log(auth.currentUser?.uid)
-				console.log(postResponse)
-				return new Response(idToken, { status: 200 })
+			} catch(e) {
+				console.error('Post failed')
+				console.error(e)
 			}
-			return new Response(idToken, { status: 400 })
 		}
+
 	}
 </script>
 
 {#if !$user}
-	<p>Go away</p>
+	<p>Go away (or please login if you have an account)</p>
 {:else}
 	<h1>Pair your Device</h1>
-	<br />
-	<br />
-	<p>Hello: {$user.uid}</p>
-	<br />
-	<Button on:click={() => fetch('/device/identity', { method: 'POST' })}>Send Pairing Signal</Button
-	>
-	<Button on:click={() => fetch('/device/identity', { method: 'GET' })}>Send Get Test</Button>
-	<Button on:click={() => getSetNewIdToken()}>Refresh Id Token</Button>
-	<br />
-	<h4>LOCAL</h4>
-	<Button on:click={() => bpmPair()}>Send Pairing Signal</Button>
-	<Button on:click={() => bpmPair()}>Send Get Test</Button>
-	<Button on:click={() => getSetNewIdToken()}>Refresh Id Token</Button>
-	<br />
-	<br />
-	<br />
-	<p>LOCAL STORAGE: {$storageOfLocal}</p>
-	<p>SESSION STORAGE: {$storageOfSession}</p>
-	<p>COOKIES: {$cookies}</p>
+			<br />
+			<br />
+	<Button on:click={() => getTest()}>Search for Devices</Button>
+	<!-- {#if $statusWritable != 200}
+		<h1>No Devices Detected</h1>
+	{:else} -->
+		<p>Hello: {$user.uid}</p>
+		<Button on:click={() => bpmPair()}>Send Pairing Signal</Button>
+		<Button on:click={() => getSetNewIdToken()}>Refresh Id Token</Button>
+		<br />
+		<br />
+		<br />
+		<p>LOCAL STORAGE: {$storageOfLocal}</p>
+		<p>SESSION STORAGE: {$storageOfSession}</p>
+		<p>COOKIES: {$cookies}</p>
+	{/if}
 {/if}

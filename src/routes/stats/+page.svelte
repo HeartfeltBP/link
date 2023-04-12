@@ -1,6 +1,6 @@
 <script lang="ts">
 	import 'carbon-components-svelte/css/g100.css'
-	import SampleView from '$lib/components/WindowView.svelte'
+	import WindowView from '$lib/components/WindowView.svelte'
 	import FrameView from '$lib/components/FrameView.svelte'
 	import { auth } from '$lib/utilities/firebase.js'
 	import { userStore } from 'sveltefire'
@@ -10,6 +10,7 @@
 	const user = userStore(auth)
 
 	let selectedIndex = 0
+	let selectedFid: string = ''
 </script>
 
 {#if $user}
@@ -24,8 +25,9 @@
 	<br />
 
 	{#if selectedIndex == 0}
-		<FrameView />
+		<FrameView bind:selectedFid/>
+		<p>Radioval: {selectedFid}</p>
 	{:else if selectedIndex == 1}
-		<SampleView />
+		<WindowView />
 	{/if}
 {/if}

@@ -53,6 +53,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			tokenTemp[1] = tokenTemp[1].replace(/[\r\n]+/gm, '')
 			const idToken = tokenTemp[1]
 			console.log(tokenTemp, idToken)
+			
 			if (!idToken || idToken == '')
 				return new Response('Cannot get authentication token', { status: 401 })
 

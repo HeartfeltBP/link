@@ -4,6 +4,7 @@
 
 	import { userStore } from 'sveltefire'
 	import { auth } from '$lib/utilities/firebase.js'
+	import { Button } from 'carbon-components-svelte'
 
 	const user = userStore(auth)
 	if (!user) {
@@ -14,4 +15,5 @@
 {#if $user}
 	<h1>Device</h1>
 	<p>Hello {$user.uid}!</p>
+	<Button href="/device/identity">Pair Your BPM</Button>
 {/if}
