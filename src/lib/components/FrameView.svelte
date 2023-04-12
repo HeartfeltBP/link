@@ -17,37 +17,55 @@
 		PointElement,
 		CategoryScale
 	} from 'chart.js'
-	import DataWrangler from './DataWrangler.svelte'
+	import type { Auth } from 'firebase/auth'
+	import type { Firestore } from 'firebase/firestore'
+	// import DataWrangler from './DataWrangler.svelte'
+
+	export const getData = (auth: Auth, firestore: Firestore) => {
+		const user = userStore(auth)
+		if(!user) {
+			return
+		}
+		console.log($user)
+		console.log(firestore.toJSON())
+		const posts = collectionStore<HfFrame>(firestore, `/${DATA_DB}${$user?.uid}`)
+			console.log($posts)
+		return posts
+	}
+
+	const user = userStore(auth)
+	const posts = getData(auth, firestore)
 
 	ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
-	export let selectedFid: string = ''
-	const user = userStore(auth)
-	const posts = collectionStore<HfFrame>(firestore, `${DATA_DB}${$user?.uid}/frames`)
-	//TODO: 
+	// export let selectedFid: string = ''
+
+	//TODO:
 	// just need to be able to successfully connect to firebase and also index an array by FIDS
-	$posts.push({
-		status: 'aaha',
-		target: 'baa',
-		fid: '0330sidoidfi',
-		pulse_rate: 1000,
-		spo2: 2000,
-		r: 69
-	})
+
+	// $posts.push({
+	// 	status: 'aaha',
+	// 	target: 'baa',
+	// 	fid: '0330sidoidfi',
+	// 	pulse_rate: 1000,
+	// 	spo2: 2000,
+	// 	r: 69
+	// })
 </script>
 
 <Button on:click={() => location.reload()}>Refresh</Button>
-<DataWrangler bind:entries={$posts}  bind:selectedIndex={selectedFid}/>
-{#if $posts}
+<!-- <DataWrangler  bind:selectedIndex={selectedFid}/> -->
+{#if $user && $posts}
 	<Grid>
-			<Row>
-				<Column>
-					<!-- <Line
+		<Row>
+			<Column>
+				<p>Balls</p>
+				<!-- <Line
 						data={formatData(false, `red_${curFrame.fid}`, curFrame.red_frame_for_presentation ?? [], `ir_${curFrame.fid}`, curFrame.ir_frame_for_presentation ?? [])}
 						width={1600}
 						height={400}
 						options={{ responsive: false }}
 					/> -->
-				</Column>
-			</Row>
+			</Column>
+		</Row>
 	</Grid>
 {/if}

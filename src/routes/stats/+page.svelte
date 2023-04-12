@@ -10,7 +10,7 @@
 	const user = userStore(auth)
 
 	let selectedIndex = 0
-	let selectedFid: string = ''
+	// let selectedFid: string = ''
 </script>
 
 {#if $user}
@@ -25,8 +25,7 @@
 	<br />
 
 	{#if selectedIndex == 0}
-		<FrameView bind:selectedFid/>
-		<p>Radioval: {selectedFid}</p>
+		<FrameView />
 	{:else if selectedIndex == 1}
 		<WindowView />
 	{/if}

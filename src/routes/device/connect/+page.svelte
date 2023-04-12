@@ -15,16 +15,12 @@
 	const storageOfLocal = readable(Object.keys(localStorage))
 	const cookies = readable(document.cookie)
 
-    let value = writable()
+	let value = writable()
 
-    export const bleClick = async (): Promise<void> => {
-        const val = await bleInit()
-        value.set(val)
-    }
-
-
-
-
+	export const bleClick = async (): Promise<void> => {
+		const val = await bleInit()
+		value.set(val)
+	}
 </script>
 
 {#if !$user}
@@ -38,7 +34,7 @@
 	<br />
 	<h4>BLE</h4>
 	<Button on:click={() => bleClick()}>Get BLE Info</Button>
-    <p>{$value}</p>
+	<p>{$value}</p>
 	<br />
 	<br />
 	<br />

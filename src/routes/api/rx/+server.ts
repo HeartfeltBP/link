@@ -53,7 +53,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			tokenTemp[1] = tokenTemp[1].replace(/[\r\n]+/gm, '')
 			const idToken = tokenTemp[1]
 			console.log(tokenTemp, idToken)
-			
+
 			if (!idToken || idToken == '')
 				return new Response('Cannot get authentication token', { status: 401 })
 
@@ -97,7 +97,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			} else {
 				return new Response('INIT', { status: 200 })
 			}
-			
+
 			// code to create sample log file
 			fs.openSync(
 				'./WINDOWS/' + 'N' + String(collectionCount) + 'DATA' + String(metricType) + '.txt',

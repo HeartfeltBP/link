@@ -31,10 +31,7 @@
 	<Grid>
 		<Row>
 			{#each $errorStore as item}
-			<InlineNotification
-				title="An error has occured"
-				subtitle={item.toString()}
-			/>
+				<InlineNotification title="An error has occured" subtitle={item.toString()} />
 			{/each}
 			<div style="width:100%">
 				<h1 style="margin-bottom:1em">Log In</h1>

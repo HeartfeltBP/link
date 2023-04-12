@@ -1,28 +1,33 @@
 export type HfDataset = {
-	label: string,
-	data: number[],
-	fill: boolean,
-	lineTension: number,
-	backgroundColor: string,
-	borderColor: string,
-	borderCapStyle: CanvasLineCap,
-	borderDash: number[],
-	borderDashOffset: number,
-	borderJoinStyle: CanvasLineJoin,
-	pointHoverBackgroundColor: string,
-	pointHoverBorderColor: string,
-	pointHoverBorderWidth: number,
-	pointRadius: number,
+	label: string
+	data: number[]
+	fill: boolean
+	lineTension: number
+	backgroundColor: string
+	borderColor: string
+	borderCapStyle: CanvasLineCap
+	borderDash: number[]
+	borderDashOffset: number
+	borderJoinStyle: CanvasLineJoin
+	pointHoverBackgroundColor: string
+	pointHoverBorderColor: string
+	pointHoverBorderWidth: number
+	pointRadius: number
 	pointHitRadius: number
-	
 }
 
 const calculateAverage = (array: number[]): number => {
-    const sum = array.reduce((a: number, b: number): number => a + b);
-    return sum / array.length;
-};
+	const sum = array.reduce((a: number, b: number): number => a + b)
+	return sum / array.length
+}
 
-export function formatData(scale: boolean, label: string, sig: number[], label2?: string, sig2?: number[]) {
+export function formatData(
+	scale: boolean,
+	label: string,
+	sig: number[],
+	label2?: string,
+	sig2?: number[]
+) {
 	let dataset0: HfDataset = {
 		label: label,
 		data: sig,
@@ -66,12 +71,10 @@ export function formatData(scale: boolean, label: string, sig: number[], label2?
 	const data = {
 		labels: Array.from(Array(sig.length).keys()),
 		type: 'line',
-		datasets: datasets,
+		datasets: datasets
 	}
 	return data
 }
 
-// TODO:
-export const txHandler = async (tx: string) => {
-	
-}
+// // TODO:
+// export const txHandler = async (tx: string) => {}

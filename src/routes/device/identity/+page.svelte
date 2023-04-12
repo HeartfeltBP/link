@@ -4,10 +4,9 @@
 	import cookie from 'cookie'
 
 	import 'carbon-components-svelte/css/g100.css'
-	import { Button } from 'carbon-components-svelte'
+	import { Button, Grid } from 'carbon-components-svelte'
 	import { readable, writable, type Writable } from 'svelte/store'
 	import { getSetNewIdToken } from '$lib/utilities/auth'
-	import { test } from 'vitest'
 
 	const user = userStore(auth)
 	const storageOfSession = readable(Object.keys(sessionStorage))
@@ -23,25 +22,25 @@
 			testResponse = await fetch('http://192.168.12.26:80/', {
 				method: 'GET'
 			})
-		} catch(e) {
-			console.error(e)
+		} catch (e) {
+			console.info('Cannot find device')
+			// console.error(e)
 			return
 		}
+		console.log('Device found!')
 
 		return testResponse.status
 	}
 
-	export const bpmPair = async (statusWritable: Writable<number>) => {
+	export const bpmPair = async () => {
 		const idToken: string = cookie.parse(document.cookie)['token']
 		console.log('.oOoOoOoOooOoOo({<0>})OoOoOoOoOoOooOo.')
 		console.log(idToken)
-
 
 		if (!idToken || typeof idToken == 'undefined') {
 			console.error('Token not available')
 			return
 		}
-	
 
 		console.info('Bpm test GET sending...')
 		let testResponse: Response, postResponse: Response
@@ -51,7 +50,7 @@
 				method: 'GET'
 			})
 			// statusWritable.set(testResponse.status)
-		} catch(e) {
+		} catch (e) {
 			console.error(e)
 			return
 		}
@@ -63,40 +62,47 @@
 				postResponse = await fetch('http://192.168.12.26:80/', {
 					method: 'POST',
 					headers: {
-						Authorization: idToken,
+						Authorization: idToken
 					}
 				})
 				if (postResponse.status == 200) {
 					console.log(auth.currentUser?.uid)
 					console.log(postResponse)
 				}
-			} catch(e) {
+			} catch (e) {
 				console.error('Post failed')
 				console.error(e)
 			}
 		}
-
 	}
 </script>
 
-{#if !$user}
-	<p>Go away (or please login if you have an account)</p>
-{:else}
-	<h1>Pair your Device</h1>
-			<br />
-			<br />
-	<Button on:click={() => getTest()}>Search for Devices</Button>
-	<!-- {#if $statusWritable != 200}
+<Grid>
+	{#if !$user}
+		<p>Go away (or please login if you have an account)</p>
+	{:else}
+		<h1>Pair your Device</h1>
+		<p>Hello: {$user.uid}</p>
+		<br />
+		<br />
+		<Button on:click={() => getTest()}>Search for Devices</Button>
+		<!-- {#if $statusWritable != 200}
 		<h1>No Devices Detected</h1>
 	{:else} -->
-		<p>Hello: {$user.uid}</p>
 		<Button on:click={() => bpmPair()}>Send Pairing Signal</Button>
 		<Button on:click={() => getSetNewIdToken()}>Refresh Id Token</Button>
 		<br />
 		<br />
 		<br />
-		<p>LOCAL STORAGE: {$storageOfLocal}</p>
-		<p>SESSION STORAGE: {$storageOfSession}</p>
-		<p>COOKIES: {$cookies}</p>
+		{#if $user}
+			<div style="width:40%">
+				<p>LOCAL STORAGE: {$storageOfLocal}</p>
+				<p>SESSION STORAGE: {$storageOfSession}</p>
+				<div style="width:20%">
+					<p>COOKIES: {$cookies}</p>
+				</div>
+			</div>
+		{/if}
+		<!-- {/if} -->
 	{/if}
-{/if}
+</Grid>

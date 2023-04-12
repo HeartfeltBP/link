@@ -4,7 +4,7 @@ import { auth_admin } from '$lib/utilities/server/firebase.server'
 import type { LayoutServerLoad, LayoutServerLoadEvent } from './$types'
 
 export const load = (async ({ cookies }: LayoutServerLoadEvent) => {
-	if(browser) {
+	if (browser) {
 		try {
 			const token = cookies.get('token')
 			// const token = localStorage.getItem('token')
