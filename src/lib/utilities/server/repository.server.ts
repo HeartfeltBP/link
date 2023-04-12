@@ -1,13 +1,13 @@
-import type { Frame, FrameHeader } from '../types'
+import type { HfFrame, HfFrameHeader } from '../types'
 import type { DocumentReference } from 'firebase-admin/firestore'
-import { DATA_DB_TEST } from '$lib/utilities/constants'
+import { DATA_DB } from '$lib/utilities/constants'
 import { firestore_admin } from './firebase.server'
 import { getUid } from './auth.server'
 
 export const uploadFrame = async (
 	token: string,
-	frame: Frame,
-	frameHeader?: FrameHeader
+	frame: HfFrame,
+	frameHeader?: HfFrameHeader
 ): Promise<string | null> => {
 	const uid = await getUid(token)
 
@@ -16,8 +16,8 @@ export const uploadFrame = async (
 		return null
 	}
 
-	const framePath = `${DATA_DB_TEST}${uid}/frames/`
-	const headerPath = `${DATA_DB_TEST}${uid}/headers/`
+	const framePath = `${DATA_DB}${uid}/frames/`
+	const headerPath = `${DATA_DB}${uid}/headers/`
 
 	if (frame.fid && frame.fid === 'INIT') {
 		frame.fid = undefined
