@@ -24,7 +24,7 @@ export interface hfWindow {
 // 4100 samples
 export interface Frame {
 	fid?: string
-	status: string // new, valid, invalid, predicted
+	status?: string // new, valid, invalid, predicted
 	target: string // collection to write to downstream (testing mode bpm-data-test)
 	ir_frame?: number[] // raw data
 	red_frame?: number[] // raw data
@@ -41,6 +41,7 @@ export interface Frame {
 
 export interface FrameHeader {
 	sr: number
+	frame_size?: number
 	ir_amplitude?: number
 	red_amplitude?: number
 }

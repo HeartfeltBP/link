@@ -55,6 +55,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			console.log(tokenTemp, idToken)
 			if (!idToken || idToken == '')
 				return new Response('Cannot get authentication token', { status: 401 })
+
 			console.log('<><><><><ID::ID:' + `${getUid(idToken)}` + ':ID::ID><><><><>')
 
 			const frameHeader: FrameHeader = {
@@ -62,7 +63,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			}
 
 			const frame: Frame = {
-				status: 'new',
+				status: '',
 				target: DATA_DB_TEST
 			}
 
@@ -90,11 +91,13 @@ export const POST: RequestHandler = async ({ request }) => {
 
 			// currently only support PPG, ECG can still be sent, however it will be rejected
 			if (fidInQuestion) {
+				frame.status = 'new'
 				return new Response(`${fidInQuestion}`, { status: 201 })
 			} else {
 				return new Response('INIT', { status: 200 })
 			}
-
+			
+			// code to create sample log file
 			fs.openSync(
 				'./WINDOWS/' + 'N' + String(collectionCount) + 'DATA' + String(metricType) + '.txt',
 				'w+'
