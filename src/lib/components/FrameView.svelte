@@ -23,7 +23,6 @@
 
 	const user = userStore(auth)
 	const posts = collectionStore<HfFrame>(firestore, `${DATA_DB}${$user?.uid}/frames`)
-
 </script>
 
 <Button on:click={() => location.reload()}>Refresh</Button>
@@ -42,7 +41,13 @@
 			<Row>
 				<Column>
 					<Line
-						data={formatData(false, `red_${p.fid}`, p.red_frame_for_presentation ?? [], `ir_${p.fid}`, p.ir_frame_for_presentation ?? [])}
+						data={formatData(
+							false,
+							`red_${p.fid}`,
+							p.red_frame_for_presentation ?? [],
+							`ir_${p.fid}`,
+							p.ir_frame_for_presentation ?? []
+						)}
 						width={1600}
 						height={400}
 						options={{ responsive: false }}
