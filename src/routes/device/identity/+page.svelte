@@ -19,7 +19,7 @@
 		let testResponse: Response
 
 		try {
-			testResponse = await fetch('http://10.198.23.69:80/', {
+			testResponse = await fetch('http://192.168.12.26:80/', {
 				method: 'GET'
 			})
 		} catch (e) {
@@ -46,7 +46,7 @@
 		let testResponse: Response, postResponse: Response
 
 		try {
-			testResponse = await fetch('http://10.198.23.69:80/', {
+			testResponse = await fetch('http://192.168.12.26:80/', {
 				method: 'GET'
 			})
 			// statusWritable.set(testResponse.status)
@@ -59,7 +59,7 @@
 
 		if (testResponse.status == 200) {
 			try {
-				postResponse = await fetch('http://10.198.23.69:80/', {
+				postResponse = await fetch('http://192.168.12.26:80/', {
 					method: 'POST',
 					headers: {
 						Authorization: idToken

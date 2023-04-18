@@ -30,6 +30,9 @@
 	<Grid>
 		{#each $posts as p}
 			<Row>
+				<Column>Time Collected: {p.time}</Column>
+			</Row>
+			<Row>
 				<Column>SpO2 = {p.spo2}%</Column>
 			</Row>
 			<Row>

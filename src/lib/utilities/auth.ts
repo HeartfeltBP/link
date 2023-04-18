@@ -4,7 +4,8 @@ import {
 	type Auth,
 	signInWithEmailAndPassword,
 	type User,
-	getAuth
+	getAuth,
+	browserLocalPersistence
 } from 'firebase/auth'
 
 import { goto } from '$app/navigation'
@@ -13,7 +14,6 @@ import { browser } from '$app/environment'
 import cookie from 'cookie'
 
 export const uStore = writable<User | null>(null)
-
 export const hasCurrentUser = (): boolean => {
 	return uStore ? true : false
 }
@@ -152,3 +152,5 @@ export const getIdStatus = (status: string) => {
 	const idStatus = localStorage.getItem('BpmIdentityStatus')
 	return typeof idStatus != 'undefined'
 }
+
+auth.setPersistence(browserLocalPersistence)

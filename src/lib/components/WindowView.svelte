@@ -30,6 +30,15 @@
 		{#each $posts as p}
 			<Row>
 				<Column>
+					<Row>
+						<Column>Frame ID: {p.fid}</Column>
+					</Row>
+					<Row>
+						<Column></Column>
+					</Row>
+					<Row>
+						<Column></Column>
+					</Row>
 					<Line
 						data={formatData(true, `ppg_${p.wid}`, p.ppg)}
 						width={400}
@@ -38,6 +47,15 @@
 					/>
 				</Column>
 				<Column>
+					<Row>
+						<Column>Frame ID: {p.fid}</Column>
+					</Row>
+					<Row>
+						<Column>Systolic = {p.sbp}</Column>
+					</Row>
+					<Row>
+						<Column>Diastolic = {p.dbp}</Column>
+					</Row>
 					<Line
 						data={formatData(false, `abp_${p.wid}`, p.abp)}
 						width={400}
