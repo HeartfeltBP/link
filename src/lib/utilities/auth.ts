@@ -152,5 +152,3 @@ export const getIdStatus = (status: string) => {
 	const idStatus = localStorage.getItem('BpmIdentityStatus')
 	return typeof idStatus != 'undefined'
 }
-
-auth.setPersistence(browserLocalPersistence)

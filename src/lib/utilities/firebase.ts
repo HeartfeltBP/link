@@ -1,7 +1,7 @@
 import { initializeApp, type FirebaseOptions, type FirebaseApp } from 'firebase/app'
 import { Firestore, getFirestore } from 'firebase/firestore'
 import { getFunctions, type Functions } from 'firebase/functions'
-import { getAuth, type Auth, setPersistence, browserSessionPersistence } from 'firebase/auth'
+import { getAuth, type Auth, setPersistence, browserSessionPersistence, browserLocalPersistence } from 'firebase/auth'
 // import { apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId } from '$env/static/private'
 import {
 	PUBLIC_apiKey,
@@ -27,4 +27,4 @@ export const functions: Functions = getFunctions(app)
 
 export const firestore: Firestore = getFirestore(app)
 export const auth: Auth = getAuth(app)
-setPersistence(auth, browserSessionPersistence)
+setPersistence(auth, browserLocalPersistence)
