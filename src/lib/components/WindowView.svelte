@@ -3,7 +3,7 @@
 	import { auth, firestore } from '$lib/utilities/firebase.js'
 	import { userStore, collectionStore } from 'sveltefire'
 
-	import { Grid, Row, Column } from 'carbon-components-svelte'
+	import { Grid, Row, Column, ContentSwitcher, Switch } from 'carbon-components-svelte'
 	import { Line } from 'svelte-chartjs'
 	import { formatData } from '$lib/utilities/data.js'
 	import type { HfWindow } from '$lib/utilities/types.js'
@@ -19,51 +19,29 @@
 		CategoryScale
 	} from 'chart.js'
 
+	export let window: HfWindow
+	let selectedIndex = 0
 	ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
 
-	const user = userStore(auth)
-	const posts = collectionStore<HfWindow>(firestore, `${DATA_DB}${$user?.uid}/windows`)
+	// const user = userStore(auth)
 </script>
 
-{#if $posts}
-	<Grid>
-		{#each $posts as p}
-			<Row>
-				<Column>
-					<Row>
-						<Column>Frame ID: {p.fid}</Column>
-					</Row>
-					<Row>
-						<Column></Column>
-					</Row>
-					<Row>
-						<Column></Column>
-					</Row>
-					<Line
-						data={formatData(true, `ppg_${p.wid}`, p.ppg)}
-						width={400}
-						height={200}
-						options={{ responsive: false }}
-					/>
-				</Column>
-				<Column>
-					<Row>
-						<Column>Frame ID: {p.fid}</Column>
-					</Row>
-					<Row>
-						<Column>Systolic = {p.sbp}</Column>
-					</Row>
-					<Row>
-						<Column>Diastolic = {p.dbp}</Column>
-					</Row>
-					<Line
-						data={formatData(false, `abp_${p.wid}`, p.abp)}
-						width={400}
-						height={200}
-						options={{ responsive: false }}
-					/>
-				</Column>
-			</Row>
-		{/each}
-	</Grid>
+{#if window}
+	<ContentSwitcher bind:selectedIndex>
+		<Switch text=PPG />
+		<Switch text=ABP />
+	</ContentSwitcher>
+	
+	{#if selectedIndex == 0}
+		<Line
+			data={formatData(true, `ppg_${window.wid}`, window.ppg)}
+			options={{ responsive: true }}
+		/>
+	{:else if selectedIndex == 1}
+		<Line
+			data={formatData(false, `abp_${window.wid}`, window.abp)}
+			options={{ responsive: true }}
+		/>
+	{/if}
+
 {/if}

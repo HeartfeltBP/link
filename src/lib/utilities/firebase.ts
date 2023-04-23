@@ -1,4 +1,4 @@
-import { initializeApp, type FirebaseOptions, type FirebaseApp } from 'firebase/app'
+import { initializeApp, type FirebaseOptions, type FirebaseApp, getApps } from 'firebase/app'
 import { Firestore, getFirestore } from 'firebase/firestore'
 import { getFunctions, type Functions } from 'firebase/functions'
 import { getAuth, type Auth, setPersistence, browserSessionPersistence, browserLocalPersistence } from 'firebase/auth'
@@ -21,10 +21,11 @@ const config: FirebaseOptions = {
 	appId: PUBLIC_appId
 }
 
-export const app: FirebaseApp = initializeApp(config)
+export const app: FirebaseApp = getApps().length === 0 ? initializeApp(config) : getApps()[0]
 export const functions: Functions = getFunctions(app)
 // connectFunctionsEmulator(functions, '127.0.0.1', 5001)
 
 export const firestore: Firestore = getFirestore(app)
 export const auth: Auth = getAuth(app)
 setPersistence(auth, browserLocalPersistence)
+

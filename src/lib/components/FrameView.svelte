@@ -3,11 +3,10 @@
 	import { auth, firestore } from '$lib/utilities/firebase.js'
 	import { userStore, collectionStore } from 'sveltefire'
 
-	import { Grid, Row, Column, Button } from 'carbon-components-svelte'
+	import { Button, Content } from 'carbon-components-svelte'
 	import { Line } from 'svelte-chartjs'
 	import { formatData } from '$lib/utilities/data.js'
 	import type { HfFrame } from '$lib/utilities/types.js'
-	import { DATA_DB } from '$lib/utilities/constants'
 	import {
 		Chart as ChartJS,
 		Title,
@@ -18,37 +17,31 @@
 		PointElement,
 		CategoryScale
 	} from 'chart.js'
-	import type { Readable } from 'svelte/store'
-	import DataWrangler from './DataWrangler.svelte'
 
 	//TODO:
 	// just need to be able to successfully connect to firebase and also index an array by FIDS
 	ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
-
-	const user = userStore(auth)
-	export let posts: Readable<HfFrame[]>
-	let selectedFid: Readable<[string]>
+	// const user = userStore(auth)
+	export let frame: HfFrame
 </script>
 
-<!-- preload a few graphs? load rest specifically by db call -->
-
-<Button on:click={() => location.reload()}>Refresh</Button>
-{#if $posts}
-	<DataWrangler bind:entries={$posts} bind:selectedRowIds={selectedFid} />
-	{#if $selectedIndex}
+<Content>
+<div style="background-color:black; padding: 1em">
+	<Button on:click={() => location.reload()}>Refresh</Button>
+	{#if frame}
 		<Line
 			data={formatData(
 				false,
-				`red_${p.fid}`,
-				$posts.red_frame_for_presentation ?? [],
-				`ir_${p.fid}`,
-				p.ir_frame_for_presentation ?? []
+				`red_${frame.fid}`,
+				frame.red_frame_for_presentation ?? [],
+				`ir_${frame.fid}`,
+				frame.ir_frame_for_presentation ?? []
 			)}
-			width={1600}
-			height={400}
-			options={{ responsive: false }}
+			options={{ responsive: true, resizeDelay: 2}}
 		/>
 	{:else}
-		<p>Explain how to use the interface.</p>
+		<em>Please select a frame</em>
 	{/if}
-{/if}
+</div>
+</Content>
+

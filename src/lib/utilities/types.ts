@@ -33,8 +33,11 @@ export interface HfFrame {
 	target: string // collection to write to downstream (testing mode bpm-data-test)
 	frame: FrameSampleData
 	frame_for_prediction?: number[] // broken into windows for bp prediction
-	frame_view: FrameViewData
-	frame_bio: FrameBioData
+	ir_frame_for_presentation: number[]
+	red_frame_for_presentation: number[]
+	pulse_rate: number // from red_frame_for_processing
+	spo2: number
+	r: number // absorbance
 }
 
 export type FrameSampleData = {
@@ -48,10 +51,10 @@ export type FrameBioData = {
 	r: number // absorbance
 }
 
-export type FrameViewData = {
-	ir_frame_for_presentation: number[]
-	red_frame_for_presentation: number[]
-}
+// export type FrameViewData = {
+// 	ir_frame_for_presentation: number[]
+// 	red_frame_for_presentation: number[]
+// }
 
 export interface HfFrameHeader {
 	sr: number
@@ -61,4 +64,17 @@ export interface HfFrameHeader {
 export type HfBpmConfig = {
 	ir_amplitude?: number
 	red_amplitude?: number
+}
+
+export type StatData = {
+	frames: HfFrame[],
+	windows: HfWindow[]
+}
+
+export type HfReading = {
+	fid: string
+	time: string
+	bioData: FrameBioData
+	sys: number
+	dia: number
 }
