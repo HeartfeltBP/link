@@ -119,6 +119,7 @@ export const load = (async () => {
 		// does rounding up misrepresent the data?
 		const sysAvg: number = Math.ceil(sysVals.reduce((a, b) => a + b) / sysVals.length)
 		const diaAvg: number = Math.ceil(diaVals.reduce((a, b) => a + b) / sysVals.length)
+
 		const bioDat: FrameBioData = {
 			pulse_rate:	uFrame.pulse_rate,
 			spo2: uFrame.spo2,
@@ -137,10 +138,8 @@ export const load = (async () => {
 	let framesStore: Readable<HfFrame[]> = readable<HfFrame[]>(userFrames)
 	let windowsStore: Readable<HfWindow[]> = readable<HfWindow[]>(userWindows)
 	let readingsStore: Readable<HfReading[]> = readable<HfReading[]>(userReadings)
-	// let fidSortStore: Readable<string[]> = readable<string[]>(predictedFidsSorted)
+	// let fidSortStore: Readable<string[]> = readable<string[]>(predictedFidsSorted) // figure out firestore indexes
 	let fidStore: Readable<string[]> = readable<string[]>(predictedFids)
-	console.log('RETURN LENGTH WINDOWS', userWindows.length)
-	console.log('RETURN LENGTH FRAMES', userFrames.length)
 
 	return {
 		fStore: framesStore,

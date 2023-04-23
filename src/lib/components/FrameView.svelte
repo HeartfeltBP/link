@@ -25,8 +25,8 @@
 	export let frame: HfFrame
 </script>
 
-<Content>
-<div style="background-color:black; padding: 1em">
+
+<div>
 	<Button on:click={() => location.reload()}>Refresh</Button>
 	{#if frame}
 		<Line
@@ -43,5 +43,5 @@
 		<em>Please select a frame</em>
 	{/if}
 </div>
-</Content>
+
 

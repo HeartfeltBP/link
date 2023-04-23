@@ -24,7 +24,7 @@
 	<Grid>
 		<Row>
 			<Column>
-				<Tile>
+				<Tile style="padding:4em">
 					<div style="width:100%">
 						<h1 style="margin-bottom:1em">Log In</h1>
 						<Form on:submit={() => checkEmailPass(email, pass)}>

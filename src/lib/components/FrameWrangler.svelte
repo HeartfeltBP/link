@@ -51,6 +51,4 @@
 	]
 </script>
 
-<Content>
-	<DataTable title='Frames' radio selectedRowIds={$selectedRowIds ?? undefined} sortable {headers} {rows} />
-</Content>
+<DataTable title='Frames' radio selectedRowIds={$selectedRowIds ?? undefined} sortable {headers} {rows} />
