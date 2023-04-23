@@ -13,6 +13,7 @@
 	import ReadingWrangler from '$lib/components/ReadingWrangler.svelte'
 	import WindowView from '$lib/components/WindowView.svelte'
 	import WindowWrangler from '$lib/components/WindowWrangler.svelte'
+	import ReadingView from '$lib/components/ReadingView.svelte'
 
 	export let data: PageData
 	const user = userStore(auth)
@@ -20,6 +21,7 @@
 	let windows: Readable<HfWindow[]>
 	let readings: Readable<HfReading[]>
 
+	// intellisense doesn't show the stores, but they're there
 	if ($user) {
 		frames = data.fStore
 		windows = data.wStore
@@ -41,6 +43,9 @@
 <Grid>
 	<p>Hello {$user.uid}!</p>
 	<Row>
+		<Column style="margin: auto">
+			<ReadingView readings={readings} />
+		</Column>
 		<Column>
 			<ReadingWrangler entries={readings} bind:selectedRowIds={curFid} />
 		</Column>
@@ -51,13 +56,11 @@
 		<Tab label="Frames" />
 		<Tab label="Windows" />
 		<svelte:fragment slot="content">
-		  <TabContent>Content 1</TabContent>
-		  <TabContent>Content 2</TabContent>
 		</svelte:fragment>
 	</Tabs>
 	{#if tabSelect == 0}
 	<Row>
-		<Column>
+		<Column style="margin: auto">
 			<FrameView frame={curFrame} />
 		</Column>
 		<Column>
@@ -67,11 +70,11 @@
 	</Row>
 	{:else if tabSelect == 1}
 	<Row>
-		<Column>
+		<Column aspectRatio="2x1" style="margin: auto">
 			<WindowView window={curWindow} />
 		</Column>
 		<Column>
-			<WindowWrangler entries={windows} bind:selectedRowIds={curFid} />
+			<WindowWrangler aspectRatio="2x1" entries={windows} bind:selectedRowIds={curFid} />
 			<!-- <p>{$curWindow}</p> -->
 		</Column>
 	</Row>

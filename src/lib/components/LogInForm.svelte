@@ -20,42 +20,37 @@
 	let email: string, pass: string
 </script>
 
-<Content>
-	<Grid>
-		<Row>
-			<Column>
-				<Tile style="padding:4em">
-					<div style="width:100%">
-						<h1 style="margin-bottom:1em">Log In</h1>
-						<Form on:submit={() => checkEmailPass(email, pass)}>
-							<div style="width: 8em; margin-bottom: 2em">
-								<ImageLoader fadeIn={true} src={logoImage} />
-							</div>
-							<TextInput
-								required
-								type="input"
-								size="xl"
-								bind:value={email}
-								labelText="E-mail"
-								placeholder="Enter e-mail"
-							/>
-							<br />
-							<PasswordInput
-								required
-								size="xl"
-								type="password"
-								invalidText="Please enter password"
-								bind:value={pass}
-								labelText="Password"
-								placeholder="Enter password"
-							/>
-							<br />
-							<Button icon={Login} type="submit" name="submit">Log In</Button>
-							<Button kind="ghost" href="/account/signup">Create Account</Button>
-						</Form>
-					</div>
-				</Tile>
-			</Column>
-		</Row>
-	</Grid>
-</Content>
+<Tile style="padding:20%;">
+		<Form on:submit={() => checkEmailPass(email, pass)}>
+			<div style="width: auto; margin-bottom: 8%; display:inline-block">
+				<h3 style="width:25%; float:inline-start; margin-top:0.5em">Login</h3>
+				<ImageLoader style="width:25%; float:inline-end; margin:auto" fadeIn={true} src={logoImage} />
+			</div>
+			<br />
+			<TextInput
+				required
+				type="input"
+				size="xl"
+				bind:value={email}
+				labelText="E-mail"
+				placeholder="Enter e-mail"
+			/>
+			<br />
+			<PasswordInput
+				required
+				size="xl"
+				type="password"
+				invalidText="Please enter password"
+				bind:value={pass}
+				labelText="Password"
+				placeholder="Enter password"
+			/>
+			<br />
+			<div style="width:100%; display:inline-block">
+				<Button style="float: inline-end; margin-top: 0;" icon={Login} type="submit" name="submit">Log In</Button>
+				<Button style="float: inline-end; margin-top: 0;" kind="ghost" href="/account/signup">Create Account</Button>
+			</div>
+		</Form>
+</Tile>
+
+

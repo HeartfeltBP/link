@@ -27,11 +27,11 @@
 
 
 <div>
-	<Button on:click={() => location.reload()}>Refresh</Button>
 	{#if frame}
 		<Line
 			data={formatData(
 				false,
+				'line',
 				`red_${frame.fid}`,
 				frame.red_frame_for_presentation ?? [],
 				`ir_${frame.fid}`,

@@ -13,6 +13,5 @@
 {#if $user}
 	<!-- account form -->
 {:else}
-	<LogInForm />
 	<SignUpForm />
 {/if}

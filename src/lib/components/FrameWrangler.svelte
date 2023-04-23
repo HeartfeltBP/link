@@ -47,7 +47,7 @@
 		{ key: 'hr', value: 'HR (bpm)' },
 		{ key: 'o2', value: 'SPO2 (%)' },
 		{ key: 't', value: 'Time (d/m/y)' },
-		{ key: 'fid', value: 'FID' }
+		{ key: 'id', value: 'FID' }
 	]
 </script>
 

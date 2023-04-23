@@ -27,19 +27,19 @@
 </script>
 
 {#if window}
-	<ContentSwitcher bind:selectedIndex>
+	<ContentSwitcher size="sm" bind:selectedIndex>
 		<Switch text=PPG />
 		<Switch text=ABP />
 	</ContentSwitcher>
 	
 	{#if selectedIndex == 0}
 		<Line
-			data={formatData(true, `ppg_${window.wid}`, window.ppg)}
+			data={formatData(true, 'line', `ppg_${window.wid}`, window.ppg)}
 			options={{ responsive: true }}
 		/>
 	{:else if selectedIndex == 1}
 		<Line
-			data={formatData(false, `abp_${window.wid}`, window.abp)}
+			data={formatData(false, 'line', `abp_${window.wid}`, window.abp)}
 			options={{ responsive: true }}
 		/>
 	{/if}

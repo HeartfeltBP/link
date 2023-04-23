@@ -98,7 +98,9 @@ export const checkEmailPass = async (email: string, pass: string): Promise<Auth 
 			if (curUser.uid != undefined) {
 				console.info('🪪')
 
-				auth.onAuthStateChanged(() => goto('/')) // create hook to clear cookies and stuff
+				auth.onAuthStateChanged(() => {
+					goto('/link/')
+				}) // create hook to clear cookies and stuff
 				auth.onIdTokenChanged(async () => {
 					const isTokenSet: boolean = cookie.parse(document.cookie)['token'] !== undefined
 					const token: string = await curUser.getIdToken()

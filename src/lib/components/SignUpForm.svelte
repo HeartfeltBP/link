@@ -64,7 +64,7 @@
 							/>
 						</Column>
 					</Row>
-
+					<br/>
 					<Row>
 						<Column>
 							<Row>
@@ -97,6 +97,7 @@
 							</Row>
 						</Column>
 					</Row>
+					<br/>
 					<Row>
 						<Column>
 							<MultiSelect
@@ -124,34 +125,38 @@
 						</Column>
 					</Row>
 					<br />
-					<Row>
-						<Column>
-							<Row>
-								<Column>
-									<Checkbox
-										required
-										id="accept-checkbox"
-										labelText="Accept our Terms and Conditions"
-									/>
-								</Column>
-								<Column>
-									<Button
-										size="small"
-										kind="ghost"
-										icon={DocumentPdf}
-										iconDescription="open terms and conditions in a new tab"
-									/>
-								</Column>
-							</Row>
-						</Column>
-						<Column>
-							<!-- spacing -->
-						</Column>
-					</Row>
+				</Column>
+			</Row>
+			<Row>
+				<Column />
+				<Column>
+					<Checkbox
+						required
+						id="accept-checkbox"
+						labelText="Accept our Terms and Conditions"
+						style="float: right;"
+					/>
+					<Button
+						style="float: right;"
+						size="small"
+						kind="ghost"
+						icon={DocumentPdf}
+						iconDescription="open terms and conditions in a new tab"
+					/>
+				</Column>
+			</Row>
+			<Row>
+				<Column />
+				<Column>
+					<Button
+						style="margin-top: 1em; float: right;"
+						icon={CodeSigningService}
+						type="submit"
+						name="submit">Create Account</Button
+					>
 				</Column>
 			</Row>
 			<br />
-			<Button icon={CodeSigningService} type="submit" name="submit">Create Account</Button>
 		</Form>
 	</Grid>
 </Content>

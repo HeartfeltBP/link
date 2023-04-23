@@ -1,7 +1,7 @@
 /*eslint prefer-const: 0*/
 import type { RequestHandler } from '@sveltejs/kit'
 import * as fs from 'fs'
-import type { HfFrame, HfFrameHeader } from '$lib/utilities/types'
+import type { HfFrame, RxHfFrame, HfFrameHeader, FrameSampleData } from '$lib/utilities/types'
 import { uploadFrame } from '$lib/utilities/server/repository.server'
 import { getUid } from '$lib/utilities/server/auth.server'
 import { DATA_DB } from '$lib/utilities/constants'
@@ -55,13 +55,14 @@ export const POST: RequestHandler = async ({ request }) => {
 			console.log(tokenTemp, idToken)
 			if (!idToken || idToken == '')
 				return new Response('Cannot get authentication token', { status: 401 })
+
 			console.log('<><><><><ID::ID:' + `${getUid(idToken)}` + ':ID::ID><><><><>')
 
 			const frameHeader: HfFrameHeader = {
 				sr: Number(samplingRate)
 			}
 
-			const frame: HfFrame = {
+			const frame: RxHfFrame = {
 				status: 'new',
 				target: DATA_DB
 			}

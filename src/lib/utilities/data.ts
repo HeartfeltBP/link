@@ -1,6 +1,11 @@
+export type ChartPair = {
+	x: any,
+	y: any
+}
+
 export type HfDataset = {
 	label: string
-	data: number[]
+	data: number[] | ChartPair[]
 	fill: boolean
 	lineTension: number
 	backgroundColor: string
@@ -23,10 +28,11 @@ const calculateAverage = (array: number[]): number => {
 
 export function formatData(
 	scale: boolean,
+	type: string = 'line',
 	label: string,
-	sig: number[],
+	sig: number[] | ChartPair[],
 	label2?: string,
-	sig2?: number[]
+	sig2?: number[] | ChartPair[]
 ) {
 	let dataset0: HfDataset = {
 		label: label,
@@ -70,7 +76,7 @@ export function formatData(
 
 	const data = {
 		labels: Array.from(Array(sig.length).keys()),
-		type: 'line',
+		type: type,
 		datasets: datasets
 	}
 	return data

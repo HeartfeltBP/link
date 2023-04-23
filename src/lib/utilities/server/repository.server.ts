@@ -1,4 +1,4 @@
-import type { HfFrame, HfFrameHeader } from '../types'
+import type { RxHfFrame, HfFrameHeader } from '../types'
 import type { DocumentReference } from 'firebase-admin/firestore'
 import { DATA_DB } from '$lib/utilities/constants'
 import { firestore_admin } from './firebase.server'
@@ -6,7 +6,7 @@ import { getUid } from './auth.server'
 
 export const uploadFrame = async (
 	token: string,
-	frame: HfFrame,
+	frame: RxHfFrame,
 	frameHeader?: HfFrameHeader
 ): Promise<string | null> => {
 	const uid = await getUid(token)
