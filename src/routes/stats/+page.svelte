@@ -5,7 +5,7 @@
 	import FrameView from '$lib/components/FrameView.svelte'
 	import { auth } from '$lib/utilities/firebase.js'
 	import { userStore } from 'sveltefire'
-	import { Column, ContentSwitcher, Grid, Row, Switch, Tab, TabContent, Tabs } from 'carbon-components-svelte'
+	import { Column, ContentSwitcher, Grid, Row, Switch, Tab, TabContent, Tabs, Tile } from 'carbon-components-svelte'
 	import type { PageData } from './$types'
 	import type { HfFrame, HfReading, HfWindow } from '$lib/utilities/types'
 	import { readable, type Readable } from 'svelte/store'
@@ -14,6 +14,7 @@
 	import WindowView from '$lib/components/WindowView.svelte'
 	import WindowWrangler from '$lib/components/WindowWrangler.svelte'
 	import ReadingView from '$lib/components/ReadingView.svelte'
+	import ReadingSummary from '$lib/components/ReadingSummary.svelte'
 
 	export let data: PageData
 	const user = userStore(auth)
@@ -41,17 +42,23 @@
 
 {#if $user}
 <Grid>
+	<h1>Stats</h1>
+	<h3>Readings Overview</h3>
 	<p>Hello {$user.uid}!</p>
 	<Row>
-		<Column style="margin: auto">
+		<div style="padding: 1em; width: 80%">
+				<ReadingSummary entries={readings}/>
+		</div>
+		<Column aspectRatio="2x1" style="margin-top: -4em">
 			<ReadingView readings={readings} />
 		</Column>
-		<Column>
+		<Column aspectRatio="2x1">
 			<ReadingWrangler entries={readings} bind:selectedRowIds={curFid} />
 		</Column>
 	</Row>
 	<br />
-	<h2>Waveform Viewer</h2>
+	<h3>Waveform Viewer</h3>
+	<br />
 	<Tabs bind:selected={tabSelect}>
 		<Tab label="Frames" />
 		<Tab label="Windows" />
@@ -60,10 +67,10 @@
 	</Tabs>
 	{#if tabSelect == 0}
 	<Row>
-		<Column style="margin: auto">
+		<Column aspectRatio="2x1" style="margin: auto">
 			<FrameView frame={curFrame} />
 		</Column>
-		<Column>
+		<Column aspectRatio="2x1">
 			<FrameWrangler entries={frames} bind:selectedRowIds={curFid} />
 			<p>{$curFid}</p>
 		</Column>
@@ -73,8 +80,10 @@
 		<Column aspectRatio="2x1" style="margin: auto">
 			<WindowView window={curWindow} />
 		</Column>
-		<Column>
-			<WindowWrangler aspectRatio="2x1" entries={windows} bind:selectedRowIds={curFid} />
+		<Column aspectRatio="2x1">
+			<div style="max-width: 45em; overflow:scroll">
+				<WindowWrangler entries={windows} bind:selectedRowIds={curFid} />
+			</div>
 			<!-- <p>{$curWindow}</p> -->
 		</Column>
 	</Row>

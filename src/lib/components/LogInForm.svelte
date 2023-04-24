@@ -20,7 +20,8 @@
 	let email: string, pass: string
 </script>
 
-<Tile style="padding:20%;">
+<Column>
+	<Tile style="padding:10%; max-width: 50%">
 		<Form on:submit={() => checkEmailPass(email, pass)}>
 			<div style="width: auto; margin-bottom: 8%; display:inline-block">
 				<h3 style="width:25%; float:inline-start; margin-top:0.5em">Login</h3>
@@ -52,5 +53,6 @@
 			</div>
 		</Form>
 </Tile>
+</Column>
 
 

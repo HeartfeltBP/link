@@ -59,31 +59,8 @@
 	]
 </script>
 
-<StructuredList condensed flush>
-	<StructuredListHead>
-		<StructuredListRow head>
-			<StructuredListCell head>Latest Measurement</StructuredListCell>
-			<StructuredListCell head>Heart Rate (bpm)</StructuredListCell>
-			<StructuredListCell head>Blood Oxygen (%)</StructuredListCell>
-			<StructuredListCell head>Blood Pressure (sys/dia)</StructuredListCell>
-		</StructuredListRow>
-	</StructuredListHead>
-	<StructuredListBody>
-		<StructuredListRow>
-			<StructuredListCell noWrap>Values</StructuredListCell>
-			<StructuredListCell>
-				{$entries[0].bioData.pulse_rate}
-			</StructuredListCell>
-			<StructuredListCell>
-				{$entries[0].bioData.spo2}
-			</StructuredListCell>
-			<StructuredListCell>
-				{$entries[0].sys} / {$entries[0].dia}
-			</StructuredListCell>
-		</StructuredListRow>
-	</StructuredListBody>
-</StructuredList>
 <DataTable
+	title='Readings'
 	style="margin-top:-4em"
 	radio
 	selectedRowIds={$selectedRowIds ?? undefined}

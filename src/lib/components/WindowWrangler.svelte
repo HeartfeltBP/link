@@ -53,13 +53,13 @@
     })
 
 	let headers = [
-		{ key: 'f0', value: 'Fundamental Freq.' },
+		{ key: 'f0', value: 'F0' },
 		{ key: 'bp', value: 'ABP (sys/dia)' },
-		{ key: 'notches', value: 'Notch Test' },
-		{ key: 'flat', value: 'Flat Line Test' },
-		{ key: 'beat_sim', value: 'Beat Similarity' },
-		{ key: 'snr', value: 'Signal to Noise' },
+		{ key: 'notches', value: 'Notch?' },
+		{ key: 'flat', value: 'Flat Line?' },
+		{ key: 'beat_sim', value: 'Beat Sim.' },
+		{ key: 'snr', value: 'SNR' },
 	]
 </script>
 
-<DataTable radio selectedRowIds={$selectedRowIds ?? undefined} sortable {headers} {rows} />
+<DataTable title='Windows' radio selectedRowIds={$selectedRowIds ?? undefined} sortable {headers} {rows} />

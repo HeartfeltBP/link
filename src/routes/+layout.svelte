@@ -32,26 +32,31 @@
 	import { readable } from 'svelte/store'
 	import type { CarbonTheme } from 'carbon-components-svelte/types/Theme/Theme.svelte'
 
-	let isSideNavOpen: boolean
-	let persistentHamburgerMenu: boolean
-	let platformName: string
+	let isSideNavOpen: boolean = false
+	let persistentHamburgerMenu: boolean = true
+	let platformName: string = "Link"
 
 	const user = userStore(auth)
-
-	if($user) {
-		isSideNavOpen = false
-		persistentHamburgerMenu = true
-		platformName = "Link"
-	} else {
-		isSideNavOpen = false
-		persistentHamburgerMenu = false
-		platformName = "Home"
-	}
 
 	// if (typeof window != 'undefined') {
 	// 	const perf = getPerformance(app)
 	// }
-	let theme: CarbonTheme = "g100";
+	let theme: CarbonTheme = 'g100'
+	if(typeof window != 'undefined') {
+		if($user) {
+		isSideNavOpen = false
+		persistentHamburgerMenu = true
+		platformName = "Link"
+		} else {
+			isSideNavOpen = false
+			// persistentHamburgerMenu = false
+			platformName = "Home"
+		}
+		if(!localStorage.getItem('theme')) {
+			localStorage.setItem('theme', theme)
+		}
+		theme = <CarbonTheme>localStorage.getItem('theme') ?? 'g100'
+	}
 	let val
 </script>
 
@@ -94,9 +99,9 @@
 				{/if}
 
 				{#if theme == "g100"}
-					<HeaderPanelLink on:click={() => {theme="g10"}} href="/">Light Mode</HeaderPanelLink>
+					<HeaderPanelLink on:click={() => {theme="g10"; localStorage.setItem('theme', theme); location.reload()}}>Light Mode</HeaderPanelLink>
 				{:else}
-					<HeaderPanelLink on:click={() => {theme="g100"}} href="/">Dark Mode</HeaderPanelLink>
+					<HeaderPanelLink on:click={() => {theme="g100"; localStorage.setItem('theme', theme); location.reload()}}>Dark Mode</HeaderPanelLink>
 				{/if}
 
 
@@ -118,11 +123,9 @@
 <SideNav bind:isOpen={isSideNavOpen}>
 	<SideNavItems>
 		<SideNavLink icon={Home} href="/" text="Home" />
-		{#if $user}
 			<SideNavLink icon={ChartComboStacked} href="/stats" text="Stats" />
 			<SideNavLink icon={WatsonHealthHoleFilling} href="/device" text="Device" />
 			<SideNavLink icon={Settings} href="/settings" text="Settings" />
-		{/if}
 		<SideNavLink icon={Api} href="/api" text="Api" />
 	</SideNavItems>
 </SideNav>
