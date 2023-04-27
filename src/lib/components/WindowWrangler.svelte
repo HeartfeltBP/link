@@ -16,12 +16,19 @@
 		Tile
 
 	} from 'carbon-components-svelte'
-	import { readable, type Readable } from 'svelte/store'
+	import { readable, type Readable, type Writable } from 'svelte/store'
 
 	export let entries: Readable<HfWindow[]>
 
     // single index since we're using a radial selector
-	export let selectedRowIds: Readable<[string]> | null
+	export let selectedRowIds: [string]
+
+	export let selectFunc: Function
+
+	const onSelect = (e: any) => {
+		e.preventDefault()
+		selectFunc()
+	}
 
 	type WranglerRow = {
 		id: string
@@ -62,4 +69,4 @@
 	]
 </script>
 
-<DataTable title='Windows' radio selectedRowIds={$selectedRowIds ?? undefined} sortable {headers} {rows} />
+<DataTable on:click:row--select={onSelect} title='Windows' radio bind:selectedRowIds={selectedRowIds} sortable {headers} {rows} />

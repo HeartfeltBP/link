@@ -1,6 +1,8 @@
 import { auth } from '$lib/utilities/firebase'
 import type { RequestHandler } from '@sveltejs/kit'
 
+// DOES NOT WORK LOCALLY!!!! - all functionality moved into page w. SSR disabled!
+
 /**
  * Get device information from BPM if it is in pairing mode
  */

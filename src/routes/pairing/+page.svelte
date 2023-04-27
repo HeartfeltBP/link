@@ -4,8 +4,8 @@
 	import cookie from 'cookie'
 
 	import 'carbon-components-svelte/css/g100.css'
-	import { Button, Grid } from 'carbon-components-svelte'
-	import { readable, writable, type Writable } from 'svelte/store'
+	import { Button, Grid, TextInput } from 'carbon-components-svelte'
+	import { readable, writable, type Readable, type Writable } from 'svelte/store'
 	import { getSetNewIdToken } from '$lib/utilities/auth'
 
 	const user = userStore(auth)
@@ -13,13 +13,14 @@
 	const storageOfLocal = readable(Object.keys(localStorage))
 	const cookies = readable(document.cookie)
 
-	// let statusWritable = writable<number>(69)
 
-	export const getTest = async () => {
+	export const getTest = async (bpmIp: string = 'http://192.168.12.26:80/') => {
+		console.info('GET: IP: ', bpmIp)
 		let testResponse: Response
+		
 
 		try {
-			testResponse = await fetch('http://192.168.12.26:80/', {
+			testResponse = await fetch(bpmIp, {
 				method: 'GET'
 			})
 		} catch (e) {
@@ -32,9 +33,13 @@
 		return testResponse.status
 	}
 
-	export const bpmPair = async () => {
+	export const bpmPair = async (bpmIp: string = 'http://192.168.12.26:80/') => {
 		const idToken: string = cookie.parse(document.cookie)['token']
+
+		console.info('POST: IP: ', bpmIp)
+		localStorage.setItem('bpmIp', bpmIp)
 		console.log('.oOoOoOoOooOoOo({<0>})OoOoOoOoOoOooOo.')
+		
 		console.log(idToken)
 
 		if (!idToken || typeof idToken == 'undefined') {
@@ -46,10 +51,10 @@
 		let testResponse: Response, postResponse: Response
 
 		try {
-			testResponse = await fetch('http://192.168.12.26:80/', {
+			testResponse = await fetch(bpmIp, {
 				method: 'GET'
 			})
-			// statusWritable.set(testResponse.status)
+			localStorage.setItem('bpmStatus', String(testResponse))
 		} catch (e) {
 			console.error(e)
 			return
@@ -59,7 +64,7 @@
 
 		if (testResponse.status == 200) {
 			try {
-				postResponse = await fetch('http://192.168.12.26:80/', {
+				postResponse = await fetch(bpmIp, {
 					method: 'POST',
 					headers: {
 						Authorization: idToken
@@ -73,8 +78,12 @@
 				console.error('Post failed')
 				console.error(e)
 			}
+		} else {
+			console.error('could detect device, aborting pairing')
 		}
 	}
+
+	export const bpmIp: Readable<string> = readable()
 </script>
 
 <Grid>
@@ -88,7 +97,9 @@
 		<Button on:click={() => getTest()}>Search for Devices</Button>
 		<!-- {#if $statusWritable != 200}
 		<h1>No Devices Detected</h1>
-	{:else} -->
+		{:else} -->
+		<TextInput value={$bpmIp} placeholder=''label='enter device IP'></TextInput>
+		<TextInput label='enter api endpoint'></TextInput>
 		<Button on:click={() => bpmPair()}>Send Pairing Signal</Button>
 		<Button on:click={() => getSetNewIdToken()}>Refresh Id Token</Button>
 		<br />

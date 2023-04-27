@@ -21,8 +21,7 @@
 	//TODO:
 	// just need to be able to successfully connect to firebase and also index an array by FIDS
 	ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
-	// const user = userStore(auth)
-	export let frame: HfFrame
+	export let frame: HfFrame | undefined
 </script>
 
 
@@ -32,10 +31,10 @@
 			data={formatData(
 				false,
 				'line',
-				`red_${frame.fid}`,
-				frame.red_frame_for_presentation ?? [],
-				`ir_${frame.fid}`,
-				frame.ir_frame_for_presentation ?? []
+				`red_${frame?.fid ?? '-'}`,
+				frame?.red_frame_for_presentation ?? [],
+				`ir_${frame?.fid ?? '-'}`,
+				frame?.ir_frame_for_presentation ?? []
 			)}
 			options={{ responsive: true, resizeDelay: 2}}
 		/>

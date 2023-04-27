@@ -24,8 +24,12 @@ export const load = (async () => {
 	let predictedFids: string[] = []
 	let predictedFidsSorted: string[] = []
 	let userFrames: HfFrame[] = []
-
+	
 	usStore.subscribe(async (curUser) => {
+		if(!curUser) {
+			abort()
+			return
+		}
 		currentUser = curUser
 	})
 
@@ -110,15 +114,19 @@ export const load = (async () => {
 		let diaVals: number[] = []
 
 		userWindows.forEach(uWindow => {
-			if(uWindow.status == 'predicted') {
+			if(uWindow.fid == uFrame.fid && uWindow.status == 'predicted') {
 				sysVals.push(uWindow.sbp)
 				diaVals.push(uWindow.dbp)
 			}
 		})
 
 		// does rounding up misrepresent the data?
+		console.info(Math.ceil(sysVals.reduce((a, b) => a + b) / sysVals.length))
+		console.info(Math.ceil(diaVals.reduce((a, b) => a + b) / sysVals.length))
 		const sysAvg: number = Math.ceil(sysVals.reduce((a, b) => a + b) / sysVals.length)
 		const diaAvg: number = Math.ceil(diaVals.reduce((a, b) => a + b) / sysVals.length)
+		console.info(sysVals)
+		console.info(diaVals)
 
 		const bioDat: FrameBioData = {
 			pulse_rate:	uFrame.pulse_rate,
@@ -132,6 +140,8 @@ export const load = (async () => {
 			sys: sysAvg,
 			dia: diaAvg
 		}
+		sysVals.length = 0
+		diaVals.length = 0
 		userReadings.push(curReading)
 	});
 

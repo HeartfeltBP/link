@@ -30,6 +30,7 @@
 	let sysVals: ChartPair[] = []
 	let diaVals: ChartPair[] = []
 	let timeVals: string[] = []
+	
 	$readings.forEach((reading: HfReading) => {
 		try{
 			// const tPushVal = reading.time.split(' ')[1].split('.')[0]

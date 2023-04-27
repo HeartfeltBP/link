@@ -5,10 +5,10 @@
 	import FrameView from '$lib/components/FrameView.svelte'
 	import { auth } from '$lib/utilities/firebase.js'
 	import { userStore } from 'sveltefire'
-	import { Column, ContentSwitcher, Grid, Row, Switch, Tab, TabContent, Tabs, Tile } from 'carbon-components-svelte'
+	import { Button, Column, ContentSwitcher, Grid, Row, Switch, Tab, TabContent, Tabs, Tile } from 'carbon-components-svelte'
 	import type { PageData } from './$types'
 	import type { HfFrame, HfReading, HfWindow } from '$lib/utilities/types'
-	import { readable, type Readable } from 'svelte/store'
+	import { readable, writable, type Readable, type Writable } from 'svelte/store'
 	import FrameWrangler from '$lib/components/FrameWrangler.svelte'
 	import ReadingWrangler from '$lib/components/ReadingWrangler.svelte'
 	import WindowView from '$lib/components/WindowView.svelte'
@@ -29,15 +29,31 @@
 		readings = data.rStore
 	}
 
-	let selectedIndex = 0
+	let selectedReadingIndex = 0
+	let selectedFrameIndex = 0
+	let selectedWindowIndex = 0
+
 	let tabSelect = 0
-	let curFrame: HfFrame = $frames[selectedIndex]
-	let curWindow: HfWindow = $windows[0]
+	// let curReading: HfReading = $readings[selectedReadingIndex]
 
-	let curFid: Readable<[string]> | null = $frames[selectedIndex].fid
-		? readable([$frames[selectedIndex].fid ?? 'err'])
-		: null
+	// let curFid: Writable<[string]> = writable([''])
+	let curFid: Writable<[string]> = writable([$frames[0].fid])
+	let curWid: Writable<[string]> = writable([$windows[0].wid])
 
+
+	let curFrame: Writable<HfFrame | undefined> = writable($frames.find((frame: HfFrame) => frame.fid == $curFid[0]))
+	let curWindow: Writable<HfWindow | undefined> = writable($windows.find((window: HfWindow) => window.wid == $curWid[0]))
+
+	const updateFids = () => {
+		$curFrame = $frames.find((frame: HfFrame) => frame.fid == $curFid[0])
+	}
+
+	const updateWids = () => {
+		$curWindow = $windows.find((window: HfWindow) => window.wid == $curWid[0])
+	}
+
+	$: console.log("selectedFids", curFid);
+	// console.info($curFid[0])
 </script>
 
 {#if $user}
@@ -47,13 +63,13 @@
 	<p>Hello {$user.uid}!</p>
 	<Row>
 		<div style="padding: 1em; width: 80%">
-				<ReadingSummary entries={readings}/>
+			<ReadingSummary entries={readings}/>
 		</div>
 		<Column aspectRatio="2x1" style="margin-top: -4em">
 			<ReadingView readings={readings} />
 		</Column>
 		<Column aspectRatio="2x1">
-			<ReadingWrangler entries={readings} bind:selectedRowIds={curFid} />
+			<ReadingWrangler entries={readings} />
 		</Column>
 	</Row>
 	<br />
@@ -68,23 +84,26 @@
 	{#if tabSelect == 0}
 	<Row>
 		<Column aspectRatio="2x1" style="margin: auto">
-			<FrameView frame={curFrame} />
+			<FrameView bind:frame={$curFrame} />
 		</Column>
 		<Column aspectRatio="2x1">
-			<FrameWrangler entries={frames} bind:selectedRowIds={curFid} />
-			<p>{$curFid}</p>
+			<FrameWrangler selectFunc={updateFids} entries={frames} bind:selectedRowIds={$curFid} />
+			<p>{$curFid[0]} {$curFid.length}</p>
+			<p>{$curFrame?.fid}</p>
 		</Column>
 	</Row>
 	{:else if tabSelect == 1}
 	<Row>
 		<Column aspectRatio="2x1" style="margin: auto">
-			<WindowView window={curWindow} />
+			<div style="float: top">
+				<WindowView bind:window={$curWindow} />
+			</div>
 		</Column>
 		<Column aspectRatio="2x1">
 			<div style="max-width: 45em; overflow:scroll">
-				<WindowWrangler entries={windows} bind:selectedRowIds={curFid} />
+				<WindowWrangler selectFunc={updateWids}  entries={windows} bind:selectedRowIds={$curWid} />
 			</div>
-			<!-- <p>{$curWindow}</p> -->
+			<p>{$curWindow?.wid}</p>
 		</Column>
 	</Row>
 	{/if}

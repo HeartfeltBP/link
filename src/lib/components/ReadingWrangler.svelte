@@ -24,7 +24,7 @@
 	export let entries: Readable<HfReading[]>
 
 	// single index since we're using a radial selector
-	export let selectedRowIds: Readable<[string]> | null
+	// export let selectedRowIds: Readable<[string]> | null
 
 	type WranglerRow = {
 		id: string
@@ -59,11 +59,11 @@
 	]
 </script>
 
+
+// add toggability to each value
 <DataTable
 	title='Readings'
 	style="margin-top:-4em"
-	radio
-	selectedRowIds={$selectedRowIds ?? undefined}
 	sortable
 	{headers}
 	{rows}

@@ -125,6 +125,8 @@ export const checkEmailPass = async (email: string, pass: string): Promise<Auth 
 				// }, (10 * 60 * 1000))
 
 				return getAuth(app)
+			} else {
+				
 			}
 		})
 		.catch((e) => {

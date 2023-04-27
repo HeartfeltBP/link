@@ -2,6 +2,7 @@ export const ssr = false
 
 import { goto } from '$app/navigation'
 import { uStore } from '$lib/utilities/auth'
+import { writable } from 'svelte/store'
 import type { PageLoad } from './$types'
 
 export const load = (async () => {

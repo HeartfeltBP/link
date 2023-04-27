@@ -18,12 +18,11 @@
 		PointElement,
 		CategoryScale
 	} from 'chart.js'
+	import type { Readable } from 'svelte/store'
 
-	export let window: HfWindow
+	export let window: HfWindow | undefined
 	let selectedIndex = 0
 	ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
-
-	// const user = userStore(auth)
 </script>
 
 {#if window}
@@ -34,12 +33,12 @@
 	
 	{#if selectedIndex == 0}
 		<Line
-			data={formatData(true, 'line', `ppg_${window.wid}`, window.ppg)}
+			data={formatData(true, 'line', `ppg_${window?.wid ?? '-'}`, window?.ppg ?? [])}
 			options={{ responsive: true }}
 		/>
 	{:else if selectedIndex == 1}
 		<Line
-			data={formatData(false, 'line', `abp_${window.wid}`, window.abp)}
+			data={formatData(false, 'line', `abp_${window?.wid ?? '-'}`, window?.abp ?? [])}
 			options={{ responsive: true }}
 		/>
 	{/if}
