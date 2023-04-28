@@ -99,7 +99,7 @@ export const checkEmailPass = async (email: string, pass: string): Promise<Auth 
 				console.info('🪪')
 
 				auth.onAuthStateChanged(() => {
-					goto('/link/')
+					goto('/')
 				}) // create hook to clear cookies and stuff
 				auth.onIdTokenChanged(async () => {
 					const isTokenSet: boolean = cookie.parse(document.cookie)['token'] !== undefined
