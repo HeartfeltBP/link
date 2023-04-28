@@ -18,6 +18,7 @@
 
 	export let data: PageData
 	const user = userStore(auth)
+	
 	let frames: Readable<HfFrame[]>
 	let windows: Readable<HfWindow[]>
 	let readings: Readable<HfReading[]>
@@ -29,14 +30,7 @@
 		readings = data.rStore
 	}
 
-	let selectedReadingIndex = 0
-	let selectedFrameIndex = 0
-	let selectedWindowIndex = 0
-
 	let tabSelect = 0
-	// let curReading: HfReading = $readings[selectedReadingIndex]
-
-	// let curFid: Writable<[string]> = writable([''])
 	let curFid: Writable<[string]> = writable([$frames[0].fid])
 	let curWid: Writable<[string]> = writable([$windows[0].wid])
 
@@ -52,8 +46,6 @@
 		$curWindow = $windows.find((window: HfWindow) => window.wid == $curWid[0])
 	}
 
-	$: console.log("selectedFids", curFid);
-	// console.info($curFid[0])
 </script>
 
 {#if $user}
@@ -88,14 +80,12 @@
 		</Column>
 		<Column aspectRatio="2x1">
 			<FrameWrangler selectFunc={updateFids} entries={frames} bind:selectedRowIds={$curFid} />
-			<p>{$curFid[0]} {$curFid.length}</p>
-			<p>{$curFrame?.fid}</p>
 		</Column>
 	</Row>
 	{:else if tabSelect == 1}
 	<Row>
-		<Column aspectRatio="2x1" style="margin: auto">
-			<div style="float: top">
+		<Column aspectRatio="2x1" style="align:top">
+			<div style="float">
 				<WindowView bind:window={$curWindow} />
 			</div>
 		</Column>
@@ -103,7 +93,6 @@
 			<div style="max-width: 45em; overflow:scroll">
 				<WindowWrangler selectFunc={updateWids}  entries={windows} bind:selectedRowIds={$curWid} />
 			</div>
-			<p>{$curWindow?.wid}</p>
 		</Column>
 	</Row>
 	{/if}

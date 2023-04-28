@@ -53,6 +53,11 @@ export const load = (async () => {
 	windowQ.withConverter(converter<HfWindow[]>())
 	const userWindowDocs = await getDocs(windowQ)
 
+	if(userWindowDocs.size <= 0) {
+		console.info('no windows retrieved from query')
+		return
+	}
+
 	userWindowDocs.forEach(async (doc) => {
 		try {
 			const curWindow: HfWindow = <HfWindow>doc.data() // will never be undefined
@@ -71,9 +76,15 @@ export const load = (async () => {
 		return
 	}
 
+	userWindows.forEach((window) => {
+		window.f0 = parseFloat(window.f0.toPrecision(2))
+		window.beat_sim = parseFloat(window.beat_sim.toPrecision(2))
+		window.snr = parseFloat(window.snr.toPrecision(2))
+	})
+
 	const iterCount =
 		predictedFids.length > 10 ? Math.ceil(predictedFids.length / 10) : predictedFids.length
-	// console.log("Bunga", iterCount)
+	
 	// eww. Have to do 10 at a time because firestore?
 	for (let i = 0; i < iterCount - 1; i += 10) {
 		// console.log(predictedFids.slice(i, i+9))
@@ -83,6 +94,11 @@ export const load = (async () => {
 		const userFrameDocs = await getDocs(frameQ)
 		// console.log(userFrameDocs.docs)
 
+		if(userFrameDocs.size <= 0) {
+			console.info('no frames retrieved from query')
+			return
+		}
+
 		userFrameDocs.forEach((doc) => {
 			try {
 				const curFrame: HfFrame = <HfFrame>doc.data() // will never be undefined
@@ -91,7 +107,7 @@ export const load = (async () => {
 					userFrames.push(curFrame)
 					console.log(userFrames.length)
 					console.log(curFrame.time, curFrame.fid)
-					predictedFidsSorted.push(curFrame.fid)
+					predictedFidsSorted.push(curFrame.fid) // sorted fids are not sorted atm!
 				}
 				console.info('no fid')
 			} catch (e) {

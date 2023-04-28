@@ -98,8 +98,8 @@
 		<!-- {#if $statusWritable != 200}
 		<h1>No Devices Detected</h1>
 		{:else} -->
-		<TextInput value={$bpmIp} placeholder=''label='enter device IP'></TextInput>
-		<TextInput label='enter api endpoint'></TextInput>
+		<TextInput value={$bpmIp} label='enter device IP'/>
+		<TextInput label='enter api endpoint'/>
 		<Button on:click={() => bpmPair()}>Send Pairing Signal</Button>
 		<Button on:click={() => getSetNewIdToken()}>Refresh Id Token</Button>
 		<br />

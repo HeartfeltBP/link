@@ -8,12 +8,12 @@
 
 	const user = userStore(auth)
 	if (!user) {
-		goto('device/identity')
+		goto('/account/login')
 	}
 </script>
 
 {#if $user}
 	<h1>Device</h1>
 	<p>Hello {$user.uid}!</p>
-	<Button href="/device/identity">Pair a Device</Button>
+	<Button href="/pairing">Pair a Device</Button>
 {/if}
