@@ -1,22 +1,9 @@
 <script lang="ts">
-	import type { HfFrame, HfReading, HfWindow } from '$lib/utilities/types'
-	import { DATA_DB } from '$lib/utilities/constants.js'
+	import 'carbon-components-svelte/css/g100.css'
+	import type { HfReading } from '$lib/utilities/types'
 	import {
-		Checkbox,
-		Column,
-		Content,
-		ContentSwitcher,
 		DataTable,
-		Grid,
-		Header,
-		Row,
-		StructuredList,
-		StructuredListBody,
-		StructuredListCell,
-		StructuredListHead,
-		StructuredListRow,
-		Switch,
-		Tile
+		Pagination
 	} from 'carbon-components-svelte'
 	import { readable, type Readable } from 'svelte/store'
 
@@ -43,7 +30,7 @@
 				hr: entry.bioData.pulse_rate ?? 'err',
 				o2: entry.bioData.spo2 ?? 'err',
 				bp: `${entry.sys}/${entry.dia}`,
-				t: entry.time ?? 'err'
+				t: entry.time.split('.')[0] ?? 'err'
 			})
 		} catch (e) {
 			console.error('Table entry population failed')
@@ -54,8 +41,11 @@
 		{ key: 'hr', value: 'HR (bpm)' },
 		{ key: 'o2', value: 'SPO2 (%)' },
 		{ key: 'bp', value: 'ABP (sys/dia)' },
-		{ key: 't', value: 'Time (d/m/y)' }
+		{ key: 't', value: 'Time (yyyy-MM-dd HH:mm:ss)' }
 	]
+
+	let pageSize = 5
+	let page = 1
 </script>
 
 
@@ -65,5 +55,13 @@
 	style="margin-top:-4em"
 	sortable
 	{headers}
+	{pageSize}
+	{page}
 	{rows}
+/>
+<Pagination
+  bind:pageSize
+  bind:page
+  totalItems={rows.length}
+  pageSizeInputDisabled
 />

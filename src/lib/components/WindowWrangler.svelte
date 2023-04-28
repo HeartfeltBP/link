@@ -4,7 +4,7 @@
 		DataTable,
 		Pagination,
 	} from 'carbon-components-svelte'
-	import { readable, type Readable, type Writable } from 'svelte/store'
+	import { readable, type Readable } from 'svelte/store'
 
 	export let entries: Readable<HfWindow[]>
 

@@ -47,14 +47,14 @@
 			console.error(e)
 		}
 	})
-	console.log(timeVals[0])
+	let stripped_vals = timeVals.map(s => Number(s.replace('-', '').replace('-', '').replace(' ', '').replace(':', '').replace(':', '').replace(':', '').replace('.', '')))
 	const scatterOpts = { 
 		responsive: true,
 		resizeDelay: 2,
         scales: {
             x: {
 				type: 'time',
-                min: timeVals[0],
+                min: timeVals[stripped_vals.indexOf(Math.min(...stripped_vals))],
             }
         }
 	}
