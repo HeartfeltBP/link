@@ -1,8 +1,9 @@
 <script lang="ts">
+	// @ts-nocheck
 	import 'carbon-components-svelte/css/g100.css'
 
 	import { Button, ContentSwitcher, Switch } from 'carbon-components-svelte'
-	import { Scatter } from 'svelte-chartjs'
+	import { Scatter, Line } from 'svelte-chartjs'
 	import { formatData, type ChartPair } from '$lib/utilities/data.js'
 	import type { HfFrame, HfReading } from '$lib/utilities/types.js'
 	import {
@@ -18,6 +19,7 @@
 		type TimeUnit,
 		type TimeScaleOptions
 	} from 'chart.js'
+	import 'chartjs-adapter-date-fns' 
 	import type { Readable } from 'svelte/store'
 
 	ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale, TimeScale)
@@ -46,9 +48,17 @@
 			console.error(e)
 		}
 	})
-
-	const scatterOpts = { responsive: true, resizeDelay: 2 }
-
+	console.log(timeVals[0])
+	const scatterOpts = { 
+		responsive: true,
+		resizeDelay: 2,
+        scales: {
+            x: {
+				type: 'time',
+                min: timeVals[0],
+            }
+        }
+	}
 </script>
 
 
@@ -65,11 +75,12 @@
 			data={
 			formatData(
 				false,
+				4,
 				'scatter',
-				`Sys Vals`,
+				`Systolic`,
 				sysVals ?? [],
-				`Dia Vals`,
-				diaVals ?? []
+				`Diastolic`,
+				diaVals ?? [],
 			)}
 			options={scatterOpts}
 		/>
@@ -78,8 +89,9 @@
 		<Scatter
 			data={formatData(
 				false,
+				4,
 				'scatter',
-				`Sys Vals`,
+				`Heart Rate`,
 				hrVals ?? [],
 			)}
 			options={scatterOpts}
@@ -89,8 +101,9 @@
 		<Scatter
 			data={formatData(
 				false,
+				4,
 				'scatter',
-				`Sys Vals`,
+				`SpO2`,
 				o2Vals ?? [],
 			)}
 			options={scatterOpts}

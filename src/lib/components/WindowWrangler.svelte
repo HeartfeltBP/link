@@ -1,20 +1,9 @@
 <script lang="ts">
 	import 'carbon-components-svelte/css/g100.css'
-	import type { HfFrame, HfReading, HfWindow } from '$lib/utilities/types'
-	import { DATA_DB } from '$lib/utilities/constants.js'
+	import type { HfWindow } from '$lib/utilities/types'
 	import {
-		Checkbox,
-		Column,
-		Content,
-		ContentSwitcher,
 		DataTable,
-		Grid,
-		Header,
-		Row,
-		Switch,
-
-		Tile
-
+		Pagination,
 	} from 'carbon-components-svelte'
 	import { readable, type Readable, type Writable } from 'svelte/store'
 
@@ -67,6 +56,15 @@
 		{ key: 'beat_sim', value: 'Beat Sim.' },
 		{ key: 'snr', value: 'SNR' },
 	]
+
+	let pageSize = 5;
+	let page = 1;
 </script>
 
-<DataTable on:click:row--select={onSelect} title='Windows' radio bind:selectedRowIds={selectedRowIds} sortable {headers} {rows} />
+<DataTable on:click:row--select={onSelect} title='Windows' radio bind:selectedRowIds={selectedRowIds} sortable {headers} {pageSize} {page} {rows} />
+<Pagination
+  bind:pageSize
+  bind:page
+  totalItems={rows.length}
+  pageSizeInputDisabled
+/>

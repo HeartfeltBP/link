@@ -38,7 +38,7 @@ export interface RxHfFrame {
 export interface HfFrame {
 	fid: string
 	status: string // new, valid, invalid, predicted
-	time: string
+	time: string 
 	target: string // collection to write to downstream (testing mode bpm-data-test)
 	ir_frame: number[] // raw data
 	red_frame: number[] // raw data

@@ -28,11 +28,12 @@ const calculateAverage = (array: number[]): number => {
 
 export function formatData(
 	scale: boolean,
+	pointSize: number = 1,
 	type: string = 'line',
 	label: string,
 	sig: number[] | ChartPair[],
 	label2?: string,
-	sig2?: number[] | ChartPair[]
+	sig2?: number[] | ChartPair[],
 ) {
 	let dataset0: HfDataset = {
 		label: label,
@@ -48,7 +49,7 @@ export function formatData(
 		pointHoverBackgroundColor: 'rgb(0, 0, 0)',
 		pointHoverBorderColor: 'rgba(220, 220, 220,1)',
 		pointHoverBorderWidth: 2,
-		pointRadius: 1,
+		pointRadius: pointSize,
 		pointHitRadius: 10
 	}
 	let datasets = [dataset0]
@@ -68,7 +69,7 @@ export function formatData(
 			pointHoverBackgroundColor: 'rgb(0, 0, 0)',
 			pointHoverBorderColor: 'rgba(220, 220, 220,1)',
 			pointHoverBorderWidth: 2,
-			pointRadius: 1,
+			pointRadius: pointSize,
 			pointHitRadius: 10
 		}
 		datasets = [dataset0, dataset1]

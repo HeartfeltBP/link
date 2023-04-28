@@ -30,6 +30,7 @@
 		<Line
 			data={formatData(
 				false,
+				1,
 				'line',
 				`red_${frame?.fid ?? '-'}`,
 				frame?.red_frame_for_presentation ?? [],

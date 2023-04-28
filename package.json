@@ -42,6 +42,8 @@
 	"dependencies": {
 		"@msgpack/msgpack": "^2.8.0",
 		"chart.js": "^4.2.1",
+		"chartjs-adapter-date-fns": "^3.0.0",
+		"date-fns": "^2.29.3",
 		"dotenv": "^16.0.3",
 		"firebase": "^9.19.1",
 		"firebase-admin": "^11.5.0",
