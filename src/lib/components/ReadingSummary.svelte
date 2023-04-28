@@ -34,8 +34,10 @@
 	let rows: WranglerRow[] = []
 	let rowStore: Readable<WranglerRow[]> = readable(rows)
 
+	let timeVals: number[] = []
 	$entries.forEach((entry) => {
 		try {
+			timeVals.push(Number(entry.time.replace('-', '').replace('-', '').replace(' ', '').replace(':', '').replace(':', '').replace(':', '').replace('.', '')))
 			rows.push({
 				id: entry.fid ?? 'err',
 				hr: entry.bioData.pulse_rate ?? 'err',
@@ -47,7 +49,7 @@
 			console.error('Table entry population failed')
 		}
 	})
-
+	let idx = timeVals.indexOf(Math.max(...timeVals))
 	let headers = [
 		{ key: 'hr', value: 'HR (bpm)' },
 		{ key: 'o2', value: 'SPO2 (%)' },
@@ -69,13 +71,13 @@
 		<StructuredListRow>
 			<StructuredListCell noWrap>Values</StructuredListCell>
 			<StructuredListCell>
-				{$entries[0].bioData.pulse_rate}
+				{$entries[idx].bioData.pulse_rate}
 			</StructuredListCell>
 			<StructuredListCell>
-				{$entries[0].bioData.spo2}
+				{$entries[idx].bioData.spo2}
 			</StructuredListCell>
 			<StructuredListCell>
-				{$entries[0].sys} / {$entries[0].dia}
+				{$entries[idx].sys} / {$entries[idx].dia}
 			</StructuredListCell>
 		</StructuredListRow>
 	</StructuredListBody>
