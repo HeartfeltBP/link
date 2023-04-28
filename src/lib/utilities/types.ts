@@ -18,8 +18,8 @@ export interface HfWindow {
 	apg_scaled: number[]
 	ppg: number[] // 256 samples of ppg data from combined_frame_for_processing
 	abp: number[] // bp prediction (raw model output)
-	sbp: number, // systolic bp
-	dbp: number, // diastolic bp
+	sbp: number // systolic bp
+	dbp: number // diastolic bp
 	f0: number // fundamental frequency of short window (not representative of hr)
 	snr: number // estimated signal to noise ratio
 	beat_sim: number // correlation between beats in window
@@ -40,7 +40,7 @@ export interface RxHfFrame {
 export interface HfFrame {
 	fid: string
 	status: string // new, valid, invalid, predicted
-	time: string 
+	time: string
 	target: string // collection to write to downstream (testing mode bpm-data-test)
 	ir_frame: number[] // raw data
 	red_frame: number[] // raw data
@@ -51,7 +51,6 @@ export interface HfFrame {
 	spo2: number
 	r: number // absorbance
 }
-
 
 export type FrameBioData = {
 	pulse_rate: number // from red_frame_for_processing
@@ -75,7 +74,7 @@ export type HfBpmConfig = {
 }
 
 export type StatData = {
-	frames: HfFrame[],
+	frames: HfFrame[]
 	windows: HfWindow[]
 }
 

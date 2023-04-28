@@ -1,6 +1,5 @@
 <script>
 	import { Content, Grid } from 'carbon-components-svelte'
-
 </script>
 
 <Content>

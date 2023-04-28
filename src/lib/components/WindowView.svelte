@@ -1,12 +1,8 @@
 <script lang="ts">
-	import { auth, firestore } from '$lib/utilities/firebase.js'
-	import { userStore, collectionStore } from 'sveltefire'
-
-	import { Grid, Row, Column, ContentSwitcher, Switch } from 'carbon-components-svelte'
+	import { ContentSwitcher, Switch } from 'carbon-components-svelte'
 	import { Line } from 'svelte-chartjs'
 	import { formatData } from '$lib/utilities/data.js'
 	import type { HfWindow } from '$lib/utilities/types.js'
-	import { DATA_DB } from '$lib/utilities/constants.js'
 	import {
 		Chart as ChartJS,
 		Title,
@@ -17,7 +13,6 @@
 		PointElement,
 		CategoryScale
 	} from 'chart.js'
-	import type { Readable } from 'svelte/store'
 
 	export let window: HfWindow | undefined
 	let selectedIndex = 0
@@ -26,10 +21,10 @@
 
 {#if window}
 	<ContentSwitcher size="sm" bind:selectedIndex>
-		<Switch text=PPG />
-		<Switch text=ABP />
+		<Switch text="PPG" />
+		<Switch text="ABP" />
 	</ContentSwitcher>
-	
+
 	{#if selectedIndex == 0}
 		<Line
 			data={formatData(true, 1, 'line', `ppg_${window?.wid ?? '-'}`, window?.ppg ?? [])}
@@ -41,5 +36,4 @@
 			options={{ responsive: true }}
 		/>
 	{/if}
-
 {/if}

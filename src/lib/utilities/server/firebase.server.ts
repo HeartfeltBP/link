@@ -11,10 +11,12 @@ const serviceAccountObj: ServiceAccount = {
 }
 
 // TODO: wrap in functions with error handling for multiple firebase initializations on dev
-const initInit: boolean = (getApps().length === 0)
-export const app_admin = initInit ? initializeApp({ credential: cert(serviceAccountObj) }) : getApps()[0]
+const initInit: boolean = getApps().length === 0
+export const app_admin = initInit
+	? initializeApp({ credential: cert(serviceAccountObj) })
+	: getApps()[0]
 export const firestore_admin: Firestore = getFirestore(app_admin)
-if(initInit) {
+if (initInit) {
 	firestore_admin.settings({ ignoreUndefinedProperties: true })
 }
 export const functions_admin = getFunctions(app_admin)

@@ -25,7 +25,14 @@
 
 	// import type { HfUser } from '$lib/utilities/types'
 
-	let email: string, pass: string, pass_confirm: string, height: number, name: string, weight: number, race: string, birthdate: string
+	let email: string,
+		pass: string,
+		pass_confirm: string,
+		height: number,
+		name: string,
+		weight: number,
+		race: string,
+		birthdate: string
 	let user: Writable<HfUser | null> = writable(null)
 
 	const createUserT = () => {
@@ -48,7 +55,12 @@
 		</div>
 		<h1>Sign Up</h1>
 		<br />
-		<Form on:submit={() => {createUserT(); createUser($user, pass_confirm)}}>
+		<Form
+			on:submit={() => {
+				createUserT()
+				createUser($user, pass_confirm)
+			}}
+		>
 			<Row>
 				<Column>
 					<TextInput
@@ -83,12 +95,18 @@
 							/>
 						</Column>
 					</Row>
-					<br/>
+					<br />
 					<Row>
 						<Column>
 							<Row>
 								<Column>
-									<NumberInput bind:value={height} name="height" label="Height" placeholder="e.g. 2.0" required />
+									<NumberInput
+										bind:value={height}
+										name="height"
+										label="Height"
+										placeholder="e.g. 2.0"
+										required
+									/>
 								</Column>
 								<Column>
 									<br /> <br />
@@ -101,7 +119,13 @@
 									/>
 								</Column>
 								<Column>
-									<NumberInput bind:value={weight} name="weight" label="Weight" placeholder="e.g. 100" required />
+									<NumberInput
+										bind:value={weight}
+										name="weight"
+										label="Weight"
+										placeholder="e.g. 100"
+										required
+									/>
 								</Column>
 								<Column>
 									<br /> <br />
@@ -116,7 +140,7 @@
 							</Row>
 						</Column>
 					</Row>
-					<br/>
+					<br />
 					<Row>
 						<Column>
 							<MultiSelect

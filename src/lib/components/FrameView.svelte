@@ -1,8 +1,4 @@
 <script lang="ts">
-	import { auth, firestore } from '$lib/utilities/firebase.js'
-	import { userStore, collectionStore } from 'sveltefire'
-
-	import { Button, Content } from 'carbon-components-svelte'
 	import { Line } from 'svelte-chartjs'
 	import { formatData } from '$lib/utilities/data.js'
 	import type { HfFrame } from '$lib/utilities/types.js'
@@ -23,7 +19,6 @@
 	export let frame: HfFrame | undefined
 </script>
 
-
 <div>
 	{#if frame}
 		<Line
@@ -36,11 +31,9 @@
 				`ir_${frame?.fid ?? '-'}`,
 				frame?.ir_frame_for_presentation ?? []
 			)}
-			options={{ responsive: true, resizeDelay: 2}}
+			options={{ responsive: true, resizeDelay: 2 }}
 		/>
 	{:else}
 		<em>Please select a frame</em>
 	{/if}
 </div>
-
-

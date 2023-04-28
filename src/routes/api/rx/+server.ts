@@ -1,7 +1,7 @@
 /*eslint prefer-const: 0*/
 import type { RequestHandler } from '@sveltejs/kit'
 import * as fs from 'fs'
-import type { HfFrame, RxHfFrame, HfFrameHeader, FrameSampleData } from '$lib/utilities/types'
+import type { RxHfFrame, HfFrameHeader } from '$lib/utilities/types'
 import { uploadFrame } from '$lib/utilities/server/repository.server'
 import { getUid } from '$lib/utilities/server/auth.server'
 import { DATA_DB } from '$lib/utilities/constants'

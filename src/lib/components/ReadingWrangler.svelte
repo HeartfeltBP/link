@@ -1,11 +1,8 @@
 <script lang="ts">
 	import 'carbon-components-svelte/css/g100.css'
 	import type { HfReading } from '$lib/utilities/types'
-	import {
-		DataTable,
-		Pagination
-	} from 'carbon-components-svelte'
-	import { readable, type Readable } from 'svelte/store'
+	import { DataTable, Pagination } from 'carbon-components-svelte'
+	import type { Readable } from 'svelte/store'
 
 	export let entries: Readable<HfReading[]>
 
@@ -21,7 +18,6 @@
 	}
 
 	let rows: WranglerRow[] = []
-	let rowStore: Readable<WranglerRow[]> = readable(rows)
 
 	$entries.forEach((entry) => {
 		try {
@@ -48,20 +44,6 @@
 	let page = 1
 </script>
 
-
 // add toggability to each value
-<DataTable
-	title='Readings'
-	style="margin-top:-4em"
-	sortable
-	{headers}
-	{pageSize}
-	{page}
-	{rows}
-/>
-<Pagination
-  bind:pageSize
-  bind:page
-  totalItems={rows.length}
-  pageSizeInputDisabled
-/>
+<DataTable title="Readings" style="margin-top:-4em" sortable {headers} {pageSize} {page} {rows} />
+<Pagination bind:pageSize bind:page totalItems={rows.length} pageSizeInputDisabled />

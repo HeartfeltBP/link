@@ -1,8 +1,14 @@
 import { initializeApp, type FirebaseOptions, type FirebaseApp, getApps } from 'firebase/app'
 import { Firestore, getFirestore } from 'firebase/firestore'
 import { getFunctions, type Functions } from 'firebase/functions'
-import { getAuth, type Auth, setPersistence, browserSessionPersistence, browserLocalPersistence } from 'firebase/auth'
-// import { apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId } from '$env/static/private'
+import {
+	getAuth,
+	type Auth,
+	setPersistence,
+	// browserSessionPersistence,
+	browserLocalPersistence
+} from 'firebase/auth'
+
 import {
 	PUBLIC_apiKey,
 	PUBLIC_authDomain,
@@ -28,4 +34,3 @@ export const functions: Functions = getFunctions(app)
 export const firestore: Firestore = getFirestore(app)
 export const auth: Auth = getAuth(app)
 setPersistence(auth, browserLocalPersistence)
-

@@ -1,5 +1,5 @@
 export type ChartPair = {
-	x: any,
+	x: any
 	y: any
 }
 
@@ -33,9 +33,9 @@ export function formatData(
 	label: string,
 	sig: number[] | ChartPair[],
 	label2?: string,
-	sig2?: number[] | ChartPair[],
+	sig2?: number[] | ChartPair[]
 ) {
-	let dataset0: HfDataset = {
+	const dataset0: HfDataset = {
 		label: label,
 		data: sig,
 		fill: true,
@@ -55,7 +55,7 @@ export function formatData(
 	let datasets = [dataset0]
 
 	if (typeof sig2 != 'undefined' && typeof label2 != 'undefined') {
-		let dataset1: HfDataset = {
+		const dataset1: HfDataset = {
 			label: label2,
 			data: sig2,
 			fill: true,

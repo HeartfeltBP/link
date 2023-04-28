@@ -39,7 +39,11 @@ export const logOut = () => {
 		})
 }
 
-export const createAuthEmailPass = async (email: string, pass: string, pass_confirm?: string): Promise<string | null> => {
+export const createAuthEmailPass = async (
+	email: string,
+	pass: string,
+	pass_confirm?: string
+): Promise<string | null> => {
 	if (pass_confirm !== undefined) {
 		if (pass !== pass_confirm) {
 			console.error('PASSWORDS DO NOT MATCH!')
@@ -49,17 +53,17 @@ export const createAuthEmailPass = async (email: string, pass: string, pass_conf
 	}
 
 	const userCred = await createUserWithEmailAndPassword(getAuth(app), email, pass).catch((e) => {
-			const errorCode = e.errorCode
-			// const errorMessage = e.errorMessage
-			console.log(errorCode, e)
-			return null
-		})
+		const errorCode = e.errorCode
+		// const errorMessage = e.errorMessage
+		console.log(errorCode, e)
+		return null
+	})
 
 	return userCred?.user.uid ?? null
 }
 
 export const createUser = async (user: HfUser | null, pass_confirm: string) => {
-	if(!user) {
+	if (!user) {
 		console.error('no user!')
 		return
 	}
@@ -67,20 +71,20 @@ export const createUser = async (user: HfUser | null, pass_confirm: string) => {
 
 	const userRef = collection(firestore, 'users')
 
-	if(!uid || typeof(uid) == 'undefined') {
+	if (!uid || typeof uid == 'undefined') {
 		return -1
 	}
 
 	await setDoc(doc(userRef, uid), {
 		name: user.name ?? '',
-    	email: user.email ?? '',
-    	weight: user.weight ?? '',
-    	height: user.height ?? '',
-    	race: user.race ?? '',
-    	birthdate: user.birthdate ?? ''
+		email: user.email ?? '',
+		weight: user.weight ?? '',
+		height: user.height ?? '',
+		race: user.race ?? '',
+		birthdate: user.birthdate ?? ''
 	})
 
-	if(window) {
+	if (window) {
 		goto('/')
 	}
 	// wrap create with email with this to also send things to db
@@ -139,8 +143,6 @@ export const checkEmailPass = async (email: string, pass: string): Promise<Auth 
 				// }, (10 * 60 * 1000))
 
 				return getAuth(app)
-			} else {
-				
 			}
 		})
 		.catch((e) => {

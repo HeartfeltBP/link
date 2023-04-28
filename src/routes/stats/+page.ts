@@ -2,7 +2,7 @@ export const ssr = false
 
 import { goto } from '$app/navigation'
 import { auth, firestore } from '$lib/utilities/firebase'
-import { getDocs, collection, doc, where, query, getDoc, orderBy, limit } from 'firebase/firestore'
+import { getDocs, collection, doc, where, query, orderBy, limit } from 'firebase/firestore'
 import type { PageLoad } from './$types'
 import { DATA_DB } from '$lib/utilities/constants'
 import type { FrameBioData, HfFrame, HfReading, HfWindow } from '$lib/utilities/types'
@@ -20,13 +20,13 @@ export const load = (async () => {
 	const usStore = userStore(auth)
 	let currentUser: User | null = null
 
-	let userWindows: HfWindow[] = []
-	let predictedFids: string[] = []
-	let predictedFidsSorted: string[] = []
-	let userFrames: HfFrame[] = []
-	
+	const userWindows: HfWindow[] = []
+	const predictedFids: string[] = []
+	const predictedFidsSorted: string[] = []
+	const userFrames: HfFrame[] = []
+
 	usStore.subscribe(async (curUser) => {
-		if(!curUser) {
+		if (!curUser) {
 			abort()
 			return
 		}
@@ -53,7 +53,7 @@ export const load = (async () => {
 	windowQ.withConverter(converter<HfWindow[]>())
 	const userWindowDocs = await getDocs(windowQ)
 
-	if(userWindowDocs.size <= 0) {
+	if (userWindowDocs.size <= 0) {
 		console.info('no windows retrieved from query')
 	}
 
@@ -82,7 +82,7 @@ export const load = (async () => {
 
 	const iterCount =
 		predictedFids.length > 10 ? Math.ceil(predictedFids.length / 10) : predictedFids.length
-	
+
 	// eww. Have to do 10 at a time because firestore?
 	for (let i = 0; i < iterCount - 1; i += 10) {
 		// console.log(predictedFids.slice(i, i+9))
@@ -92,7 +92,7 @@ export const load = (async () => {
 		const userFrameDocs = await getDocs(frameQ)
 		// console.log(userFrameDocs.docs)
 
-		if(userFrameDocs.size <= 0) {
+		if (userFrameDocs.size <= 0) {
 			console.info('no frames retrieved from query')
 		}
 
@@ -119,15 +119,14 @@ export const load = (async () => {
 		console.info('failed to populate frames and windows')
 	}
 
-	let userReadings: HfReading[] = []
-	
+	const userReadings: HfReading[] = []
 
-	userFrames.forEach(uFrame => {
-		let sysVals: number[] = []
-		let diaVals: number[] = []
+	userFrames.forEach((uFrame) => {
+		const sysVals: number[] = []
+		const diaVals: number[] = []
 
-		userWindows.forEach(uWindow => {
-			if(uWindow.fid == uFrame.fid && uWindow.status == 'predicted') {
+		userWindows.forEach((uWindow) => {
+			if (uWindow.fid == uFrame.fid && uWindow.status == 'predicted') {
 				sysVals.push(uWindow.sbp)
 				diaVals.push(uWindow.dbp)
 			}
@@ -142,7 +141,7 @@ export const load = (async () => {
 		console.info(diaVals)
 
 		const bioDat: FrameBioData = {
-			pulse_rate:	uFrame.pulse_rate,
+			pulse_rate: uFrame.pulse_rate,
 			spo2: uFrame.spo2,
 			r: uFrame.r
 		}
@@ -156,13 +155,13 @@ export const load = (async () => {
 		sysVals.length = 0
 		diaVals.length = 0
 		userReadings.push(curReading)
-	});
+	})
 
-	let framesStore: Readable<HfFrame[]> = readable<HfFrame[]>(userFrames)
-	let windowsStore: Readable<HfWindow[]> = readable<HfWindow[]>(userWindows)
-	let readingsStore: Readable<HfReading[]> = readable<HfReading[]>(userReadings)
+	const framesStore: Readable<HfFrame[]> = readable<HfFrame[]>(userFrames)
+	const windowsStore: Readable<HfWindow[]> = readable<HfWindow[]>(userWindows)
+	const readingsStore: Readable<HfReading[]> = readable<HfReading[]>(userReadings)
 	// let fidSortStore: Readable<string[]> = readable<string[]>(predictedFidsSorted) // figure out firestore indexes
-	let fidStore: Readable<string[]> = readable<string[]>(predictedFids)
+	const fidStore: Readable<string[]> = readable<string[]>(predictedFids)
 
 	return {
 		fStore: framesStore,

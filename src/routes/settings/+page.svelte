@@ -1,5 +1,4 @@
 <script lang="ts">
-
 	import { userStore } from 'sveltefire'
 	import { auth } from '$lib/utilities/firebase.js'
 

@@ -1,10 +1,10 @@
 <script lang="ts">
 	// @ts-nocheck
 
-	import { Button, ContentSwitcher, Switch } from 'carbon-components-svelte'
-	import { Scatter, Line } from 'svelte-chartjs'
+	import { ContentSwitcher, Switch } from 'carbon-components-svelte'
+	import { Scatter } from 'svelte-chartjs'
 	import { formatData, type ChartPair } from '$lib/utilities/data.js'
-	import type { HfFrame, HfReading } from '$lib/utilities/types.js'
+	import type { HfReading } from '$lib/utilities/types.js'
 	import {
 		Chart as ChartJS,
 		Title,
@@ -14,14 +14,21 @@
 		LinearScale,
 		PointElement,
 		CategoryScale,
-		TimeScale,
-		type TimeUnit,
-		type TimeScaleOptions
+		TimeScale
 	} from 'chart.js'
-	import 'chartjs-adapter-date-fns' 
+	import 'chartjs-adapter-date-fns'
 	import type { Readable } from 'svelte/store'
 
-	ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale, TimeScale)
+	ChartJS.register(
+		Title,
+		Tooltip,
+		Legend,
+		LineElement,
+		LinearScale,
+		PointElement,
+		CategoryScale,
+		TimeScale
+	)
 	// const user = userStore(auth)
 	export let readings: Readable<HfReading[]>
 	let selectedIndex = 0
@@ -31,86 +38,78 @@
 	let sysVals: ChartPair[] = []
 	let diaVals: ChartPair[] = []
 	let timeVals: string[] = []
-	
+
 	$readings.forEach((reading: HfReading) => {
-		try{
+		try {
 			// const tPushVal = reading.time.split(' ')[1].split('.')[0]
 			const tPushVal = reading.time
 			timeVals.push(tPushVal)
-			hrVals.push({x: reading.time, y: reading.bioData.pulse_rate})
-			o2Vals.push({x: reading.time, y: reading.bioData.spo2})
-			sysVals.push({x: reading.time, y: reading.sys})
-			diaVals.push({x: reading.time, y: reading.dia})
+			hrVals.push({ x: reading.time, y: reading.bioData.pulse_rate })
+			o2Vals.push({ x: reading.time, y: reading.bioData.spo2 })
+			sysVals.push({ x: reading.time, y: reading.sys })
+			diaVals.push({ x: reading.time, y: reading.dia })
 			console.log(hrVals.length, o2Vals.length, sysVals.length, diaVals.length, tPushVal)
-		} catch(e) {
+		} catch (e) {
 			console.error('Error populating readingView')
 			console.error(e)
 		}
 	})
-	let stripped_vals = timeVals.map(s => Number(s.replace('-', '').replace('-', '').replace(' ', '').replace(':', '').replace(':', '').replace(':', '').replace('.', '')))
-	const scatterOpts = { 
+	let stripped_vals = timeVals.map((s) =>
+		Number(
+			s
+				.replace('-', '')
+				.replace('-', '')
+				.replace(' ', '')
+				.replace(':', '')
+				.replace(':', '')
+				.replace(':', '')
+				.replace('.', '')
+		)
+	)
+	const scatterOpts = {
 		responsive: true,
 		resizeDelay: 2,
-        scales: {
-            x: {
+		scales: {
+			x: {
 				type: 'time',
-                min: timeVals[stripped_vals.indexOf(Math.min(...stripped_vals))],
-            }
-        }
+				min: timeVals[stripped_vals.indexOf(Math.min(...stripped_vals))]
+			}
+		}
 	}
 </script>
 
-
 <div>
 	<ContentSwitcher size="sm" bind:selectedIndex>
-		<Switch text=ABP />
-		<Switch text=HR />
-		<Switch text=SPO2 />
+		<Switch text="ABP" />
+		<Switch text="HR" />
+		<Switch text="SPO2" />
 	</ContentSwitcher>
 
 	{#if $readings.length > 0}
 		{#if selectedIndex == 0}
-		<Scatter
-			data={
-			formatData(
-				false,
-				4,
-				'scatter',
-				`Systolic`,
-				sysVals ?? [],
-				`Diastolic`,
-				diaVals ?? [],
-			)}
-			options={scatterOpts}
-		/>
+			<Scatter
+				data={formatData(
+					false,
+					4,
+					'scatter',
+					`Systolic`,
+					sysVals ?? [],
+					`Diastolic`,
+					diaVals ?? []
+				)}
+				options={scatterOpts}
+			/>
 		{/if}
 		{#if selectedIndex == 1}
-		<Scatter
-			data={formatData(
-				false,
-				4,
-				'scatter',
-				`Heart Rate`,
-				hrVals ?? [],
-			)}
-			options={scatterOpts}
-		/>
+			<Scatter
+				data={formatData(false, 4, 'scatter', `Heart Rate`, hrVals ?? [])}
+				options={scatterOpts}
+			/>
 		{/if}
 		{#if selectedIndex == 2}
-		<Scatter
-			data={formatData(
-				false,
-				4,
-				'scatter',
-				`SpO2`,
-				o2Vals ?? [],
-			)}
-			options={scatterOpts}
-		/>
+			<Scatter data={formatData(false, 4, 'scatter', `SpO2`, o2Vals ?? [])} options={scatterOpts} />
 		{/if}
 	{:else}
 		<em>Please select a reading</em>
 	{/if}
 </div>
-
-

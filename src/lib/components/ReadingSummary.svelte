@@ -1,24 +1,13 @@
 <script lang="ts">
-	import type { HfFrame, HfReading, HfWindow } from '$lib/utilities/types'
-	import { DATA_DB } from '$lib/utilities/constants.js'
+	import type { HfReading } from '$lib/utilities/types'
 	import {
-		Checkbox,
-		Column,
-		Content,
-		ContentSwitcher,
-		DataTable,
-		Grid,
-		Header,
-		Row,
 		StructuredList,
 		StructuredListBody,
 		StructuredListCell,
 		StructuredListHead,
-		StructuredListRow,
-		Switch,
-		Tile
+		StructuredListRow
 	} from 'carbon-components-svelte'
-	import { readable, type Readable } from 'svelte/store'
+	import type { Readable } from 'svelte/store'
 
 	export let entries: Readable<HfReading[]>
 
@@ -31,12 +20,22 @@
 	}
 
 	let rows: WranglerRow[] = []
-	let rowStore: Readable<WranglerRow[]> = readable(rows)
 
 	let timeVals: number[] = []
 	$entries.forEach((entry) => {
 		try {
-			timeVals.push(Number(entry.time.replace('-', '').replace('-', '').replace(' ', '').replace(':', '').replace(':', '').replace(':', '').replace('.', '')))
+			timeVals.push(
+				Number(
+					entry.time
+						.replace('-', '')
+						.replace('-', '')
+						.replace(' ', '')
+						.replace(':', '')
+						.replace(':', '')
+						.replace(':', '')
+						.replace('.', '')
+				)
+			)
 			rows.push({
 				id: entry.fid ?? 'err',
 				hr: entry.bioData.pulse_rate ?? 'err',
@@ -49,12 +48,6 @@
 		}
 	})
 	let idx = timeVals.indexOf(Math.max(...timeVals))
-	let headers = [
-		{ key: 'hr', value: 'HR (bpm)' },
-		{ key: 'o2', value: 'SPO2 (%)' },
-		{ key: 'bp', value: 'ABP (sys/dia)' },
-		{ key: 't', value: 'Time (d/m/y)' }
-	]
 </script>
 
 <StructuredList condensed flush>
