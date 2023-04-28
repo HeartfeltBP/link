@@ -1,5 +1,4 @@
 <script lang="ts">
-	import 'carbon-components-svelte/css/g100.css'
 	import type { HfWindow } from '$lib/utilities/types'
 	import {
 		DataTable,

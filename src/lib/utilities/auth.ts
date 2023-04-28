@@ -1,4 +1,4 @@
-import { app, auth } from './firebase'
+import { app, auth, firestore } from './firebase'
 import {
 	createUserWithEmailAndPassword,
 	type Auth,
@@ -12,6 +12,8 @@ import { goto } from '$app/navigation'
 import { writable } from 'svelte/store'
 import { browser } from '$app/environment'
 import cookie from 'cookie'
+import type { HfUser } from './types'
+import { collection, doc, setDoc } from 'firebase/firestore'
 
 export const uStore = writable<User | null>(null)
 export const hasCurrentUser = (): boolean => {
@@ -37,38 +39,50 @@ export const logOut = () => {
 		})
 }
 
-export const createAuthEmailPass = async (email: string, pass: string, pass_confirm?: string) => {
+export const createAuthEmailPass = async (email: string, pass: string, pass_confirm?: string): Promise<string | null> => {
 	if (pass_confirm !== undefined) {
 		if (pass !== pass_confirm) {
 			console.error('PASSWORDS DO NOT MATCH!')
 			localStorage.setItem('BpmIdentityStatus', 'INVALID')
-			return -1
+			return null
 		}
 	}
 
-	createUserWithEmailAndPassword(getAuth(app), email, pass)
-		.then(async () => {
-			// signed in
-			// const user = userCredential.user
-			// await setDoc(doc(firestore, 'users', user.uid), {
-			// 	DOB: 'bungo',
-			// 	Height: 'bungo',
-			// 	Name: 'bungo',
-			// 	Weight: 'bungo'
-			// })
-		})
-
-		.catch((e) => {
+	const userCred = await createUserWithEmailAndPassword(getAuth(app), email, pass).catch((e) => {
 			const errorCode = e.errorCode
 			// const errorMessage = e.errorMessage
 			console.log(errorCode, e)
-			return -1
+			return null
 		})
 
-	return 0
+	return userCred?.user.uid ?? null
 }
 
-export const createUser = async () => {
+export const createUser = async (user: HfUser | null, pass_confirm: string) => {
+	if(!user) {
+		console.error('no user!')
+		return
+	}
+	const uid = await createAuthEmailPass(user.email, user.pass, pass_confirm)
+
+	const userRef = collection(firestore, 'users')
+
+	if(!uid || typeof(uid) == 'undefined') {
+		return -1
+	}
+
+	await setDoc(doc(userRef, uid), {
+		name: user.name ?? '',
+    	email: user.email ?? '',
+    	weight: user.weight ?? '',
+    	height: user.height ?? '',
+    	race: user.race ?? '',
+    	birthdate: user.birthdate ?? ''
+	})
+
+	if(window) {
+		goto('/')
+	}
 	// wrap create with email with this to also send things to db
 }
 

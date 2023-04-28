@@ -1,9 +1,11 @@
 export type HfUser = {
+	name: string
 	email: string
 	pass: string
-	DOB: string
-	weight: string
-	height: string
+	weight: number
+	height: number
+	race: string
+	birthdate: string
 }
 
 // 256 samples

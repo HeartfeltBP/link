@@ -1,5 +1,4 @@
 <script lang="ts">
-	import 'carbon-components-svelte/css/g100.css'
 	import type { HfFrame, HfWindow } from '$lib/utilities/types'
 	import { DATA_DB } from '$lib/utilities/constants.js'
 	import {
@@ -18,7 +17,7 @@
 
 	export let entries: Readable<HfFrame[]>
 
-    // single index since we're using a radial selector
+	// single index since we're using a radial selector
 	// export let selectedRowIds: Readable<[string]> | null
 	export let selectedRowIds: [string]
 
@@ -33,24 +32,26 @@
 		id: string
 		hr: number
 		o2: number
-        t?: string
+		t?: string
 	}
 
 	let rows: WranglerRow[] = []
-    let rowStore: Readable<WranglerRow[]> = readable(rows)
+	let rowStore: Readable<WranglerRow[]> = readable(rows)
 
-    $entries.forEach((entry) => {
-        try {
-            rows.push({
-            id: entry.fid ?? 'err',
-            hr: entry.pulse_rate ?? 'err',
-            o2: entry.spo2 ?? 'err',
-            t:  entry.time ?? 'err'
-        })
-        } catch(e) {
-            console.error('Table entry population failed')
-        }
-    })
+	if ($entries) {
+		$entries.forEach((entry) => {
+			try {
+				rows.push({
+					id: entry.fid ?? 'err',
+					hr: entry.pulse_rate ?? 'err',
+					o2: entry.spo2 ?? 'err',
+					t: entry.time ?? 'err'
+				})
+			} catch (e) {
+				console.error('Table entry population failed')
+			}
+		})
+	}
 
 	let headers = [
 		{ key: 'hr', value: 'HR (bpm)' },
@@ -60,4 +61,12 @@
 	]
 </script>
 
-<DataTable on:click:row--select={onSelect} title='Frames' radio bind:selectedRowIds={selectedRowIds} sortable {headers} {rows} />
+<DataTable
+	on:click:row--select={onSelect}
+	title="Frames"
+	radio
+	bind:selectedRowIds
+	sortable
+	{headers}
+	{rows}
+/>

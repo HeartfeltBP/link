@@ -1,5 +1,4 @@
 <script lang="ts">
-	import 'carbon-components-svelte/css/g100.css'
 	import type { HfFrame, HfReading, HfWindow } from '$lib/utilities/types'
 	import { DATA_DB } from '$lib/utilities/constants.js'
 	import {

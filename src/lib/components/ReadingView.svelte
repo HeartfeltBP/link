@@ -1,6 +1,5 @@
 <script lang="ts">
 	// @ts-nocheck
-	import 'carbon-components-svelte/css/g100.css'
 
 	import { Button, ContentSwitcher, Switch } from 'carbon-components-svelte'
 	import { Scatter, Line } from 'svelte-chartjs'

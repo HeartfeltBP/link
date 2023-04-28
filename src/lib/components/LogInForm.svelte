@@ -13,7 +13,6 @@
 	} from 'carbon-components-svelte'
 
 	import { Login } from 'carbon-icons-svelte'
-	import 'carbon-components-svelte/css/g100.css'
 	import logoImage from '$lib/assets/HeartfeltLogo.png'
 	import { checkEmailPass } from '$lib/utilities/auth'
 
@@ -21,11 +20,10 @@
 </script>
 
 <Column>
-	<Tile style="padding:10%; max-width: 50%">
-		<Form on:submit={() => checkEmailPass(email, pass)}>
-			<div style="width: auto; margin-bottom: 8%; display:inline-block">
+		<Form style="padding=10%" on:submit={() => checkEmailPass(email, pass)}>
+			<div style="width: 100%; margin-bottom: 8%; display:inline-block">
 				<h3 style="width:25%; float:inline-start; margin-top:0.5em">Login</h3>
-				<ImageLoader style="width:25%; float:inline-end; margin:auto" fadeIn={true} src={logoImage} />
+				<ImageLoader style="width:15%; float:inline-end;" fadeIn={true} src={logoImage} />
 			</div>
 			<br />
 			<TextInput
@@ -52,7 +50,6 @@
 				<Button style="float: inline-end; margin-top: 0;" kind="ghost" href="/account/signup">Create Account</Button>
 			</div>
 		</Form>
-</Tile>
 </Column>
 
 

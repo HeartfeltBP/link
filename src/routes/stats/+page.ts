@@ -55,7 +55,6 @@ export const load = (async () => {
 
 	if(userWindowDocs.size <= 0) {
 		console.info('no windows retrieved from query')
-		return
 	}
 
 	userWindowDocs.forEach(async (doc) => {
@@ -73,7 +72,6 @@ export const load = (async () => {
 
 	if (userWindows.length <= 0 || predictedFids.length <= 0) {
 		console.info('could not retrive any windows')
-		return
 	}
 
 	userWindows.forEach((window) => {
@@ -96,7 +94,6 @@ export const load = (async () => {
 
 		if(userFrameDocs.size <= 0) {
 			console.info('no frames retrieved from query')
-			return
 		}
 
 		userFrameDocs.forEach((doc) => {
@@ -119,7 +116,7 @@ export const load = (async () => {
 	console.log('returning values')
 
 	if (userFrames.length <= 0 && userWindows.length <= 0) {
-		return null
+		console.info('failed to populate frames and windows')
 	}
 
 	let userReadings: HfReading[] = []

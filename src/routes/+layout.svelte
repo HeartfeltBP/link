@@ -73,16 +73,16 @@
 	</svelte:fragment>
 	{#if !$user} 
 	<HeaderNav>
-		<HeaderNavItem text="Home" href="/"/>
-		<HeaderNavMenu text="About" href="/"> 
-			<HeaderNavItem text="Project Overview" href="/"/>
-			<HeaderNavItem text="Team" href="/"/>
-			<HeaderNavItem text="Development" href="/"/>
+		<HeaderNavItem text="Home" href="/info"/>
+		<HeaderNavMenu text="About"> 
+			<HeaderNavItem text="Project Overview" href="/info/about/project-overview"/>
+			<HeaderNavItem text="Team" href="/info/about/team"/>
+			<HeaderNavItem text="Development" href="/info/about/development"/>
 		</HeaderNavMenu>
-		<HeaderNavMenu text="Technology" href="/"> 
-			<HeaderNavItem text="BPM" href="/"/>
-			<HeaderNavItem text="ML Model" href="/"/>
-			<HeaderNavItem text="Infrastructure" href="/"/>
+		<HeaderNavMenu text="Technology"> 
+			<HeaderNavItem text="BPM" href="/info/technology/bpm"/>
+			<HeaderNavItem text="ML Model" href="/info/technology/model"/>
+			<HeaderNavItem text="Infrastructure" href="/info/technology/infrastructure"/>
 		</HeaderNavMenu>
 	</HeaderNav>
 	{/if}
@@ -108,9 +108,14 @@
 				<HeaderPanelDivider>Account Actions</HeaderPanelDivider>
 				{#if $user}
 					<HeaderPanelLink on:click={() => logOut()}>Log Out</HeaderPanelLink>
-					<HeaderPanelDivider>Navigation</HeaderPanelDivider>
-					<HeaderPanelLink href="/">Heartfelt Home</HeaderPanelLink>
-					<HeaderPanelLink href="/">Link Home</HeaderPanelLink>
+					<HeaderPanelDivider>Heartfelt Information</HeaderPanelDivider>
+					<HeaderPanelLink href="/info">Info Home</HeaderPanelLink>
+					<HeaderPanelLink href="/info/about/project-overview">About - Project Overview</HeaderPanelLink>
+					<HeaderPanelLink href="/info/about/team">About - Team</HeaderPanelLink>
+					<HeaderPanelLink href="/info/about/development">About - Development</HeaderPanelLink>
+					<HeaderPanelLink href="/info/technology/bpm">Technology - BPM</HeaderPanelLink>
+					<HeaderPanelLink href="/info/technology/infrastructure">Technology - Infrastructure</HeaderPanelLink>
+					<HeaderPanelLink href="/info/technology/model">Technology - Model</HeaderPanelLink>
 				{:else}
 					<HeaderPanelLink href="/account/login">Log In</HeaderPanelLink>
 				{/if}

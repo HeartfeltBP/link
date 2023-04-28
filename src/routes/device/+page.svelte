@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import 'carbon-components-svelte/css/g100.css'
 
 	import { userStore } from 'sveltefire'
 	import { auth } from '$lib/utilities/firebase.js'
@@ -14,6 +13,7 @@
 
 {#if $user}
 	<h1>Device</h1>
+	<br />
 	<p>Hello {$user.uid}!</p>
 	<Button href="/pairing">Pair a Device</Button>
 {/if}

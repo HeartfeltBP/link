@@ -1,5 +1,4 @@
 <script lang="ts">
-	import 'carbon-components-svelte/css/g100.css'
 	import { auth, firestore } from '$lib/utilities/firebase.js'
 	import { userStore, collectionStore } from 'sveltefire'
 

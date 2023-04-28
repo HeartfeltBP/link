@@ -3,8 +3,7 @@
 	import { userStore } from 'sveltefire'
 	import cookie from 'cookie'
 
-	import 'carbon-components-svelte/css/g100.css'
-	import { Button, Grid, TextInput } from 'carbon-components-svelte'
+	import { Button, Column, Form, Grid, ProgressIndicator, ProgressStep, TextInput } from 'carbon-components-svelte'
 	import { readable, writable, type Readable, type Writable } from 'svelte/store'
 	import { getSetNewIdToken } from '$lib/utilities/auth'
 
@@ -83,7 +82,10 @@
 		}
 	}
 
-	export const bpmIp: Readable<string> = readable()
+	export let bpmIp: Writable<string> = writable('')
+
+	let currentIndex: Writable<number> = writable(0)
+	let stepsComplete: [boolean, boolean, boolean] = [false, false, false]
 </script>
 
 <Grid>
@@ -92,20 +94,53 @@
 	{:else}
 		<h1>Pair your Device</h1>
 		<p>Hello: {$user.uid}</p>
+		<ProgressIndicator bind:currentIndex={$currentIndex}>
+			<ProgressStep
+			bind:complete={stepsComplete[0]}
+			label="Step 1"
+			description="Search for Devices"
+			/>
+			<ProgressStep
+			bind:complete={stepsComplete[1]}
+			label="Step 2"
+			description="Connect to Device"
+			/>
+			<ProgressStep
+			bind:complete={stepsComplete[2]}
+			label="Step 3"
+			description="Confirm"
+			/>
+		</ProgressIndicator>
 		<br />
 		<br />
-		<Button on:click={() => getTest()}>Search for Devices</Button>
+		{#if $currentIndex == 0}
+		<Form style="padding:1em">
+			<div style="display:inline">
+					<TextInput style="display:inline" value={$bpmIp} labelText='Enter Device IP'/>
+					<Button style="margin-top:2em; float:right;" on:click={() => {stepsComplete[$currentIndex] = true; $currentIndex++}}>Continue</Button>
+			</div>
+		</Form>
+		{:else if $currentIndex == 1}
+			{#if $bpmIp.length > 0}
+				<Button on:click={() => getTest($bpmIp)}>Search for Devices</Button>
+				<Button on:click={() => {stepsComplete[$currentIndex] = true; $currentIndex++}}>Continue</Button>
+			{:else}
+				<Button on:click={() => getTest()}>Search for Devices</Button>
+				<Button on:click={() => {stepsComplete[$currentIndex] = true; $currentIndex++}}>Continue</Button>
+			{/if}
+		{:else if $currentIndex == 2}
+			<Button on:click={() => bpmPair()}>Send Pairing Signal</Button>
+			<Button on:click={() => getSetNewIdToken()}>Refresh Id Token</Button>
+			<Button on:click={() => {stepsComplete[$currentIndex] = true; $currentIndex++;}}>Finish</Button>
+		{/if}
 		<!-- {#if $statusWritable != 200}
 		<h1>No Devices Detected</h1>
 		{:else} -->
-		<TextInput value={$bpmIp} label='enter device IP'/>
-		<TextInput label='enter api endpoint'/>
-		<Button on:click={() => bpmPair()}>Send Pairing Signal</Button>
-		<Button on:click={() => getSetNewIdToken()}>Refresh Id Token</Button>
+
 		<br />
 		<br />
 		<br />
-		{#if $user}
+		<!-- {#if $user}
 			<div style="width:40%">
 				<p>LOCAL STORAGE: {$storageOfLocal}</p>
 				<p>SESSION STORAGE: {$storageOfSession}</p>
@@ -113,7 +148,6 @@
 					<p>COOKIES: {$cookies}</p>
 				</div>
 			</div>
-		{/if}
-		<!-- {/if} -->
+		{/if} -->
 	{/if}
 </Grid>

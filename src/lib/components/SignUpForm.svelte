@@ -17,15 +17,28 @@
 		ImageLoader
 	} from 'carbon-components-svelte'
 	import { CodeSigningService, DocumentPdf } from 'carbon-icons-svelte'
-	import 'carbon-components-svelte/css/g100.css'
 
-	import { createAuthEmailPass } from '../utilities/auth'
+	import { createAuthEmailPass, createUser } from '../utilities/auth'
 	import logoImage from '$lib/assets/HeartfeltLogo.png'
+	import type { HfUser } from '$lib/utilities/types'
+	import { writable, type Writable } from 'svelte/store'
 
 	// import type { HfUser } from '$lib/utilities/types'
 
-	let email: string, pass: string, pass_confirm: string
-	// let height: string, weight: string, race: string, birthdate: string
+	let email: string, pass: string, pass_confirm: string, height: number, name: string, weight: number, race: string, birthdate: string
+	let user: Writable<HfUser | null> = writable(null)
+
+	const createUserT = () => {
+		$user = {
+			name: name,
+			email: email,
+			pass: pass,
+			weight: weight,
+			height: height,
+			race: race,
+			birthdate: birthdate
+		}
+	}
 </script>
 
 <Content>
@@ -35,7 +48,7 @@
 		</div>
 		<h1>Sign Up</h1>
 		<br />
-		<Form on:submit={() => createAuthEmailPass(email, pass, pass_confirm)}>
+		<Form on:submit={() => {createUserT(); createUser($user, pass_confirm)}}>
 			<Row>
 				<Column>
 					<TextInput
@@ -43,6 +56,12 @@
 						name="email"
 						labelText="E-mail"
 						placeholder="Enter e-mail"
+					/>
+					<TextInput
+						bind:value={name}
+						name="name"
+						labelText="Name"
+						placeholder="Enter your first name"
 					/>
 					<br />
 					<Row>
@@ -69,7 +88,7 @@
 						<Column>
 							<Row>
 								<Column>
-									<NumberInput name="height" label="Height" placeholder="e.g. 2.0" required />
+									<NumberInput bind:value={height} name="height" label="Height" placeholder="e.g. 2.0" required />
 								</Column>
 								<Column>
 									<br /> <br />
@@ -82,7 +101,7 @@
 									/>
 								</Column>
 								<Column>
-									<NumberInput name="weight" label="Weight" placeholder="e.g. 100" required />
+									<NumberInput bind:value={weight} name="weight" label="Weight" placeholder="e.g. 100" required />
 								</Column>
 								<Column>
 									<br /> <br />
@@ -102,6 +121,7 @@
 						<Column>
 							<MultiSelect
 								titleText="Race"
+								bind:value={race}
 								label="Select Race"
 								items={[
 									{ id: '0', text: 'American Indian/Alaska Native' },
@@ -115,8 +135,9 @@
 							/>
 						</Column>
 						<Column>
-							<DatePicker datePickerType="single" on:change required>
+							<DatePicker datePickerType="single" required>
 								<DatePickerInput
+									bind:value={birthdate}
 									helperText="ex: 01/21/2000"
 									labelText="Select birthdate"
 									placeholder="mm/dd/yyyy"

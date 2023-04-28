@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { auth } from '$lib/utilities/firebase'
 	import { userStore } from 'sveltefire'
-	import 'carbon-components-svelte/css/g100.css'
 	import LogInForm from '$lib/components/LogInForm.svelte'
 	import { Column, Content, Grid, Row } from 'carbon-components-svelte'
 	// import {breakpoint, platform} from '$lib/components/MediaQuery.svelte'
