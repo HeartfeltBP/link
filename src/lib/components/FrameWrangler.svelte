@@ -43,8 +43,8 @@
 	let headers = [
 		{ key: 'hr', value: 'HR (bpm)' },
 		{ key: 'o2', value: 'SPO2 (%)' },
-		{ key: 't', value: 'Time (d/m/y)' },
-		{ key: 'id', value: 'FID' }
+		{ key: 'id', value: 'FID' },
+		{ key: 't', value: 'Time (yyyy-MM-dd HH:mm:ss)' }
 	]
 
 	let pageSize = 5

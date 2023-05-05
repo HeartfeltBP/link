@@ -72,6 +72,16 @@
 		scales: {
 			x: {
 				type: 'time',
+				ticks: {
+					source: 'data',
+				},
+				time: {
+					displayFormats: {
+						month: 'MM',
+						day: 'DD',
+						hour: 'HH:mm'
+					},
+				},
 				min: timeVals[stripped_vals.indexOf(Math.min(...stripped_vals))]
 			}
 		}
