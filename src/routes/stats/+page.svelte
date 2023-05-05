@@ -13,6 +13,7 @@
 	import WindowWrangler from '$lib/components/WindowWrangler.svelte'
 	import ReadingView from '$lib/components/ReadingView.svelte'
 	import ReadingSummary from '$lib/components/ReadingSummary.svelte'
+	import { goto } from '$app/navigation'
 
 	export let data: PageData
 	const user = userStore(auth)
@@ -54,13 +55,18 @@
 	const updateWids = () => {
 		$curWindow = $windows.find((window: HfWindow) => window.wid == $curWid[0])
 	}
+
+	const reloadX = () => {
+		goto('/stats', { replaceState: true, invalidateAll: true })
+		// location.reload()
+	}
 </script>
 
 {#if $user && $hasStats}
 	<Grid>
 		<Row style="display:inline">
 			<h1>Stats</h1>
-			<Button style="float:inline-end" on:click={() => location.reload()}>Refresh</Button>
+			<Button style="float:inline-end" on:click={reloadX}>Refresh</Button>
 		</Row>
 		<h3>Readings Overview</h3>
 		<p>Hello {$user.uid}!</p>
@@ -115,6 +121,7 @@
 	<h4>You don't have any data!</h4>
 	<p>Set up your BPM in 'Devices' and start collecting data to see stats!</p>
 	<br />
+	<Button style="float:inline-end" on:click={reloadX}>Refresh</Button>
 	<Button href="/device">Go to Device Page</Button>
 {:else}
 	<p>Please login!</p>

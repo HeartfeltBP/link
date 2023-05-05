@@ -85,7 +85,7 @@ export const createUser = async (user: HfUser | null, pass_confirm: string) => {
 	})
 
 	if (window) {
-		goto('/')
+		goto('/stats')
 	}
 	// wrap create with email with this to also send things to db
 }
@@ -117,8 +117,9 @@ export const checkEmailPass = async (email: string, pass: string): Promise<Auth 
 				console.info('🪪')
 
 				auth.onAuthStateChanged(() => {
-					goto('/')
+					goto('/stats')
 				}) // create hook to clear cookies and stuff
+
 				auth.onIdTokenChanged(async () => {
 					const isTokenSet: boolean = cookie.parse(document.cookie)['token'] !== undefined
 					const token: string = await curUser.getIdToken()
